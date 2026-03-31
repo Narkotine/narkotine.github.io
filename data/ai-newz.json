@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "title": "GPT-5 : OpenAI repousse le lancement au Q3 2026",
+    "date": "2026-03-29",
+    "tags": ["OpenAI", "LLM", "Industrie"],
+    "content": "OpenAI a confirmé le report du lancement de GPT-5 au troisième trimestre 2026. La raison invoquée : des problèmes persistants d'alignement et de fiabilité sur les tâches de raisonnement complexe. La concurrence, notamment Anthropic et Google DeepMind, continue de resserrer l'écart."
+  },
+  {
+    "id": 2,
+    "title": "L'UE adopte le AI Act : ce qui change pour les développeurs",
+    "date": "2026-03-27",
+    "tags": ["Régulation", "Europe", "AI Act"],
+    "content": "Le Parlement européen a voté la version finale du AI Act. Les systèmes d'IA à haut risque devront désormais passer par une certification obligatoire. Les développeurs open-source bénéficient d'exemptions partielles, mais les obligations de transparence s'appliquent à tous."
+  }
+]

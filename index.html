@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>nguhma.github.io</title>
+  <title>Nguhma — News</title>
   <style>
     * {
       margin: 0;
@@ -15,37 +15,292 @@
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: #0f0f0f;
       color: #f0f0f0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
       min-height: 100vh;
     }
 
-    .container {
-      text-align: center;
+    /* ── Header ── */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #0f0f0f;
+      border-bottom: 1px solid #1e1e1e;
+      padding: 1.2rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
 
-    h1 {
-      font-size: 4rem;
+    .logo {
+      font-size: 1.3rem;
       font-weight: 700;
       letter-spacing: -0.02em;
     }
 
-    h1 span {
+    .logo span {
       color: #7c6aff;
     }
 
-    p {
-      margin-top: 1rem;
-      font-size: 1.1rem;
+    /* ── Feed selector ── */
+    nav {
+      display: flex;
+      gap: 0.4rem;
+    }
+
+    nav button {
+      background: transparent;
       color: #888;
+      border: 1px solid #2a2a2a;
+      padding: 0.45rem 1rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    nav button:hover {
+      color: #ccc;
+      border-color: #444;
+    }
+
+    nav button.active {
+      background: #7c6aff;
+      color: #fff;
+      border-color: #7c6aff;
+    }
+
+    /* ── Main content ── */
+    main {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+    }
+
+    .feed-title {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+    }
+
+    .feed-subtitle {
+      color: #555;
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
+    }
+
+    /* ── Article cards ── */
+    .article {
+      border-bottom: 1px solid #1e1e1e;
+      padding: 1.5rem 0;
+    }
+
+    .article:last-child {
+      border-bottom: none;
+    }
+
+    .article-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .article-date {
+      font-size: 0.8rem;
+      color: #555;
+    }
+
+    .article-tags {
+      display: flex;
+      gap: 0.35rem;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      font-size: 0.7rem;
+      background: #1a1a2e;
+      color: #7c6aff;
+      padding: 0.2rem 0.55rem;
+      border-radius: 4px;
+    }
+
+    .article-title {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      line-height: 1.4;
+    }
+
+    .article-body {
+      font-size: 0.92rem;
+      color: #aaa;
+      line-height: 1.65;
+    }
+
+    /* ── Empty state ── */
+    .empty {
+      text-align: center;
+      color: #444;
+      padding: 4rem 0;
+      font-size: 0.95rem;
+    }
+
+    /* ── Loading ── */
+    .loading {
+      text-align: center;
+      color: #555;
+      padding: 4rem 0;
+    }
+
+    /* ── Responsive mobile ── */
+    @media (max-width: 600px) {
+      header {
+        flex-direction: column;
+        gap: 0.8rem;
+        padding: 1rem;
+        align-items: flex-start;
+      }
+
+      nav {
+        width: 100%;
+      }
+
+      nav button {
+        flex: 1;
+        text-align: center;
+        padding: 0.5rem;
+      }
+
+      main {
+        padding: 1.5rem 1rem 3rem;
+      }
+
+      .feed-title {
+        font-size: 1.3rem;
+      }
+
+      .article-title {
+        font-size: 1.05rem;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Hello, <span>World</span> 👋</h1>
-    <p>Mon site arrive bientôt.</p>
-  </div>
+
+  <header>
+    <div class="logo">nguhma<span>.</span></div>
+    <nav id="feed-nav"></nav>
+  </header>
+
+  <main id="content">
+    <div class="loading">Chargement…</div>
+  </main>
+
+  <script>
+    const FEEDS = {
+      geopolitks: {
+        file: 'data/geopolitks.json',
+        title: 'Geopolitks',
+        subtitle: 'Géopolitique, conflits & diplomatie'
+      },
+      'ai-newz': {
+        file: 'data/ai-newz.json',
+        title: 'AI Newz',
+        subtitle: 'Intelligence artificielle, tech & régulation'
+      }
+    };
+
+    let currentFeed = Object.keys(FEEDS)[0];
+
+    // ── Build nav buttons ──
+    function buildNav() {
+      const nav = document.getElementById('feed-nav');
+      nav.innerHTML = '';
+      for (const [key, feed] of Object.entries(FEEDS)) {
+        const btn = document.createElement('button');
+        btn.textContent = feed.title;
+        btn.className = key === currentFeed ? 'active' : '';
+        btn.addEventListener('click', () => switchFeed(key));
+        nav.appendChild(btn);
+      }
+    }
+
+    // ── Format date ──
+    function formatDate(iso) {
+      const d = new Date(iso + 'T00:00:00');
+      return d.toLocaleDateString('fr-FR', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      });
+    }
+
+    // ── Render articles ──
+    function renderArticles(articles, feed) {
+      const main = document.getElementById('content');
+
+      if (!articles.length) {
+        main.innerHTML = `
+          <h2 class="feed-title">${feed.title}</h2>
+          <p class="feed-subtitle">${feed.subtitle}</p>
+          <div class="empty">Aucun article pour le moment.</div>`;
+        return;
+      }
+
+      articles.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+      let html = `
+        <h2 class="feed-title">${feed.title}</h2>
+        <p class="feed-subtitle">${feed.subtitle}</p>`;
+
+      for (const a of articles) {
+        const tags = (a.tags || []).map(t => `<span class="tag">${t}</span>`).join('');
+        html += `
+        <article class="article">
+          <div class="article-meta">
+            <span class="article-date">${formatDate(a.date)}</span>
+            <div class="article-tags">${tags}</div>
+          </div>
+          <h3 class="article-title">${a.title}</h3>
+          <p class="article-body">${a.content}</p>
+        </article>`;
+      }
+
+      main.innerHTML = html;
+    }
+
+    // ── Load feed ──
+    async function loadFeed(key) {
+      const feed = FEEDS[key];
+      const main = document.getElementById('content');
+      main.innerHTML = '<div class="loading">Chargement…</div>';
+
+      try {
+        const res = await fetch(feed.file);
+        if (!res.ok) throw new Error('Fichier introuvable');
+        const articles = await res.json();
+        renderArticles(articles, feed);
+      } catch (e) {
+        main.innerHTML = `
+          <h2 class="feed-title">${feed.title}</h2>
+          <p class="feed-subtitle">${feed.subtitle}</p>
+          <div class="empty">Impossible de charger les articles.</div>`;
+      }
+    }
+
+    // ── Switch feed ──
+    function switchFeed(key) {
+      currentFeed = key;
+      buildNav();
+      loadFeed(key);
+    }
+
+    // ── Init ──
+    buildNav();
+    loadFeed(currentFeed);
+  </script>
+
 </body>
 </html>
