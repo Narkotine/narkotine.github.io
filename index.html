@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Nguhma — News</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
   <style>
     * {
       margin: 0;
@@ -37,15 +38,10 @@
       letter-spacing: -0.02em;
     }
 
-    .logo span {
-      color: #7c6aff;
-    }
+    .logo span { color: #7c6aff; }
 
     /* ── Feed selector ── */
-    nav {
-      display: flex;
-      gap: 0.4rem;
-    }
+    nav { display: flex; gap: 0.4rem; }
 
     nav button {
       background: transparent;
@@ -59,10 +55,7 @@
       transition: all 0.2s ease;
     }
 
-    nav button:hover {
-      color: #ccc;
-      border-color: #444;
-    }
+    nav button:hover { color: #ccc; border-color: #444; }
 
     nav button.active {
       background: #7c6aff;
@@ -72,7 +65,7 @@
 
     /* ── Main content ── */
     main {
-      max-width: 720px;
+      max-width: 760px;
       margin: 0 auto;
       padding: 2rem 1.5rem 4rem;
     }
@@ -91,14 +84,40 @@
 
     /* ── Article cards ── */
     .article {
-      border-bottom: 1px solid #1e1e1e;
-      padding: 1.5rem 0;
+      border-radius: 10px;
+      padding: 1.6rem;
+      margin-bottom: 1.2rem;
+      background: #161616;
+      border: 1px solid #222;
+      transition: border-color 0.2s;
     }
 
-    .article:last-child {
-      border-bottom: none;
+    .article:hover { border-color: #333; }
+
+    /* ── Fresh article : golden glow ── */
+    .article.fresh {
+      background: linear-gradient(135deg, #1a1600 0%, #1c1400 60%, #161200 100%);
+      border-color: #4a3800;
+      box-shadow: 0 0 0 1px #4a3800, 0 4px 24px rgba(180, 130, 0, 0.12);
     }
 
+    .fresh-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #c9960a;
+      background: rgba(180, 130, 0, 0.12);
+      border: 1px solid rgba(180, 130, 0, 0.25);
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      margin-bottom: 0.7rem;
+    }
+
+    /* ── Article meta ── */
     .article-meta {
       display: flex;
       align-items: center;
@@ -107,16 +126,9 @@
       flex-wrap: wrap;
     }
 
-    .article-date {
-      font-size: 0.8rem;
-      color: #555;
-    }
+    .article-date { font-size: 0.8rem; color: #555; }
 
-    .article-tags {
-      display: flex;
-      gap: 0.35rem;
-      flex-wrap: wrap;
-    }
+    .article-tags { display: flex; gap: 0.35rem; flex-wrap: wrap; }
 
     .tag {
       font-size: 0.7rem;
@@ -126,32 +138,70 @@
       border-radius: 4px;
     }
 
+    .article.fresh .tag {
+      background: rgba(180, 130, 0, 0.1);
+      color: #c9960a;
+    }
+
     .article-title {
-      font-size: 1.15rem;
+      font-size: 1.1rem;
       font-weight: 600;
-      margin-bottom: 0.5rem;
+      margin-bottom: 1rem;
       line-height: 1.4;
+      color: #e8e8e8;
     }
 
-    .article-body {
-      font-size: 0.92rem;
-      color: #aaa;
-      line-height: 1.65;
+    /* ── Markdown rendering ── */
+    .article-body { font-size: 0.9rem; color: #aaa; line-height: 1.7; }
+
+    .article-body h2 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #ddd;
+      margin: 1.4rem 0 0.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid #1e1e1e;
     }
 
-    /* ── Empty state ── */
-    .empty {
+    .article.fresh .article-body h2 { border-top-color: #2a2000; }
+
+    .article-body h2:first-child { margin-top: 0; padding-top: 0; border-top: none; }
+
+    .article-body p { margin-bottom: 0.6rem; }
+
+    .article-body ul {
+      margin: 0.4rem 0 0.6rem 1.2rem;
+    }
+
+    .article-body li { margin-bottom: 0.3rem; }
+
+    .article-body strong { color: #e0e0e0; font-weight: 600; }
+
+    .article-body em { color: #999; font-style: italic; }
+
+    .article-body a {
+      color: #7c6aff;
+      text-decoration: none;
+    }
+
+    .article-body a:hover { text-decoration: underline; }
+
+    .article.fresh .article-body a { color: #c9960a; }
+
+    .article-body hr {
+      border: none;
+      border-top: 1px solid #1e1e1e;
+      margin: 1.2rem 0;
+    }
+
+    .article.fresh .article-body hr { border-top-color: #2a2000; }
+
+    /* ── Empty / Loading ── */
+    .empty, .loading {
       text-align: center;
       color: #444;
       padding: 4rem 0;
       font-size: 0.95rem;
-    }
-
-    /* ── Loading ── */
-    .loading {
-      text-align: center;
-      color: #555;
-      padding: 4rem 0;
     }
 
     /* ── Responsive mobile ── */
@@ -163,9 +213,7 @@
         align-items: flex-start;
       }
 
-      nav {
-        width: 100%;
-      }
+      nav { width: 100%; }
 
       nav button {
         flex: 1;
@@ -173,17 +221,13 @@
         padding: 0.5rem;
       }
 
-      main {
-        padding: 1.5rem 1rem 3rem;
-      }
+      main { padding: 1.2rem 0.8rem 3rem; }
 
-      .feed-title {
-        font-size: 1.3rem;
-      }
+      .feed-title { font-size: 1.3rem; }
 
-      .article-title {
-        font-size: 1.05rem;
-      }
+      .article { padding: 1.2rem; }
+
+      .article-title { font-size: 1rem; }
     }
   </style>
 </head>
@@ -214,7 +258,10 @@
 
     let currentFeed = Object.keys(FEEDS)[0];
 
-    // ── Build nav buttons ──
+    // ── Marked config ──
+    marked.setOptions({ breaks: true, gfm: true });
+
+    // ── Build nav ──
     function buildNav() {
       const nav = document.getElementById('feed-nav');
       nav.innerHTML = '';
@@ -231,15 +278,19 @@
     function formatDate(iso) {
       const d = new Date(iso + 'T00:00:00');
       return d.toLocaleDateString('fr-FR', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric'
+        day: 'numeric', month: 'long', year: 'numeric'
       });
+    }
+
+    // ── Today's date string ──
+    function todayISO() {
+      return new Date().toISOString().slice(0, 10);
     }
 
     // ── Render articles ──
     function renderArticles(articles, feed) {
       const main = document.getElementById('content');
+      const today = todayISO();
 
       if (!articles.length) {
         main.innerHTML = `
@@ -256,15 +307,19 @@
         <p class="feed-subtitle">${feed.subtitle}</p>`;
 
       for (const a of articles) {
+        const isFresh = a.fresh === true || a.date === today;
         const tags = (a.tags || []).map(t => `<span class="tag">${t}</span>`).join('');
+        const bodyHTML = marked.parse(a.content || '');
+
         html += `
-        <article class="article">
+        <article class="article${isFresh ? ' fresh' : ''}">
+          ${isFresh ? '<div class="fresh-badge">⚡ Nouveau</div>' : ''}
           <div class="article-meta">
             <span class="article-date">${formatDate(a.date)}</span>
             <div class="article-tags">${tags}</div>
           </div>
           <h3 class="article-title">${a.title}</h3>
-          <p class="article-body">${a.content}</p>
+          <div class="article-body">${bodyHTML}</div>
         </article>`;
       }
 
@@ -274,16 +329,14 @@
     // ── Load feed ──
     async function loadFeed(key) {
       const feed = FEEDS[key];
-      const main = document.getElementById('content');
-      main.innerHTML = '<div class="loading">Chargement…</div>';
-
+      document.getElementById('content').innerHTML = '<div class="loading">Chargement…</div>';
       try {
-        const res = await fetch(feed.file);
-        if (!res.ok) throw new Error('Fichier introuvable');
+        const res = await fetch(feed.file + '?v=' + Date.now());
+        if (!res.ok) throw new Error();
         const articles = await res.json();
         renderArticles(articles, feed);
-      } catch (e) {
-        main.innerHTML = `
+      } catch {
+        document.getElementById('content').innerHTML = `
           <h2 class="feed-title">${feed.title}</h2>
           <p class="feed-subtitle">${feed.subtitle}</p>
           <div class="empty">Impossible de charger les articles.</div>`;
