@@ -27,9 +27,6 @@
       background: #0f0f0f;
       border-bottom: 1px solid #1e1e1e;
       padding: 1.2rem 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
     }
 
     .logo {
@@ -41,7 +38,11 @@
     .logo span { color: #7c6aff; }
 
     /* ── Feed selector ── */
-    nav { display: flex; gap: 0.4rem; }
+    nav {
+      display: flex;
+      gap: 0.4rem;
+      margin-bottom: 1.5rem;
+    }
 
     nav button {
       background: transparent;
@@ -64,7 +65,7 @@
     }
 
     /* ── Main content ── */
-    main {
+    #content-wrapper {
       max-width: 760px;
       margin: 0 auto;
       padding: 2rem 1.5rem 4rem;
@@ -206,12 +207,7 @@
 
     /* ── Responsive mobile ── */
     @media (max-width: 600px) {
-      header {
-        flex-direction: column;
-        gap: 0.8rem;
-        padding: 1rem;
-        align-items: flex-start;
-      }
+      header { padding: 1rem; }
 
       nav { width: 100%; }
 
@@ -221,7 +217,7 @@
         padding: 0.5rem;
       }
 
-      main { padding: 1.2rem 0.8rem 3rem; }
+      #content-wrapper { padding: 1.2rem 0.8rem 3rem; }
 
       .feed-title { font-size: 1.3rem; }
 
@@ -235,11 +231,11 @@
 
   <header>
     <div class="logo">nguhma<span>.</span></div>
-    <nav id="feed-nav"></nav>
   </header>
 
-  <main id="content">
-    <div class="loading">Chargement…</div>
+  <main id="content-wrapper">
+    <nav id="feed-nav"></nav>
+    <div id="content"><div class="loading">Chargement…</div></div>
   </main>
 
   <script>
