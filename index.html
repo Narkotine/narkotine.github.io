@@ -3,20 +3,43 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nguhma — News</title>
+  <title>Nguhma — Galaxy Snacks</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@400;500;600;700&display=swap');
+
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
 
+    :root {
+      --bg: #0a0a0b;
+      --surface: #131315;
+      --surface-hover: #1a1a1d;
+      --border: #1e1e22;
+      --border-hover: #2a2a30;
+      --text: #e8e8ec;
+      --text-muted: #6e6e7a;
+      --text-dim: #44444f;
+      --accent: #7c6aff;
+      --accent-dim: rgba(124, 106, 255, 0.12);
+      --gold: #c9960a;
+      --gold-dim: rgba(180, 130, 0, 0.12);
+      --gold-border: #4a3800;
+      --gold-bg-start: #1a1600;
+      --gold-bg-end: #131000;
+      --mono: 'JetBrains Mono', monospace;
+      --sans: 'Outfit', sans-serif;
+    }
+
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #0f0f0f;
-      color: #f0f0f0;
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
       min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
     }
 
     /* ── Header ── */
@@ -24,44 +47,95 @@
       position: sticky;
       top: 0;
       z-index: 100;
-      background: #0f0f0f;
-      border-bottom: 1px solid #1e1e1e;
-      padding: 1.2rem 2rem;
+      background: rgba(10, 10, 11, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 0.9rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
 
     .logo {
-      font-size: 1.3rem;
+      font-family: var(--mono);
+      font-size: 1.1rem;
       font-weight: 700;
-      letter-spacing: -0.02em;
+      letter-spacing: -0.03em;
+      color: var(--text);
     }
 
-    .logo span { color: #7c6aff; }
+    .logo span {
+      color: var(--accent);
+    }
+
+    /* ── Language switcher ── */
+    .lang-switch {
+      display: flex;
+      gap: 0;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .lang-switch button {
+      background: transparent;
+      color: var(--text-muted);
+      border: none;
+      padding: 0.35rem 0.75rem;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .lang-switch button:not(:last-child) {
+      border-right: 1px solid var(--border);
+    }
+
+    .lang-switch button:hover {
+      color: var(--text);
+      background: var(--surface);
+    }
+
+    .lang-switch button.active {
+      background: var(--accent);
+      color: #fff;
+    }
 
     /* ── Feed selector ── */
     nav {
       display: flex;
       gap: 0.4rem;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.8rem;
     }
 
     nav button {
       background: transparent;
-      color: #888;
-      border: 1px solid #2a2a2a;
-      padding: 0.45rem 1rem;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      padding: 0.45rem 1.1rem;
       border-radius: 6px;
-      font-size: 0.85rem;
-      font-family: inherit;
+      font-size: 0.82rem;
+      font-family: var(--sans);
+      font-weight: 500;
       cursor: pointer;
       transition: all 0.2s ease;
     }
 
-    nav button:hover { color: #ccc; border-color: #444; }
+    nav button:hover {
+      color: var(--text);
+      border-color: var(--border-hover);
+      background: var(--surface);
+    }
 
     nav button.active {
-      background: #7c6aff;
+      background: var(--accent);
       color: #fff;
-      border-color: #7c6aff;
+      border-color: var(--accent);
     }
 
     /* ── Main content ── */
@@ -72,50 +146,55 @@
     }
 
     .feed-title {
-      font-size: 1.6rem;
+      font-size: 1.5rem;
       font-weight: 700;
-      margin-bottom: 0.3rem;
+      margin-bottom: 0.25rem;
+      letter-spacing: -0.02em;
     }
 
     .feed-subtitle {
-      color: #555;
-      font-size: 0.9rem;
+      color: var(--text-dim);
+      font-size: 0.85rem;
       margin-bottom: 2rem;
+      font-weight: 400;
     }
 
     /* ── Article cards ── */
     .article {
       border-radius: 10px;
       padding: 1.6rem;
-      margin-bottom: 1.2rem;
-      background: #161616;
-      border: 1px solid #222;
+      margin-bottom: 1rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
       transition: border-color 0.2s;
     }
 
-    .article:hover { border-color: #333; }
+    .article:hover {
+      border-color: var(--border-hover);
+    }
 
-    /* ── Fresh article : golden glow ── */
+    /* ── Fresh article: golden glow ── */
     .article.fresh {
-      background: linear-gradient(135deg, #1a1600 0%, #1c1400 60%, #161200 100%);
-      border-color: #4a3800;
-      box-shadow: 0 0 0 1px #4a3800, 0 4px 24px rgba(180, 130, 0, 0.12);
+      background: linear-gradient(135deg, var(--gold-bg-start) 0%, var(--gold-bg-end) 100%);
+      border-color: var(--gold-border);
+      box-shadow: 0 0 0 1px var(--gold-border), 0 4px 24px rgba(180, 130, 0, 0.10);
     }
 
     .fresh-badge {
       display: inline-flex;
       align-items: center;
       gap: 0.3rem;
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: #c9960a;
-      background: rgba(180, 130, 0, 0.12);
+      letter-spacing: 0.06em;
+      color: var(--gold);
+      background: var(--gold-dim);
       border: 1px solid rgba(180, 130, 0, 0.25);
       padding: 0.2rem 0.6rem;
       border-radius: 4px;
       margin-bottom: 0.7rem;
+      font-family: var(--mono);
     }
 
     /* ── Article meta ── */
@@ -127,46 +206,67 @@
       flex-wrap: wrap;
     }
 
-    .article-date { font-size: 0.8rem; color: #555; }
+    .article-date {
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      font-family: var(--mono);
+    }
 
-    .article-tags { display: flex; gap: 0.35rem; flex-wrap: wrap; }
+    .article-tags {
+      display: flex;
+      gap: 0.3rem;
+      flex-wrap: wrap;
+    }
 
     .tag {
-      font-size: 0.7rem;
-      background: #1a1a2e;
-      color: #7c6aff;
-      padding: 0.2rem 0.55rem;
+      font-size: 0.68rem;
+      font-family: var(--mono);
+      background: var(--accent-dim);
+      color: var(--accent);
+      padding: 0.18rem 0.55rem;
       border-radius: 4px;
+      font-weight: 600;
     }
 
     .article.fresh .tag {
-      background: rgba(180, 130, 0, 0.1);
-      color: #c9960a;
+      background: var(--gold-dim);
+      color: var(--gold);
     }
 
     .article-title {
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       font-weight: 600;
       margin-bottom: 1rem;
       line-height: 1.4;
-      color: #e8e8e8;
+      color: var(--text);
+      letter-spacing: -0.01em;
     }
 
     /* ── Markdown rendering ── */
-    .article-body { font-size: 0.9rem; color: #aaa; line-height: 1.7; }
-
-    .article-body h2 {
-      font-size: 1rem;
-      font-weight: 600;
-      color: #ddd;
-      margin: 1.4rem 0 0.5rem;
-      padding-top: 1rem;
-      border-top: 1px solid #1e1e1e;
+    .article-body {
+      font-size: 0.88rem;
+      color: #9a9aaa;
+      line-height: 1.75;
     }
 
-    .article.fresh .article-body h2 { border-top-color: #2a2000; }
+    .article-body h2 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #ccc;
+      margin: 1.4rem 0 0.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
 
-    .article-body h2:first-child { margin-top: 0; padding-top: 0; border-top: none; }
+    .article.fresh .article-body h2 {
+      border-top-color: #2a2000;
+    }
+
+    .article-body h2:first-child {
+      margin-top: 0;
+      padding-top: 0;
+      border-top: none;
+    }
 
     .article-body p { margin-bottom: 0.6rem; }
 
@@ -176,22 +276,23 @@
 
     .article-body li { margin-bottom: 0.3rem; }
 
-    .article-body strong { color: #e0e0e0; font-weight: 600; }
+    .article-body strong { color: var(--text); font-weight: 600; }
 
-    .article-body em { color: #999; font-style: italic; }
+    .article-body em { color: #7a7a8a; font-style: italic; }
 
     .article-body a {
-      color: #7c6aff;
+      color: var(--accent);
       text-decoration: none;
+      transition: opacity 0.15s;
     }
 
-    .article-body a:hover { text-decoration: underline; }
+    .article-body a:hover { opacity: 0.75; }
 
-    .article.fresh .article-body a { color: #c9960a; }
+    .article.fresh .article-body a { color: var(--gold); }
 
     .article-body hr {
       border: none;
-      border-top: 1px solid #1e1e1e;
+      border-top: 1px solid var(--border);
       margin: 1.2rem 0;
     }
 
@@ -200,30 +301,69 @@
     /* ── Empty / Loading ── */
     .empty, .loading {
       text-align: center;
-      color: #444;
+      color: var(--text-dim);
       padding: 4rem 0;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
+    }
+
+    .loading::after {
+      content: '';
+      display: inline-block;
+      width: 4px;
+      height: 4px;
+      background: var(--accent);
+      border-radius: 50%;
+      margin-left: 6px;
+      animation: pulse 1.2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.2; }
+      50% { opacity: 1; }
+    }
+
+    /* ── Fade-in animation ── */
+    .article {
+      animation: fadeUp 0.4s ease both;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     /* ── Responsive mobile ── */
     @media (max-width: 600px) {
-      header { padding: 1rem; }
+      header {
+        padding: 0.8rem 1rem;
+      }
 
-      nav { width: 100%; }
+      nav {
+        width: 100%;
+      }
 
       nav button {
         flex: 1;
         text-align: center;
-        padding: 0.5rem;
+        padding: 0.5rem 0.4rem;
+        font-size: 0.78rem;
       }
 
-      #content-wrapper { padding: 1.2rem 0.8rem 3rem; }
+      #content-wrapper {
+        padding: 1.2rem 0.8rem 3rem;
+      }
 
       .feed-title { font-size: 1.3rem; }
 
       .article { padding: 1.2rem; }
 
-      .article-title { font-size: 1rem; }
+      .article-title { font-size: 0.95rem; }
     }
   </style>
 </head>
@@ -231,85 +371,169 @@
 
   <header>
     <div class="logo">nguhma<span>.</span></div>
+    <div class="lang-switch" id="lang-switch"></div>
   </header>
 
   <main id="content-wrapper">
     <nav id="feed-nav"></nav>
-    <div id="content"><div class="loading">Chargement…</div></div>
+    <div id="content"><div class="loading">Loading</div></div>
   </main>
 
   <script>
-    const FEEDS = {
-      geopolitks: {
-        file: 'data/geopolitks.json',
-        title: 'Geopolitks',
-        subtitle: 'Géopolitique, conflits & diplomatie'
+    // ────────────────────────────────────────────────────────
+    //  REGISTRY — add categories & languages here, nothing else
+    // ────────────────────────────────────────────────────────
+
+    const LANGUAGES = {
+      fr: {
+        label: 'FR',
+        loading: 'Chargement',
+        empty: 'Aucun article pour le moment.',
+        error: 'Impossible de charger les articles.',
+        freshBadge: '⚡ Nouveau',
+        dateFmt: { day: 'numeric', month: 'long', year: 'numeric' },
+        dateLocale: 'fr-FR'
       },
-      'ai-newz': {
-        file: 'data/ai-newz.json',
-        title: 'AI Newz',
-        subtitle: 'Intelligence artificielle, tech & régulation'
+      eng: {
+        label: 'EN',
+        loading: 'Loading',
+        empty: 'No articles yet.',
+        error: 'Could not load articles.',
+        freshBadge: '⚡ Fresh',
+        dateFmt: { day: 'numeric', month: 'long', year: 'numeric' },
+        dateLocale: 'en-US'
       }
     };
 
-    let currentFeed = Object.keys(FEEDS)[0];
+    const CATEGORIES = {
+      AIz: {
+        title: { fr: 'AI & Robotics Snacks', eng: 'AI & Robotics Snacks' },
+        subtitle: {
+          fr: 'Intelligence artificielle, robots & hype technologique',
+          eng: 'Artificial intelligence, robots & tech hype'
+        }
+      },
+      Geopolitikz: {
+        title: { fr: 'Geopolitiks Snacks', eng: 'Geopolitiks Snacks' },
+        subtitle: {
+          fr: 'Géopolitique, conflits, diplomatie & tech comme force géopolitique',
+          eng: 'Geopolitics, conflicts, diplomacy & tech as geopolitical force'
+        }
+      }
+    };
 
-    // ── Marked config ──
+    // ────────────────────────────────────────────────────────
+    //  STATE
+    // ────────────────────────────────────────────────────────
+
+    let currentLang = localStorage.getItem('snacks-lang') || 'fr';
+    let currentCategory = localStorage.getItem('snacks-cat') || Object.keys(CATEGORIES)[0];
+
+    // Validate stored values
+    if (!LANGUAGES[currentLang]) currentLang = 'fr';
+    if (!CATEGORIES[currentCategory]) currentCategory = Object.keys(CATEGORIES)[0];
+
+    // ────────────────────────────────────────────────────────
+    //  MARKED CONFIG
+    // ────────────────────────────────────────────────────────
     marked.setOptions({ breaks: true, gfm: true });
 
-    // ── Build nav ──
+    // ────────────────────────────────────────────────────────
+    //  FILE PATH BUILDER
+    // ────────────────────────────────────────────────────────
+
+    function dataFile(lang, slug) {
+      return `data/news.${lang}.${slug}`;
+    }
+
+    // ────────────────────────────────────────────────────────
+    //  LANGUAGE SWITCHER
+    // ────────────────────────────────────────────────────────
+
+    function buildLangSwitch() {
+      const container = document.getElementById('lang-switch');
+      container.innerHTML = '';
+      for (const [code, lang] of Object.entries(LANGUAGES)) {
+        const btn = document.createElement('button');
+        btn.textContent = lang.label;
+        btn.className = code === currentLang ? 'active' : '';
+        btn.addEventListener('click', () => {
+          if (code === currentLang) return;
+          currentLang = code;
+          localStorage.setItem('snacks-lang', code);
+          buildLangSwitch();
+          buildNav();
+          loadFeed(currentCategory);
+        });
+        container.appendChild(btn);
+      }
+    }
+
+    // ────────────────────────────────────────────────────────
+    //  CATEGORY NAV
+    // ────────────────────────────────────────────────────────
+
     function buildNav() {
       const nav = document.getElementById('feed-nav');
       nav.innerHTML = '';
-      for (const [key, feed] of Object.entries(FEEDS)) {
+      for (const [slug, cat] of Object.entries(CATEGORIES)) {
         const btn = document.createElement('button');
-        btn.textContent = feed.title;
-        btn.className = key === currentFeed ? 'active' : '';
-        btn.addEventListener('click', () => switchFeed(key));
+        btn.textContent = cat.title[currentLang] || cat.title['eng'] || slug;
+        btn.className = slug === currentCategory ? 'active' : '';
+        btn.addEventListener('click', () => switchFeed(slug));
         nav.appendChild(btn);
       }
     }
 
-    // ── Format date ──
+    // ────────────────────────────────────────────────────────
+    //  DATE FORMATTING
+    // ────────────────────────────────────────────────────────
+
     function formatDate(iso) {
-      const d = new Date(iso + 'T00:00:00');
-      return d.toLocaleDateString('fr-FR', {
-        day: 'numeric', month: 'long', year: 'numeric'
-      });
+      const d = new Date(iso + 'T12:00:00');
+      const lang = LANGUAGES[currentLang] || LANGUAGES['fr'];
+      return d.toLocaleDateString(lang.dateLocale, lang.dateFmt);
     }
 
-    // ── Today's date string ──
     function todayISO() {
       return new Date().toISOString().slice(0, 10);
     }
 
-    // ── Render articles ──
-    function renderArticles(articles, feed) {
+    // ────────────────────────────────────────────────────────
+    //  RENDER
+    // ────────────────────────────────────────────────────────
+
+    function renderArticles(articles, slug) {
       const main = document.getElementById('content');
+      const cat = CATEGORIES[slug];
+      const lang = LANGUAGES[currentLang];
       const today = todayISO();
+
+      const title = cat.title[currentLang] || cat.title['eng'] || slug;
+      const subtitle = cat.subtitle[currentLang] || cat.subtitle['eng'] || '';
 
       if (!articles.length) {
         main.innerHTML = `
-          <h2 class="feed-title">${feed.title}</h2>
-          <p class="feed-subtitle">${feed.subtitle}</p>
-          <div class="empty">Aucun article pour le moment.</div>`;
+          <h2 class="feed-title">${title}</h2>
+          <p class="feed-subtitle">${subtitle}</p>
+          <div class="empty">${lang.empty}</div>`;
         return;
       }
 
       articles.sort((a, b) => new Date(b.date) - new Date(a.date));
 
       let html = `
-        <h2 class="feed-title">${feed.title}</h2>
-        <p class="feed-subtitle">${feed.subtitle}</p>`;
+        <h2 class="feed-title">${title}</h2>
+        <p class="feed-subtitle">${subtitle}</p>`;
 
-      for (const a of articles) {
-        const isFresh = a.fresh === true || a.date === today;
+      articles.forEach((a, i) => {
+        const isFresh = a.date === today;
         const tags = (a.tags || []).map(t => `<span class="tag">${t}</span>`).join('');
         const bodyHTML = marked.parse(a.content || '');
 
         html += `
-        <article class="article${isFresh ? ' fresh' : ''}">
-          ${isFresh ? '<div class="fresh-badge">⚡ Nouveau</div>' : ''}
+        <article class="article${isFresh ? ' fresh' : ''}" style="animation-delay: ${i * 0.06}s">
+          ${isFresh ? `<div class="fresh-badge">${lang.freshBadge}</div>` : ''}
           <div class="article-meta">
             <span class="article-date">${formatDate(a.date)}</span>
             <div class="article-tags">${tags}</div>
@@ -317,38 +541,60 @@
           <h3 class="article-title">${a.title}</h3>
           <div class="article-body">${bodyHTML}</div>
         </article>`;
-      }
+      });
 
       main.innerHTML = html;
     }
 
-    // ── Load feed ──
-    async function loadFeed(key) {
-      const feed = FEEDS[key];
-      document.getElementById('content').innerHTML = '<div class="loading">Chargement…</div>';
+    // ────────────────────────────────────────────────────────
+    //  LOAD FEED
+    // ────────────────────────────────────────────────────────
+
+    async function loadFeed(slug) {
+      const lang = LANGUAGES[currentLang];
+      const main = document.getElementById('content');
+      const cat = CATEGORIES[slug];
+      const title = cat.title[currentLang] || cat.title['eng'] || slug;
+      const subtitle = cat.subtitle[currentLang] || cat.subtitle['eng'] || '';
+
+      main.innerHTML = `
+        <h2 class="feed-title">${title}</h2>
+        <p class="feed-subtitle">${subtitle}</p>
+        <div class="loading">${lang.loading}</div>`;
+
+      const file = dataFile(currentLang, slug);
+
       try {
-        const res = await fetch(feed.file + '?v=' + Date.now());
-        if (!res.ok) throw new Error();
+        const res = await fetch(file + '?v=' + Date.now());
+        if (!res.ok) throw new Error(res.status);
         const articles = await res.json();
-        renderArticles(articles, feed);
+        renderArticles(articles, slug);
       } catch {
-        document.getElementById('content').innerHTML = `
-          <h2 class="feed-title">${feed.title}</h2>
-          <p class="feed-subtitle">${feed.subtitle}</p>
-          <div class="empty">Impossible de charger les articles.</div>`;
+        main.innerHTML = `
+          <h2 class="feed-title">${title}</h2>
+          <p class="feed-subtitle">${subtitle}</p>
+          <div class="empty">${lang.error}</div>`;
       }
     }
 
-    // ── Switch feed ──
-    function switchFeed(key) {
-      currentFeed = key;
+    // ────────────────────────────────────────────────────────
+    //  SWITCH FEED
+    // ────────────────────────────────────────────────────────
+
+    function switchFeed(slug) {
+      currentCategory = slug;
+      localStorage.setItem('snacks-cat', slug);
       buildNav();
-      loadFeed(key);
+      loadFeed(slug);
     }
 
-    // ── Init ──
+    // ────────────────────────────────────────────────────────
+    //  INIT
+    // ────────────────────────────────────────────────────────
+
+    buildLangSwitch();
     buildNav();
-    loadFeed(currentFeed);
+    loadFeed(currentCategory);
   </script>
 
 </body>
