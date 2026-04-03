@@ -442,8 +442,8 @@
     //  FILE PATH BUILDER
     // ────────────────────────────────────────────────────────
 
-    function dataFile(lang, slug) {
-      return `data/news.${lang}.${slug}`;
+    function dataFile(lang, slug, n) {
+      return `data/news.${lang}.${slug}.${n}`;
     }
 
     // ────────────────────────────────────────────────────────
@@ -562,13 +562,28 @@
         <p class="feed-subtitle">${subtitle}</p>
         <div class="loading">${lang.loading}</div>`;
 
-      const file = dataFile(currentLang, slug);
-
       try {
-        const res = await fetch(file + '?v=' + Date.now());
-        if (!res.ok) throw new Error(res.status);
-        const articles = await res.json();
-        renderArticles(articles, slug);
+        const allArticles = [];
+        let n = 1;
+
+        while (true) {
+          const res = await fetch(dataFile(currentLang, slug, n) + '?v=' + Date.now());
+          if (!res.ok) break;
+          const articles = await res.json();
+          allArticles.push(...articles);
+          n++;
+        }
+
+        if (n === 1) {
+          // Aucun fichier trouvé
+          main.innerHTML = `
+            <h2 class="feed-title">${title}</h2>
+            <p class="feed-subtitle">${subtitle}</p>
+            <div class="empty">${lang.error}</div>`;
+          return;
+        }
+
+        renderArticles(allArticles, slug);
       } catch {
         main.innerHTML = `
           <h2 class="feed-title">${title}</h2>
