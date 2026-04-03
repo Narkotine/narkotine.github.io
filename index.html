@@ -520,7 +520,11 @@
         return;
       }
 
-      articles.sort((a, b) => new Date(b.date) - new Date(a.date));
+      articles.sort((a, b) => {
+        const dateDiff = new Date(b.date) - new Date(a.date);
+        if (dateDiff !== 0) return dateDiff;
+        return b.id - a.id;
+      });
 
       let html = `
         <h2 class="feed-title">${title}</h2>
