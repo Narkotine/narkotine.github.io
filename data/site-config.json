@@ -1,0 +1,88 @@
+{
+  "languages": {
+    "fr": {
+      "label": "FR",
+      "loading": "Chargement",
+      "empty": "Aucun article pour le moment.",
+      "error": "Impossible de charger les articles.",
+      "freshBadge": "Fresh drop",
+      "dateFmt": {
+        "day": "numeric",
+        "month": "long",
+        "year": "numeric"
+      },
+      "dateLocale": "fr-FR",
+      "heroTitle": "Deux flux nets. Une archive compacte.",
+      "heroCopy": "Briefings quotidiens sur l'IA, la robotique et la géopolitique technologique, avec bascule de langue et lecture d'archives.",
+      "heroStats": {
+        "language": "Langue active",
+        "category": "Flux actif",
+        "latest": "Dernière date"
+      }
+    },
+    "eng": {
+      "label": "EN",
+      "loading": "Loading",
+      "empty": "No articles yet.",
+      "error": "Could not load articles.",
+      "freshBadge": "Fresh drop",
+      "dateFmt": {
+        "day": "numeric",
+        "month": "long",
+        "year": "numeric"
+      },
+      "dateLocale": "en-US",
+      "heroTitle": "Two sharp feeds. One compact archive.",
+      "heroCopy": "Daily briefings on AI, robotics, and tech geopolitics, with language switching and archive browsing.",
+      "heroStats": {
+        "language": "Active language",
+        "category": "Active feed",
+        "latest": "Latest date"
+      }
+    }
+  },
+  "categories": {
+    "AIz": {
+      "title": {
+        "fr": "AI & Robotics Snacks",
+        "eng": "AI & Robotics Snacks"
+      },
+      "subtitle": {
+        "fr": "Intelligence artificielle, robots et hype technologique",
+        "eng": "Artificial intelligence, robotics, and tech hype"
+      },
+      "classificationRules": [
+        "Use AIz for stories mainly about AI, robotics, models, labs, benchmarks, launches, deployments, or product capability.",
+        "If a government or geopolitical actor appears but the story is mainly about the technology itself, keep it in AIz."
+      ]
+    },
+    "Geopolitikz": {
+      "title": {
+        "fr": "Geopolitiks Snacks",
+        "eng": "Geopolitiks Snacks"
+      },
+      "subtitle": {
+        "fr": "Geopolitique, conflits, diplomatie et tech comme force stratégique",
+        "eng": "Geopolitics, conflicts, diplomacy, and tech as strategic force"
+      },
+      "classificationRules": [
+        "Use Geopolitikz for stories where AI or robotics are primarily framed through politics, regulation, diplomacy, war, sanctions, industrial policy, or national strategy.",
+        "When a story could fit both feeds, choose the feed where the geopolitical or policy consequence is the most insightful angle."
+      ]
+    }
+  },
+  "dataFiles": {
+    "pattern": "data/news.{lang}.{slug}.{index}"
+  },
+  "contentRules": {
+    "requiredFields": [
+      "id",
+      "title",
+      "date",
+      "tags",
+      "content"
+    ],
+    "dateFormat": "YYYY-MM-DD",
+    "contentFormat": "markdown"
+  }
+}

@@ -16,24 +16,16 @@
     <header class="site-header">
       <div class="brand-block">
         <p class="eyebrow">Daily briefing terminal</p>
-        <div class="logo">nguhma<span>.</span></div>
       </div>
-      <div class="lang-switch" id="lang-switch" aria-label="Language switcher"></div>
+      <nav class="feed-nav header-feed-nav" id="feed-nav" aria-label="Feed categories"></nav>
+      <div class="header-controls">
+        <div class="theme-switch" id="theme-switch" aria-label="Theme switcher"></div>
+        <div class="lang-switch" id="lang-switch" aria-label="Language switcher"></div>
+      </div>
     </header>
 
     <main class="layout" id="app">
-      <section class="hero-panel" aria-labelledby="hero-title">
-        <p class="hero-kicker">Galaxy Snacks</p>
-        <h1 id="hero-title">Two sharp feeds. One compact archive.</h1>
-        <p class="hero-copy">
-          Briefings quotidiens sur l'IA, la robotique et la géopolitique
-          technologique, avec bascule de langue et lecture d'archives.
-        </p>
-        <div class="hero-meta" id="hero-meta"></div>
-      </section>
-
       <section class="feed-panel">
-        <nav class="feed-nav" id="feed-nav" aria-label="Feed categories"></nav>
         <div id="content" class="feed-content">
           <div class="loading">Loading</div>
         </div>
@@ -41,6 +33,6 @@
     </main>
   </div>
 
-  <script type="module" src="assets/app.js"></script>
+  <script type="module" src="assets/app.js?v=20260430"></script>
 </body>
 </html>

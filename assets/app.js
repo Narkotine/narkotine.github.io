@@ -1,85 +1,44 @@
-const LANGUAGES = {
-  fr: {
-    label: 'FR',
-    loading: 'Chargement',
-    empty: 'Aucun article pour le moment.',
-    error: 'Impossible de charger les articles.',
-    freshBadge: 'Fresh drop',
-    dateFmt: { day: 'numeric', month: 'long', year: 'numeric' },
-    dateLocale: 'fr-FR',
-    heroTitle: 'Deux flux nets. Une archive compacte.',
-    heroCopy:
-      "Briefings quotidiens sur l'IA, la robotique et la géopolitique technologique, avec bascule de langue et lecture d'archives.",
-    heroStats: {
-      language: 'Langue active',
-      category: 'Flux actif',
-      latest: 'Dernière date'
-    }
-  },
-  eng: {
-    label: 'EN',
-    loading: 'Loading',
-    empty: 'No articles yet.',
-    error: 'Could not load articles.',
-    freshBadge: 'Fresh drop',
-    dateFmt: { day: 'numeric', month: 'long', year: 'numeric' },
-    dateLocale: 'en-US',
-    heroTitle: 'Two sharp feeds. One compact archive.',
-    heroCopy:
-      'Daily briefings on AI, robotics, and tech geopolitics, with language switching and archive browsing.',
-    heroStats: {
-      language: 'Active language',
-      category: 'Active feed',
-      latest: 'Latest date'
-    }
-  }
-};
-
-const CATEGORIES = {
-  AIz: {
-    title: { fr: 'AI & Robotics Snacks', eng: 'AI & Robotics Snacks' },
-    subtitle: {
-      fr: 'Intelligence artificielle, robots et hype technologique',
-      eng: 'Artificial intelligence, robotics, and tech hype'
-    }
-  },
-  Geopolitikz: {
-    title: { fr: 'Geopolitiks Snacks', eng: 'Geopolitiks Snacks' },
-    subtitle: {
-      fr: 'Geopolitique, conflits, diplomatie et tech comme force stratégique',
-      eng: 'Geopolitics, conflicts, diplomacy, and tech as strategic force'
-    }
-  }
-};
+let siteConfig;
 
 const STORAGE_KEYS = {
   lang: 'snacks-lang',
-  category: 'snacks-cat'
+  category: 'snacks-cat',
+  theme: 'snacks-theme'
+};
+
+const THEMES = {
+  soft: { label: 'Soft' },
+  sharp: { label: 'Sharp' },
+  night: { label: 'Night' }
 };
 
 const DOM = {
+  themeSwitch: document.getElementById('theme-switch'),
   langSwitch: document.getElementById('lang-switch'),
   feedNav: document.getElementById('feed-nav'),
-  content: document.getElementById('content'),
-  heroTitle: document.getElementById('hero-title'),
-  heroMeta: document.getElementById('hero-meta'),
-  heroCopy: document.querySelector('.hero-copy')
+  content: document.getElementById('content')
 };
 
 const feedCache = new Map();
+const archiveLoadState = new Map();
 
-let currentLang = validateLanguage(localStorage.getItem(STORAGE_KEYS.lang));
-let currentCategory = validateCategory(localStorage.getItem(STORAGE_KEYS.category));
+let currentLang;
+let currentCategory;
+let currentTheme;
 let activeLoadToken = 0;
 
 marked.setOptions({ breaks: true, gfm: true });
 
 function validateLanguage(value) {
-  return LANGUAGES[value] ? value : 'fr';
+  return siteConfig.languages[value] ? value : 'fr';
 }
 
 function validateCategory(value) {
-  return CATEGORIES[value] ? value : Object.keys(CATEGORIES)[0];
+  return siteConfig.categories[value] ? value : Object.keys(siteConfig.categories)[0];
+}
+
+function validateTheme(value) {
+  return THEMES[value] ? value : 'soft';
 }
 
 function dataFile(lang, slug, index) {
@@ -87,11 +46,11 @@ function dataFile(lang, slug, index) {
 }
 
 function getLanguageConfig() {
-  return LANGUAGES[currentLang] || LANGUAGES.fr;
+  return siteConfig.languages[currentLang] || siteConfig.languages.fr;
 }
 
 function getCategoryConfig(slug = currentCategory) {
-  return CATEGORIES[slug] || CATEGORIES[Object.keys(CATEGORIES)[0]];
+  return siteConfig.categories[slug] || siteConfig.categories[Object.keys(siteConfig.categories)[0]];
 }
 
 function getLocalizedCategoryTitle(slug = currentCategory) {
@@ -102,6 +61,18 @@ function getLocalizedCategoryTitle(slug = currentCategory) {
 function getLocalizedCategorySubtitle(slug = currentCategory) {
   const category = getCategoryConfig(slug);
   return category.subtitle[currentLang] || category.subtitle.eng || '';
+}
+
+function getArchiveLabels() {
+  return currentLang === 'eng'
+    ? {
+        show: 'View archive',
+        hide: 'Hide archive'
+      }
+    : {
+        show: 'Voir les archives',
+        hide: 'Masquer les archives'
+      };
 }
 
 function formatDate(iso) {
@@ -123,10 +94,40 @@ function createElement(tag, className, text) {
   return node;
 }
 
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function applyTheme() {
+  document.body.dataset.theme = currentTheme;
+}
+
+function buildThemeSwitch() {
+  DOM.themeSwitch.replaceChildren();
+
+  Object.entries(THEMES).forEach(([themeKey, theme]) => {
+    const button = createElement(
+      'button',
+      themeKey === currentTheme ? 'active' : '',
+      theme.label
+    );
+    button.type = 'button';
+    button.setAttribute('aria-pressed', String(themeKey === currentTheme));
+    button.addEventListener('click', () => {
+      if (themeKey === currentTheme) return;
+      currentTheme = themeKey;
+      localStorage.setItem(STORAGE_KEYS.theme, currentTheme);
+      applyTheme();
+      buildThemeSwitch();
+    });
+    DOM.themeSwitch.appendChild(button);
+  });
+}
+
 function buildLangSwitch() {
   DOM.langSwitch.replaceChildren();
 
-  Object.entries(LANGUAGES).forEach(([code, lang]) => {
+  Object.entries(siteConfig.languages).forEach(([code, lang]) => {
     const button = createElement('button', code === currentLang ? 'active' : '', lang.label);
     button.type = 'button';
     button.setAttribute('aria-pressed', String(code === currentLang));
@@ -136,8 +137,8 @@ function buildLangSwitch() {
       localStorage.setItem(STORAGE_KEYS.lang, currentLang);
       buildLangSwitch();
       buildNav();
-      updateHero();
       loadFeed(currentCategory);
+      scrollToTop();
     });
     DOM.langSwitch.appendChild(button);
   });
@@ -146,7 +147,7 @@ function buildLangSwitch() {
 function buildNav() {
   DOM.feedNav.replaceChildren();
 
-  Object.entries(CATEGORIES).forEach(([slug, category]) => {
+  Object.entries(siteConfig.categories).forEach(([slug, category]) => {
     const button = createElement(
       'button',
       slug === currentCategory ? 'active' : '',
@@ -157,29 +158,6 @@ function buildNav() {
     button.addEventListener('click', () => switchFeed(slug));
     DOM.feedNav.appendChild(button);
   });
-}
-
-function renderHeroStat(label, value) {
-  const wrapper = createElement('div', 'hero-stat');
-  const labelNode = createElement('span', 'hero-stat-label', label);
-  const valueNode = createElement('span', 'hero-stat-value', value);
-  wrapper.append(labelNode, valueNode);
-  return wrapper;
-}
-
-function updateHero(articles = []) {
-  const lang = getLanguageConfig();
-  DOM.heroTitle.textContent = lang.heroTitle;
-  DOM.heroCopy.textContent = lang.heroCopy;
-
-  const latestArticle = [...articles].sort((a, b) => new Date(b.date) - new Date(a.date))[0];
-  const latestDate = latestArticle ? formatDate(latestArticle.date) : '—';
-
-  DOM.heroMeta.replaceChildren(
-    renderHeroStat(lang.heroStats.language, lang.label),
-    renderHeroStat(lang.heroStats.category, getLocalizedCategoryTitle()),
-    renderHeroStat(lang.heroStats.latest, latestDate)
-  );
 }
 
 function renderFeedHeader(slug) {
@@ -199,29 +177,36 @@ function renderLoadingState(slug) {
   DOM.content.replaceChildren(renderFeedHeader(slug), createElement('div', 'loading', lang.loading));
 }
 
-function renderArticles(articles, slug) {
-  const lang = getLanguageConfig();
-  const wrapper = document.createDocumentFragment();
-  const sortedArticles = [...articles].sort((a, b) => {
-    const dateDiff = new Date(b.date) - new Date(a.date);
-    if (dateDiff !== 0) return dateDiff;
-    return (b.id || 0) - (a.id || 0);
+function getRecentDateSet(articles) {
+  const distinctDates = [...new Set(articles.map((article) => article.date))]
+    .sort((a, b) => new Date(b) - new Date(a))
+    .slice(0, 3);
+
+  return new Set(distinctDates);
+}
+
+function splitArticlesByRecency(articles) {
+  const recentDateSet = getRecentDateSet(articles);
+  const recent = [];
+  const archive = [];
+
+  articles.forEach((article) => {
+    if (recentDateSet.has(article.date)) {
+      recent.push(article);
+    } else {
+      archive.push(article);
+    }
   });
 
-  wrapper.appendChild(renderFeedHeader(slug));
+  return { recent, archive };
+}
 
-  if (!sortedArticles.length) {
-    wrapper.appendChild(createElement('div', 'empty', lang.empty));
-    DOM.content.replaceChildren(wrapper);
-    updateHero([]);
-    return;
-  }
-
+function renderArticleList(articles, lang) {
   const list = createElement('div', 'articles');
   const today = todayISO();
 
-  sortedArticles.forEach((article, index) => {
-    const isFresh = article.date === today || article.fresh === true;
+  articles.forEach((article, index) => {
+    const isFresh = article.date === today;
     const card = createElement('article', `article${isFresh ? ' fresh' : ''}`);
     card.style.animationDelay = `${index * 0.06}s`;
 
@@ -246,9 +231,94 @@ function renderArticles(articles, slug) {
     list.appendChild(card);
   });
 
-  wrapper.appendChild(list);
+  return list;
+}
+
+function createFeedStateKey(lang = currentLang, slug = currentCategory) {
+  return `${lang}:${slug}`;
+}
+
+function buildArchiveSection(archiveArticles, slug, lang) {
+  const archiveStateKey = createFeedStateKey();
+  const archiveSection = createElement('section', 'archive-panel');
+  const archiveActions = createElement('div', 'archive-actions');
+  const archiveContent = createElement('div', 'archive-content');
+  const archiveState = archiveLoadState.get(archiveStateKey) || { loaded: false, loading: false };
+  const archiveLabels = getArchiveLabels();
+
+  const buttonLabel = archiveState.loaded ? archiveLabels.hide : archiveLabels.show;
+  const archiveButton = createElement('button', 'archive-toggle', buttonLabel);
+  archiveButton.type = 'button';
+
+  const loadArchive = async () => {
+    archiveLoadState.set(archiveStateKey, { loaded: false, loading: true });
+    renderArticles(feedCache.get(archiveStateKey)?.recent || [], slug);
+
+    try {
+      const feedState = await loadArchiveFeed(currentLang, currentCategory);
+      archiveLoadState.set(archiveStateKey, { loaded: true, loading: false });
+      renderArticles(feedState.recent, slug);
+    } catch (error) {
+      console.error(error);
+      archiveLoadState.set(archiveStateKey, { loaded: false, loading: false });
+      renderArticles(feedCache.get(archiveStateKey)?.recent || [], slug);
+    }
+  };
+
+  archiveButton.addEventListener('click', async () => {
+    const currentState = archiveLoadState.get(archiveStateKey) || { loaded: false, loading: false };
+
+    if (currentState.loading) return;
+
+    if (!currentState.loaded) {
+      await loadArchive();
+      return;
+    }
+
+    archiveLoadState.set(archiveStateKey, { loaded: false, loading: false });
+    renderArticles(feedCache.get(archiveStateKey)?.recent || [], slug);
+  });
+
+  archiveActions.appendChild(archiveButton);
+
+  if (archiveState.loading) {
+    archiveContent.appendChild(createElement('div', 'loading archive-loading', lang.loading));
+  } else if (archiveState.loaded) {
+    archiveContent.appendChild(renderArticleList(archiveArticles, lang));
+  }
+
+  archiveSection.append(archiveActions, archiveContent);
+  return archiveSection;
+}
+
+function renderArticles(articles, slug) {
+  const lang = getLanguageConfig();
+  const wrapper = document.createDocumentFragment();
+  const sortedArticles = [...articles].sort((a, b) => {
+    const dateDiff = new Date(b.date) - new Date(a.date);
+    if (dateDiff !== 0) return dateDiff;
+    return (b.id || 0) - (a.id || 0);
+  });
+
+  wrapper.appendChild(renderFeedHeader(slug));
+
+  if (!sortedArticles.length) {
+    wrapper.appendChild(createElement('div', 'empty', lang.empty));
+    DOM.content.replaceChildren(wrapper);
+    return;
+  }
+
+  const archiveStateKey = createFeedStateKey();
+  const cachedState = feedCache.get(archiveStateKey);
+  const archiveArticles = cachedState?.archive || [];
+  const { recent } = splitArticlesByRecency(sortedArticles);
+  wrapper.appendChild(renderArticleList(recent, lang));
+
+  if ((cachedState && cachedState.nextArchivePage >= 1) || archiveArticles.length) {
+    wrapper.appendChild(buildArchiveSection(archiveArticles, slug, lang));
+  }
+
   DOM.content.replaceChildren(wrapper);
-  updateHero(sortedArticles);
 }
 
 async function fetchFeedPage(lang, slug, index) {
@@ -264,28 +334,133 @@ async function fetchFeedPage(lang, slug, index) {
   return response.json();
 }
 
+async function hasFeedPage(lang, slug, index) {
+  const response = await fetch(dataFile(lang, slug, index), { cache: 'no-store', method: 'HEAD' });
+  if (response.status === 404) {
+    return false;
+  }
+
+  if (!response.ok) {
+    throw new Error(`Feed probe failed with status ${response.status}`);
+  }
+
+  return true;
+}
+
+async function findLatestFeedPage(lang, slug) {
+  if (!(await hasFeedPage(lang, slug, 1))) {
+    throw new Error(`No feed files found for ${lang}:${slug}`);
+  }
+
+  let low = 1;
+  let high = 1;
+
+  while (await hasFeedPage(lang, slug, high)) {
+    low = high;
+    high *= 2;
+  }
+
+  while (low < high) {
+    const mid = Math.floor((low + high + 1) / 2);
+    if (await hasFeedPage(lang, slug, mid)) {
+      low = mid;
+    } else {
+      high = mid - 1;
+    }
+  }
+
+  return low;
+}
+
+async function fetchRecentFeed(lang, slug) {
+  const latestPage = await findLatestFeedPage(lang, slug);
+  const recent = [];
+  const recentDates = new Set();
+  let page = latestPage;
+
+  while (page >= 1 && recentDates.size < 3) {
+    const chunk = await fetchFeedPage(lang, slug, page);
+    const entries = Array.isArray(chunk) ? chunk : [];
+
+    entries.forEach((article) => {
+      recent.push(article);
+      if (article.date) {
+        recentDates.add(article.date);
+      }
+    });
+    page -= 1;
+  }
+
+  return {
+    latestPage,
+    nextArchivePage: page,
+    recent
+  };
+}
+
+async function loadArchiveFeed(lang, slug) {
+  const cacheKey = createFeedStateKey(lang, slug);
+  const cached = feedCache.get(cacheKey);
+
+  if (!cached) {
+    throw new Error(`Missing cached recent feed for ${cacheKey}`);
+  }
+
+  if (cached.archiveLoaded) {
+    return cached;
+  }
+
+  const archive = [...cached.archive];
+
+  for (let page = cached.nextArchivePage; page >= 1; page -= 1) {
+    const chunk = await fetchFeedPage(lang, slug, page);
+    archive.push(...chunk);
+  }
+
+  const nextState = {
+    ...cached,
+    archive,
+    archiveLoaded: true
+  };
+
+  feedCache.set(cacheKey, nextState);
+  return nextState;
+}
+
+async function loadSiteConfig() {
+  const response = await fetch('data/site-config.json', { cache: 'no-store' });
+  if (!response.ok) {
+    throw new Error(`Config request failed with status ${response.status}`);
+  }
+
+  const nextConfig = await response.json();
+  if (!nextConfig.languages || !nextConfig.categories) {
+    throw new Error('Invalid site config payload');
+  }
+
+  siteConfig = nextConfig;
+  currentLang = validateLanguage(localStorage.getItem(STORAGE_KEYS.lang));
+  currentCategory = validateCategory(localStorage.getItem(STORAGE_KEYS.category));
+}
+
 async function fetchFeed(lang, slug) {
-  const cacheKey = `${lang}:${slug}`;
+  const cacheKey = createFeedStateKey(lang, slug);
   if (feedCache.has(cacheKey)) {
     return feedCache.get(cacheKey);
   }
 
-  const articles = [];
-  let page = 1;
+  const recentState = await fetchRecentFeed(lang, slug);
+  const splitState = splitArticlesByRecency(recentState.recent);
+  const nextState = {
+    latestPage: recentState.latestPage,
+    nextArchivePage: recentState.nextArchivePage,
+    recent: splitState.recent,
+    archive: splitState.archive,
+    archiveLoaded: recentState.nextArchivePage < 1
+  };
 
-  while (true) {
-    const chunk = await fetchFeedPage(lang, slug, page);
-    if (!chunk) break;
-    articles.push(...chunk);
-    page += 1;
-  }
-
-  if (page === 1) {
-    throw new Error(`No feed files found for ${cacheKey}`);
-  }
-
-  feedCache.set(cacheKey, articles);
-  return articles;
+  feedCache.set(cacheKey, nextState);
+  return nextState;
 }
 
 async function loadFeed(slug) {
@@ -295,14 +470,13 @@ async function loadFeed(slug) {
   renderLoadingState(slug);
 
   try {
-    const articles = await fetchFeed(requestedLang, slug);
+    const feedState = await fetchFeed(requestedLang, slug);
     if (loadToken !== activeLoadToken) return;
-    renderArticles(articles, slug);
+    renderArticles(feedState.recent, slug);
   } catch (error) {
     if (loadToken !== activeLoadToken) return;
     console.error(error);
     renderEmptyState(lang.error, slug);
-    updateHero([]);
   }
 }
 
@@ -311,11 +485,23 @@ function switchFeed(slug) {
   currentCategory = validateCategory(slug);
   localStorage.setItem(STORAGE_KEYS.category, currentCategory);
   buildNav();
-  updateHero();
   loadFeed(currentCategory);
+  scrollToTop();
 }
 
-buildLangSwitch();
-buildNav();
-updateHero();
-loadFeed(currentCategory);
+async function bootstrap() {
+  try {
+    await loadSiteConfig();
+    currentTheme = validateTheme(localStorage.getItem(STORAGE_KEYS.theme));
+    applyTheme();
+    buildThemeSwitch();
+    buildLangSwitch();
+    buildNav();
+    loadFeed(currentCategory);
+  } catch (error) {
+    console.error(error);
+    DOM.content.replaceChildren(createElement('div', 'empty', 'Configuration error.'));
+  }
+}
+
+bootstrap();
