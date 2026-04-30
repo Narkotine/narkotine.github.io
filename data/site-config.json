@@ -52,8 +52,8 @@
         "eng": "Artificial intelligence, robotics, and tech hype"
       },
       "classificationRules": [
-        "Use AIz for stories mainly about AI, robotics, models, labs, benchmarks, launches, deployments, or product capability.",
-        "If a government or geopolitical actor appears but the story is mainly about the technology itself, keep it in AIz."
+        "Use AIz for stories mainly about AI, robotics, models, labs, benchmarks, launches, deployments, compute, hardware, cloud capacity, product capability, or the business and technical stack around them.",
+        "If a government, regulator, or geopolitical actor appears but the story is still mainly about the technology, infrastructure, product, model, or company, keep it in AIz."
       ]
     },
     "Geopolitikz": {
@@ -66,8 +66,8 @@
         "eng": "Geopolitics, conflicts, diplomacy, and tech as strategic force"
       },
       "classificationRules": [
-        "Use Geopolitikz for stories where AI or robotics are primarily framed through politics, regulation, diplomacy, war, sanctions, industrial policy, or national strategy.",
-        "When a story could fit both feeds, choose the feed where the geopolitical or policy consequence is the most insightful angle."
+        "Use Geopolitikz only when the primary frame is geopolitics: sanctions, export controls, diplomacy, war, state coercion, national-security confrontation, or interstate rivalry.",
+        "If a story can still be read primarily as an AI industry, model, cloud, chip, robotics, or infrastructure story, it belongs in AIz rather than Geopolitikz."
       ]
     }
   },
