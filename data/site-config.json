@@ -52,8 +52,8 @@
         "eng": "Artificial intelligence, robotics, and tech hype"
       },
       "classificationRules": [
-        "Use AIz for stories mainly about AI, robotics, models, labs, benchmarks, launches, deployments, compute, hardware, cloud capacity, product capability, or the business and technical stack around them.",
-        "If a government, regulator, or geopolitical actor appears but the story is still mainly about the technology, infrastructure, product, model, or company, keep it in AIz."
+        "Use AIz for stories mainly about AI, robotics, models, labs, benchmarks, launches, deployments, compute, GPUs, chips, software, cloud capacity, connected devices, product capability, or the business and technical stack around them.",
+        "If a government, regulator, military, parliament, sanctions regime, export-control fight, industrial-policy dispute, or geopolitical actor appears but the story concerns AI, GPUs, chips, software, cloud, computers, robotics, connected devices, model access, or the technology stack, keep it in AIz."
       ]
     },
     "Geopolitikz": {
@@ -66,8 +66,8 @@
         "eng": "Geopolitics, conflicts, diplomacy, and tech as strategic force"
       },
       "classificationRules": [
-        "Use Geopolitikz only when the primary frame is geopolitics: sanctions, export controls, diplomacy, war, state coercion, national-security confrontation, or interstate rivalry.",
-        "If a story can still be read primarily as an AI industry, model, cloud, chip, robotics, or infrastructure story, it belongs in AIz rather than Geopolitikz."
+        "Use Geopolitikz only when the primary frame is geopolitics without a core AI, GPU, computing, software, cloud, chip, connected-device, or robotics angle: diplomacy, war, ceasefires, territorial disputes, sanctions unrelated to technology, state coercion, international regulation, national-security confrontation, or interstate rivalry.",
+        "If a story can be read primarily as an AI, GPU, chip, software, computing, cloud, connected-device, robotics, model, or technology-infrastructure story, it belongs in AIz rather than Geopolitikz, even when politicians, militaries, regulators, sanctions, export controls, or China/U.S. rivalry are involved."
       ]
     }
   },
