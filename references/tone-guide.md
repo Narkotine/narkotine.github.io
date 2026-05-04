@@ -39,10 +39,14 @@ Use this story format:
 - If a story is missing specifics, research further before using it.
 - Avoid vague adjectives when a number or concrete claim would do the job.
 - Write each language version as a proper rewrite, not a literal translation.
+- For French output, use normal French orthography with accents and diacritics throughout.
+- Do not strip accents for convenience or ASCII compatibility. Prefer `était`, `sécurité`, `frappé`, `évacuer`, `clé`, `modèles` over `etait`, `securite`, `frappe`, `evacuer`, `cle`, `modeles`.
+- Before saving French copy, do a final surface proofreading pass focused on accents, apostrophes, and other common French diacritics.
 
 ## Language Notes
 
 - French copy can be slightly more biting, but it should remain clean and readable.
+- French copy must read like native edited French, not an ASCII transliteration of French.
 - English copy should stay tight and dry rather than theatrical.
 - Headlines should be compact and memorable without drifting into clickbait.
 
