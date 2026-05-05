@@ -33,11 +33,12 @@ Use this story format:
 
 ## Requirements
 
-- Keep each story under 150 words.
+- Target 90 to 130 words per story. Keep the hard limit at 150 words.
 - Keep sarcasm in the framing, not in the facts.
 - Prefer named actors, dates, metrics, prices, benchmark scores, funding amounts, model names, and direct institutional claims.
 - If a story is missing specifics, research further before using it.
 - Avoid vague adjectives when a number or concrete claim would do the job.
+- Prefer two strong bullets over three average bullets.
 - Write each language version as a proper rewrite, not a literal translation.
 - For French output, use normal French orthography with accents and diacritics throughout.
 - Do not strip accents for convenience or ASCII compatibility. Prefer `était`, `sécurité`, `frappé`, `évacuer`, `clé`, `modèles` over `etait`, `securite`, `frappe`, `evacuer`, `cle`, `modeles`.
@@ -53,5 +54,6 @@ Use this story format:
 ## Sources
 
 - Prefer primary sources and direct reporting.
-- Use low-quality aggregators only as a pointer to better sourcing, not as the final source of record.
+- Use aggregators as discovery and coverage-gap checks, not as final sources of record unless they add original reporting or analysis.
+- Follow `references/source-policy.md` for candidate selection, source hierarchy, and link rules.
 - Preserve exact dates and institution names.
