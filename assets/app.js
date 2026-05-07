@@ -94,6 +94,179 @@ function createElement(tag, className, text) {
   return node;
 }
 
+function normalizeText(value) {
+  return String(value || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
+}
+
+function textTokens(value) {
+  const stopWords = new Set([
+    'a',
+    'an',
+    'and',
+    'aux',
+    'd',
+    'de',
+    'des',
+    'du',
+    'en',
+    'et',
+    'for',
+    'in',
+    'l',
+    'la',
+    'le',
+    'les',
+    'of',
+    'on',
+    'the',
+    'to',
+    'un',
+    'une',
+    'with'
+  ]);
+
+  return normalizeText(value)
+    .match(/[a-z0-9]+/g)
+    ?.filter((token) => token.length > 1 && !stopWords.has(token)) || [];
+}
+
+function slugify(value) {
+  return normalizeText(value)
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 72) || 'item';
+}
+
+function createTagLink(tag, targetId) {
+  const link = createElement('a', 'tag tag-link', tag);
+  link.href = `#${targetId}`;
+  link.addEventListener('click', (event) => {
+    const target = document.getElementById(targetId);
+    if (!target) return;
+
+    event.preventDefault();
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    history.replaceState(null, '', `#${targetId}`);
+  });
+  return link;
+}
+
+function splitMarkdownNewsSections(content, article, slug) {
+  const lines = String(content || '').split(/\r?\n/);
+  const sections = [];
+  let current = null;
+
+  lines.forEach((line) => {
+    const headingMatch = line.match(/^##\s+(.+)$/);
+
+    if (headingMatch) {
+      current = {
+        title: headingMatch[1].trim(),
+        markdown: line
+      };
+      sections.push(current);
+      return;
+    }
+
+    if (current) {
+      current.markdown += `\n${line}`;
+    }
+  });
+
+  return sections.map((section, index) => ({
+    ...section,
+    index,
+    targetId: `news-${slugify(currentLang)}-${slugify(slug)}-${slugify(article.date)}-${slugify(article.id)}-${index + 1}`
+  }));
+}
+
+function isSourceSection(section) {
+  return /^📌?\s*sources?\b/i.test(normalizeText(section.title).replace(/^[-\s]+/, ''));
+}
+
+function matchTagsToNewsSections(tags, sections) {
+  const tagMatches = new Map();
+  const usableSections = sections.filter((section) => !isSourceSection(section));
+
+  tags.forEach((tag) => {
+    const tagTokenList = textTokens(tag);
+    if (!tagTokenList.length || !usableSections.length) {
+      tagMatches.set(tag, []);
+      return;
+    }
+
+    const exactMatches = usableSections.filter((section) => {
+      const sectionText = normalizeText(`${section.title}\n${section.markdown}`);
+      return tagTokenList.every((token) => sectionText.includes(token));
+    });
+
+    if (exactMatches.length) {
+      tagMatches.set(tag, exactMatches);
+      return;
+    }
+
+    const scoredMatches = usableSections
+      .map((section) => {
+        const sectionText = normalizeText(`${section.title}\n${section.markdown}`);
+        return {
+          section,
+          score: tagTokenList.filter((token) => sectionText.includes(token)).length
+        };
+      })
+      .filter((match) => match.score > 0)
+      .sort((a, b) => b.score - a.score || a.section.index - b.section.index);
+
+    tagMatches.set(tag, scoredMatches.length ? [scoredMatches[0].section] : []);
+  });
+
+  return tagMatches;
+}
+
+function buildTagTargets(tags, tagMatches, fallbackId) {
+  const targets = new Map();
+
+  tags.forEach((tag) => {
+    const firstMatch = tagMatches.get(tag)?.[0];
+    targets.set(tag, firstMatch?.targetId || fallbackId);
+  });
+
+  return targets;
+}
+
+function renderTagList(tags, tagTargets, className = 'article-tags') {
+  const tagList = createElement('div', className);
+  tags.forEach((tag) => {
+    tagList.appendChild(createTagLink(tag, tagTargets.get(tag)));
+  });
+  return tagList;
+}
+
+function decorateNewsSections(body, sections, tags, tagMatches, tagTargets) {
+  const headings = [...body.querySelectorAll('h2')];
+
+  sections.forEach((section, index) => {
+    const heading = headings[index];
+    if (!heading) return;
+
+    heading.id = section.targetId;
+    heading.classList.add('news-heading');
+
+    const sectionTags = tags.filter((tag) =>
+      (tagMatches.get(tag) || []).some((matchedSection) => matchedSection.index === section.index)
+    );
+
+    if (!sectionTags.length) return;
+
+    heading.insertAdjacentElement(
+      'afterend',
+      renderTagList(sectionTags, tagTargets, 'article-tags news-tags')
+    );
+  });
+}
+
 function scrollToTop() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -201,13 +374,20 @@ function splitArticlesByRecency(articles) {
   return { recent, archive };
 }
 
-function renderArticleList(articles, lang) {
+function renderArticleList(articles, lang, slug) {
   const list = createElement('div', 'articles');
   const today = todayISO();
 
   articles.forEach((article, index) => {
     const isFresh = article.date === today;
     const card = createElement('article', `article${isFresh ? ' fresh' : ''}`);
+    const articleId = `brief-${slugify(currentLang)}-${slugify(slug)}-${slugify(article.date)}-${slugify(article.id)}`;
+    const tags = article.tags || [];
+    const newsSections = splitMarkdownNewsSections(article.content || '', article, slug);
+    const tagMatches = matchTagsToNewsSections(tags, newsSections);
+    const tagTargets = buildTagTargets(tags, tagMatches, articleId);
+
+    card.id = articleId;
     card.style.animationDelay = `${index * 0.06}s`;
 
     if (isFresh) {
@@ -216,16 +396,12 @@ function renderArticleList(articles, lang) {
 
     const meta = createElement('div', 'article-meta');
     meta.appendChild(createElement('span', 'article-date', formatDate(article.date)));
-
-    const tagList = createElement('div', 'article-tags');
-    (article.tags || []).forEach((tag) => {
-      tagList.appendChild(createElement('span', 'tag', tag));
-    });
-    meta.appendChild(tagList);
+    meta.appendChild(renderTagList(tags, tagTargets));
 
     const title = createElement('h3', 'article-title', article.title || '');
     const body = createElement('div', 'article-body');
     body.innerHTML = marked.parse(article.content || '');
+    decorateNewsSections(body, newsSections, tags, tagMatches, tagTargets);
 
     card.append(meta, title, body);
     list.appendChild(card);
@@ -284,7 +460,7 @@ function buildArchiveSection(archiveArticles, slug, lang) {
   if (archiveState.loading) {
     archiveContent.appendChild(createElement('div', 'loading archive-loading', lang.loading));
   } else if (archiveState.loaded) {
-    archiveContent.appendChild(renderArticleList(archiveArticles, lang));
+    archiveContent.appendChild(renderArticleList(archiveArticles, lang, slug));
   }
 
   archiveSection.append(archiveActions, archiveContent);
@@ -312,7 +488,7 @@ function renderArticles(articles, slug) {
   const cachedState = feedCache.get(archiveStateKey);
   const archiveArticles = cachedState?.archive || [];
   const { recent } = splitArticlesByRecency(sortedArticles);
-  wrapper.appendChild(renderArticleList(recent, lang));
+  wrapper.appendChild(renderArticleList(recent, lang, slug));
 
   if ((cachedState && cachedState.nextArchivePage >= 1) || archiveArticles.length) {
     wrapper.appendChild(buildArchiveSection(archiveArticles, slug, lang));
