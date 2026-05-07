@@ -8,7 +8,7 @@ const STORAGE_KEYS = {
 
 const THEMES = {
   soft: { label: 'Soft' },
-  sharp: { label: 'Sharp' },
+  aurum: { label: 'Aurum' },
   night: { label: 'Night' }
 };
 
@@ -273,6 +273,10 @@ function scrollToTop() {
 
 function applyTheme() {
   document.body.dataset.theme = currentTheme;
+}
+
+function syncScrolledState() {
+  document.body.classList.toggle('is-scrolled', window.scrollY > 0);
 }
 
 function buildThemeSwitch() {
@@ -670,6 +674,8 @@ async function bootstrap() {
     await loadSiteConfig();
     currentTheme = validateTheme(localStorage.getItem(STORAGE_KEYS.theme));
     applyTheme();
+    syncScrolledState();
+    window.addEventListener('scroll', syncScrolledState, { passive: true });
     buildThemeSwitch();
     buildLangSwitch();
     buildNav();
