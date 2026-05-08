@@ -1,0 +1,19 @@
+[
+  {
+    "id": 37,
+    "title": "AI & Robotics Snacks - 8 mai 2026",
+    "date": "2026-05-08",
+    "tags": [
+      "CAISI",
+      "Google DeepMind",
+      "Microsoft",
+      "xAI",
+      "OpenAI",
+      "Anthropic",
+      "The Deployment Company",
+      "Arm",
+      "TSMC"
+    ],
+    "content": "**AI & Robotics Snacks** - 8 mai 2026\n\n---\n\n## 🧪 Washington veut voir les modèles avant leur sortie\n\nLe lancement d'un modèle frontière passe désormais par la case laboratoire fédéral. Une cérémonie logicielle très détendue.\n\n- **L'accès:** NIST annonce que CAISI a signé avec Google DeepMind, Microsoft et xAI pour des évaluations avant déploiement et des recherches ciblées sur la sécurité.\n- **L'échelle:** CAISI dit avoir déjà mené plus de 40 évaluations, y compris sur des modèles non publiés, parfois fournis avec garde-fous réduits ou retirés.\n- **Le contexte:** Reuters rappelle qu'OpenAI et Anthropic avaient déjà des accords, renégociés sous l'AI Action Plan de Trump.\n\n*Move fast, mais en déposant d'abord la version inquiétante chez Commerce.*\n\n**Sources:** [NIST](https://www.nist.gov/news-events/news/2026/05/caisi-signs-agreements-regarding-frontier-ai-national-security-testing) | [Reuters via Investing.com](https://www.investing.com/news/stock-market-news/microsoft-xai-and-google-will-share-ai-models-with-us-govt-for-security-reviews-4658803)\n\n---\n\n## 🧰 OpenAI et Anthropic réinventent le conseil, avec plus de capital-risque\n\nLes labos voulaient automatiser les consultants. Ils commencent par financer et acheter des consultants. Très pur comme disruption.\n\n- **La course:** Reuters indique que les véhicules d'OpenAI et d'Anthropic discutent d'acquisitions de sociétés de services IA pour aider les entreprises à déployer leurs modèles.\n- **Les montants:** OpenAI lève environ 4 milliards de dollars auprès de 19 investisseurs pour The Deployment Company; Anthropic pousse un véhicule de 1,5 milliard avec Blackstone, Hellman & Friedman et Goldman Sachs.\n- **Le blocage:** il faut encore des ingénieurs et consultants pour adapter les modèles aux données, systèmes et workflows clients.\n\n*L'IA d'entreprise a donc toujours besoin d'humains, de badges et de réunions.*\n\n**Sources:** [Reuters via Investing.com](https://www.investing.com/news/stock-market-news/openai-anthropic-ventures-in-talks-to-buy-ai-services-firms-sources-say-4659837) | [Axios](https://www.axios.com/2026/05/04/openai-anthropic-private-equity-enterprise-business)\n\n---\n\n## 🧱 Arm retrouve le vrai patron de l'IA: la file d'attente des fabs\n\nTout le monde veut des puces pour agents autonomes. La réalité répond wafers, packaging et machines de test.\n\n- **La chute:** Reuters rapporte qu'Arm a perdu 5%, à 225,43 dollars, après des avertissements sur les smartphones et l'approvisionnement de sa puce IA, menaçant plus de 12 milliards de dollars de valeur boursière.\n- **La puce:** le nouveau processeur data center d'Arm pour l'IA agentique est produit par TSMC en 3 nanomètres, avec deux morceaux de silicium fonctionnant comme une seule puce.\n- **La limite:** Rene Haas dit qu'Arm peut servir le premier milliard de dollars de demande, mais pas encore sécuriser la capacité au-delà.\n\n*La chaîne IA reste un tableur où chaque ligne finit par: demander poliment à TSMC.*\n\n**Sources:** [Reuters via WSAU](https://wsau.com/2026/05/07/arm-shares-slide-on-smartphone-market-weakness-ai-chip-supply-concerns/)\n"
+  }
+]

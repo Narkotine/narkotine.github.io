@@ -1,0 +1,19 @@
+[
+  {
+    "id": 37,
+    "title": "AI & Robotics Snacks - May 8, 2026",
+    "date": "2026-05-08",
+    "tags": [
+      "CAISI",
+      "Google DeepMind",
+      "Microsoft",
+      "xAI",
+      "OpenAI",
+      "Anthropic",
+      "The Deployment Company",
+      "Arm",
+      "TSMC"
+    ],
+    "content": "**AI & Robotics Snacks** - May 8, 2026\n\n---\n\n## 🧪 Washington asked to see the models before they escape\n\nFrontier AI launch prep now includes a government lab pass. Very normal software shipping ritual.\n\n- **The access:** NIST says CAISI signed new agreements with Google DeepMind, Microsoft and xAI for pre-deployment evaluations and targeted security research.\n- **The scope:** CAISI says it has completed more than 40 evaluations, including unreleased models, and developers often provide versions with safeguards reduced or removed.\n- **The context:** Reuters says OpenAI and Anthropic already had earlier agreements, now renegotiated under the Trump administration's AI Action Plan.\n\n*Move fast, but first hand the scary build to Commerce.*\n\n**Sources:** [NIST](https://www.nist.gov/news-events/news/2026/05/caisi-signs-agreements-regarding-frontier-ai-national-security-testing) | [Reuters via Investing.com](https://www.investing.com/news/stock-market-news/microsoft-xai-and-google-will-share-ai-models-with-us-govt-for-security-reviews-4658803)\n\n---\n\n## 🧰 OpenAI and Anthropic discovered consulting with better branding\n\nThe model labs are racing to replace consultants by buying, funding and repackaging consultants. Innovation remains undefeated.\n\n- **The land grab:** Reuters says OpenAI and Anthropic ventures are in talks to acquire AI services firms that help customers deploy models.\n- **The money:** OpenAI is raising about $4 billion from 19 investors for The Deployment Company; Anthropic is pursuing a $1.5 billion push backed by firms including Blackstone, Hellman & Friedman and Goldman Sachs.\n- **The bottleneck:** both companies need engineers and consultants to adapt models to customer data, systems and workflows.\n\n*Turns out enterprise AI still needs humans with calendars and access badges.*\n\n**Sources:** [Reuters via Investing.com](https://www.investing.com/news/stock-market-news/openai-anthropic-ventures-in-talks-to-buy-ai-services-firms-sources-say-4659837) | [Axios](https://www.axios.com/2026/05/04/openai-anthropic-private-equity-enterprise-business)\n\n---\n\n## 🧱 Arm found the AI chip bottleneck hiding in the fab queue\n\nEveryone wants agentic AI silicon; unfortunately, physics still insists on wafers, packaging and test gear.\n\n- **The slide:** Reuters says Arm shares fell 5% to $225.43 after warnings on smartphone softness and AI chip supply, threatening more than $12 billion in market value.\n- **The chip:** Arm's new data-center processor for agentic AI is being made by TSMC on 3-nanometer technology from two pieces of silicon operating as one chip.\n- **The constraint:** CEO Rene Haas said Arm can meet the first $1 billion of demand, but still needs capacity beyond that.\n\n*The AI supply chain remains a spreadsheet where every row says: ask TSMC nicely.*\n\n**Sources:** [Reuters via WSAU](https://wsau.com/2026/05/07/arm-shares-slide-on-smartphone-market-weakness-ai-chip-supply-concerns/)\n"
+  }
+]
