@@ -1,0 +1,19 @@
+[
+  {
+    "id": 42,
+    "title": "AI & Robotics Snacks - 16 mai 2026",
+    "date": "2026-05-16",
+    "tags": [
+      "Nvidia",
+      "H200",
+      "Chine",
+      "Contrôles à l'export",
+      "Anthropic",
+      "Copyright",
+      "Claude",
+      "Rivian",
+      "IA embarquée"
+    ],
+    "content": "**AI & Robotics Snacks** - 16 mai 2026\n\n---\n\n## 🧨 Nvidia obtient le feu vert, puis le mur\n\nWashington a approuvé le commerce. Pékin a fourni le rebondissement. Gestion produit de superpuissance, version efficace.\n\n- **L'autorisation :** Reuters indique que les États-Unis ont validé l'achat de puces Nvidia H200 par une dizaine d'entreprises chinoises, dont Alibaba, Tencent, ByteDance et JD.com.\n- **Le blocage :** aucune livraison n'a encore eu lieu; les acheteurs chinois auraient freiné après des consignes de Pékin, pendant que Jensen Huang tentait de relancer le dossier durant le voyage de Trump en Chine.\n- **L'enjeu :** Lenovo confirme être autorisé à vendre des H200 en Chine, un marché qui représentait autrefois environ 13 % du chiffre d'affaires total de Nvidia.\n\n*Autorisé ne veut pas dire livré. Les contrôles export découvrent le suspense.*\n\n**Sources :** [Reuters via Yahoo Finance](https://ca.finance.yahoo.com/news/exclusive-us-clears-h200-chip-054811582.html) | [Reuters via MarketScreener](https://www.marketscreener.com/news/us-clears-h200-chip-sales-to-10-china-firms-as-nvidia-ceo-looks-for-breakthrough-ce7f5bddd98df020)\n\n---\n\n## 📚 La facture livres d'Anthropic reste au tribunal\n\nLe règlement sur les données d'entraînement arrive à l'étape tableur, celle où l'on débat frais, représentants et propreté d'un chèque à 1,5 milliard.\n\n- **L'audience :** Reuters rapporte que la juge Araceli Martinez-Olguin a demandé plus de détails sur le règlement proposé par Anthropic avec des auteurs.\n- **Les points ouverts :** elle n'a pas donné son approbation finale jeudi, réclamant des précisions sur les honoraires d'avocats et les paiements aux plaignants principaux.\n- **Le précédent :** Reuters décrit l'accord comme le plus grand règlement copyright connu aux États-Unis et le premier grand dossier américain d'entraînement IA à se conclure.\n\n*Le modèle va vite. Le droit d'auteur, lui, a choisi la vitesse contentieux.*\n\n**Sources :** [Reuters via Investing.com](https://www.investing.com/news/stock-market-news/us-judge-considers-anthropics-15-billion-settlement-of-authors-lawsuit-4690939) | [Reuters via Yahoo Finance](https://ca.finance.yahoo.com/news/us-judge-considers-anthropics-1-235024726.html)\n\n---\n\n## 🚙 Rivian donne une voix maison au pickup\n\nRivian ne veut toujours pas de CarPlay dans l'habitacle, donc la voiture reçoit son propre assistant. Intégration verticale, mais bavarde.\n\n- **Le déploiement :** Ars Technica indique que Rivian Assistant arrive avec la mise à jour 2026.15 sur les véhicules Gen1 et Gen2 disposant d'un abonnement ou essai Connect+.\n- **Les commandes :** l'assistant peut gérer réglages, climatisation, navigation, médias, messages et appels, mais aussi consulter le manuel et expliquer les alertes du véhicule.\n- **La suite :** Yahoo Autos précise que \"Hey Rivian\" arrive sur R1T et R1S, avec un support R2 prévu ensuite.\n\n*Le véhicule défini par logiciel devient le véhicule qui interrompt poliment.*\n\n**Sources :** [Ars Technica](https://arstechnica.com/cars/2026/05/rivian-adds-a-new-onboard-ai-assistant-to-its-latest-software-update/) | [Yahoo Autos](https://autos.yahoo.com/ev-and-future-tech/articles/rivian-debuts-hey-rivian-ai-110000159.html)"
+  }
+]
