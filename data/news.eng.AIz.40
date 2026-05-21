@@ -1,0 +1,20 @@
+[
+  {
+    "id": 44,
+    "title": "AI & Robotics Snacks - May 21, 2026",
+    "date": "2026-05-21",
+    "tags": [
+      "OpenAI",
+      "Discrete Geometry",
+      "Erdos",
+      "Nvidia",
+      "Q1 FY2027",
+      "Anthropic",
+      "SpaceX",
+      "Colossus",
+      "xAI",
+      "IPO"
+    ],
+    "content": "**AI & Robotics Snacks** - May 21, 2026\n\n---\n\n## 🧮 OpenAI found the geometry trapdoor\n\nA frontier model just made an 80-year math conjecture look like a legacy ticket with bad ownership.\n\n- **The proof:** OpenAI says an internal general-purpose reasoning model disproved a central conjecture in the planar unit distance problem, first posed by Paul Erdos in 1946.\n- **The math:** the model produced an infinite family of point configurations with at least n^(1+delta) unit-distance pairs; a refinement by Princeton's Will Sawin gives delta = 0.014.\n- **The check:** external mathematicians reviewed the proof and companion remarks, with Tim Gowers calling it a milestone in AI mathematics.\n\n*The spreadsheet of unsolved problems now has a new column: model did it.*\n\n**Sources:** [OpenAI](https://openai.com/index/model-disproves-discrete-geometry-conjecture/) | [Axios](https://www.axios.com/2026/05/21/ai-news-cycle-openai-anthropic-spacex)\n\n---\n\n## 💰 Nvidia printed the infrastructure receipt\n\nThe AI economy asked for more compute, and Nvidia answered with a quarterly number that looks like a national budget line.\n\n- **The quarter:** Nvidia reported record Q1 fiscal 2027 revenue of $81.6 billion, up 20% sequentially and 85% year over year.\n- **The engine room:** data center revenue reached $75.2 billion, while Nvidia reorganized reporting around data center and edge computing to show where the future money lives.\n- **The payout:** the company returned about $20 billion to shareholders and authorized another $80 billion in buybacks.\n\n*The picks-and-shovels business has discovered it can also sell the mine plan.*\n\n**Sources:** [Nvidia](https://www.globenewswire.com/news-release/2026/05/20/3298888/0/en/nvidia-announces-financial-results-for-first-quarter-fiscal-2027.html) | [AP](https://apnews.com/article/955c699a0c91c423edc81b7903b80f85)\n\n---\n\n## 🧾 Anthropic got profitable, then leased a furnace\n\nClaude's maker is apparently learning the frontier-lab law: first show profit, then immediately feed it to compute.\n\n- **The revenue:** TechCrunch, citing the Wall Street Journal, says Anthropic told investors Q2 revenue should more than double to about $10.9 billion and produce its first operating profit.\n- **The bill:** Axios says SpaceX's IPO paperwork shows Anthropic will pay $1.25 billion per month through May 2029 for Colossus compute capacity.\n- **The escape hatch:** either side can exit the compute deal with 90 days' notice, because even hyperscale dependency needs a panic door.\n\n*The AI margin story is alive, provided nobody looks too long at the electricity meter.*\n\n**Sources:** [TechCrunch](https://techcrunch.com/2026/05/20/anthropic-says-its-about-to-have-its-first-profitable-quarter/) | [Axios](https://www.axios.com/2026/05/20/anthropic-spacex-compute)\n\n---\n\n## 🚀 SpaceX turned rockets into an AI prospectus\n\nThe IPO filing still has Mars in the window, but the back room smells like GPUs, debt and Musk control rights.\n\n- **The offering:** AP says SpaceX filed for what could be one of the biggest public stock sales ever, with reports putting the raise near $75 billion.\n- **The losses:** the filing shows $2.6 billion in operating losses last year on $18.7 billion in revenue, while the AI business lost $6.4 billion.\n- **The stack:** TechCrunch says roughly 60% of 2025 capital spending, about $20 billion, went to SpaceX's AI division after the xAI and X acquisitions.\n\n*Apparently the path to Mars now routes through Memphis data centers.*\n\n**Sources:** [AP](https://apnews.com/article/spacex-initial-public-offering-musk-da83ecf78085755a522b8376254a8273) | [TechCrunch](https://techcrunch.com/2026/05/20/the-spacex-ipo-filing-ai-bets-starship-dreams-elon-musk/)"
+  }
+]
