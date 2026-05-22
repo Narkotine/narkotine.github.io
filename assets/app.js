@@ -154,6 +154,10 @@ function createTagLink(tag, targetId) {
   return link;
 }
 
+function createTagLabel(tag) {
+  return createElement('span', 'tag', tag);
+}
+
 function splitMarkdownNewsSections(content, article, slug) {
   const lines = String(content || '').split(/\r?\n/);
   const sections = [];
@@ -236,10 +240,10 @@ function buildTagTargets(tags, tagMatches, fallbackId) {
   return targets;
 }
 
-function renderTagList(tags, tagTargets, className = 'article-tags') {
+function renderTagList(tags, tagTargets, className = 'article-tags', options = {}) {
   const tagList = createElement('div', className);
   tags.forEach((tag) => {
-    tagList.appendChild(createTagLink(tag, tagTargets.get(tag)));
+    tagList.appendChild(options.linked === false ? createTagLabel(tag) : createTagLink(tag, tagTargets.get(tag)));
   });
   return tagList;
 }
@@ -262,7 +266,7 @@ function decorateNewsSections(body, sections, tags, tagMatches, tagTargets) {
 
     heading.insertAdjacentElement(
       'afterend',
-      renderTagList(sectionTags, tagTargets, 'article-tags news-tags')
+      renderTagList(sectionTags, tagTargets, 'article-tags news-tags', { linked: false })
     );
   });
 }
