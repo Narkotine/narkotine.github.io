@@ -33,6 +33,9 @@
         <button id="btn-sound-toggle" class="icon-btn" aria-label="Activer ou couper le son" title="Son">
           <span id="sound-icon">🔊</span>
         </button>
+        <button id="btn-settings-modal" class="icon-btn" aria-label="Options & Règles" title="Options de la partie">
+          <span>⚙️</span>
+        </button>
         <button id="btn-words-modal" class="icon-btn" aria-label="Gérer les mots et catégories" title="Mots & Thèmes">
           <span>🏷️</span>
         </button>
@@ -61,7 +64,7 @@
         <!-- FORMULAIRE D'AJOUT RAPIDE -->
         <div class="card setup-card">
           <form id="form-add-player" class="add-player-form" onsubmit="return false;">
-            <input type="text" id="input-new-player-name" placeholder="Ex: Julie, Thomas, Sarah..." maxlength="18" autocomplete="off" autofocus>
+            <input type="text" id="input-new-player-name" placeholder="Prénom (ex: Julie)..." maxlength="18" autocomplete="off" autofocus>
             <button type="submit" id="btn-add-player" class="btn btn-primary">
               <span>Ajouter</span> ➕
             </button>
@@ -215,13 +218,45 @@
           </div>
         </div>
 
+        <!-- RÈGLES OPTIONNELLES -->
+        <div class="card setup-card">
+          <div class="card-header-row">
+            <h2 class="card-title">⚙️ Règles optionnelles</h2>
+          </div>
+          <div class="options-toggles-list">
+            <!-- RÈGLE 1 : RÔLES VISIBLES -->
+            <label class="option-toggle-row" for="opt-show-roles">
+              <div class="option-text-col">
+                <span class="option-title">👁️ Rôles connus</span>
+                <span class="option-desc">Afficher si on est Civil ou Undercover dès la révélation</span>
+              </div>
+              <div class="toggle-wrapper">
+                <input type="checkbox" id="opt-show-roles" class="toggle-checkbox">
+                <span class="toggle-switch"></span>
+              </div>
+            </label>
+
+            <!-- RÈGLE 2 : VOTE ANONYME -->
+            <label class="option-toggle-row" for="opt-anon-voting">
+              <div class="option-text-col">
+                <span class="option-title">🗳️ Vote anonyme</span>
+                <span class="option-desc">Vote secret joueur par joueur sur le téléphone avec gestion des ex æquo</span>
+              </div>
+              <div class="toggle-wrapper">
+                <input type="checkbox" id="opt-anon-voting" class="toggle-checkbox">
+                <span class="toggle-switch"></span>
+              </div>
+            </label>
+          </div>
+        </div>
+
         <!-- BOUTONS D'ACTION FINALE -->
         <div class="setup-submit-bar dual-buttons">
           <button id="btn-back-to-setup" class="btn btn-secondary btn-large">
             <span>⬅️ Prénoms</span>
           </button>
           <button id="btn-start-game" class="btn btn-primary btn-large btn-glow">
-            <span>Lancer la partie pour de vrai ! 🚀</span>
+            <span>Lancer la partie ! 🚀</span>
           </button>
         </div>
       </section>
@@ -337,31 +372,142 @@
       <!-- 4. ÉCRAN DE VOTE & ÉLIMINATION                          -->
       <!-- ======================================================== -->
       <section id="screen-voting" class="screen">
-        <div class="phase-header">
-          <div class="phase-badge danger">
-            <span class="badge-dot pulse"></span>
-            <span>Tribunal & Vote</span>
+        
+        <!-- A. MODE DE VOTE PUBLIC DIRECT -->
+        <div id="voting-public-mode" class="voting-mode-section">
+          <div class="phase-header">
+            <div class="phase-badge danger">
+              <span class="badge-dot pulse"></span>
+              <span>Tribunal & Vote</span>
+            </div>
+            <h1 class="phase-title">Qui est l'imposteur ?</h1>
+            <p class="phase-instructions">Débattez entre vous et sélectionnez le joueur le plus suspect pour l'éliminer.</p>
           </div>
-          <h1 class="phase-title">Qui est l'imposteur ?</h1>
-          <p class="phase-instructions">Débattez entre vous et sélectionnez le joueur le plus suspect pour l'éliminer.</p>
+
+          <!-- GRILLE DES JOUEURS À ÉLIMINER -->
+          <div class="vote-grid-container">
+            <div id="voting-players-grid" class="voting-players-grid">
+              <!-- Cartes des joueurs vivants -->
+            </div>
+          </div>
+
+          <div class="voting-actions-bar">
+            <div id="selected-suspect-banner" class="selected-suspect-banner hidden">
+              <span>Suspect choisi :</span>
+              <strong id="selected-suspect-name">-</strong>
+            </div>
+            <button id="btn-confirm-elimination" class="btn btn-danger btn-large" disabled>
+              <span>Éliminer ce joueur</span> ⚡
+            </button>
+          </div>
         </div>
 
-        <!-- GRILLE DES JOUEURS À ÉLIMINER -->
-        <div class="vote-grid-container">
-          <div id="voting-players-grid" class="voting-players-grid">
-            <!-- Cartes des joueurs vivants -->
+        <!-- B. MODE DE VOTE ANONYME TOUR PAR TOUR -->
+        <div id="voting-anonymous-mode" class="voting-mode-section hidden">
+          
+          <!-- ÉTAPE 1 : PASSER LE TÉLÉPHONE AU JOUEUR -->
+          <div id="anon-pass-screen" class="anon-substep">
+            <div class="phase-header">
+              <div class="phase-badge">
+                <span class="badge-dot"></span>
+                <span id="anon-voter-step-badge">Vote 1 sur 4</span>
+              </div>
+              <h1 class="phase-title">Vote Anonyme 🗳️</h1>
+              <p class="phase-instructions">Chaque joueur vote secrètement à l'abri des regards.</p>
+            </div>
+
+            <div class="reveal-player-banner">
+              <div class="player-avatar large" id="anon-voter-avatar">?</div>
+              <div class="reveal-callout">
+                <span class="subtext">Passez l'appareil à</span>
+                <h2 class="current-player-name" id="anon-voter-name">Alex</h2>
+              </div>
+            </div>
+
+            <div class="card setup-card text-center">
+              <p class="card-prompt-text">Assurez-vous que personne ne regarde votre écran pour voter.</p>
+              <button id="btn-anon-start-vote" class="btn btn-primary btn-large btn-glow">
+                <span>Voter secrètement 🔒</span>
+              </button>
+            </div>
           </div>
+
+          <!-- ÉTAPE 2 : BULLETIN SECRET DU JOUEUR -->
+          <div id="anon-ballot-screen" class="anon-substep hidden">
+            <div class="phase-header">
+              <div class="phase-badge danger">
+                <span class="badge-dot pulse"></span>
+                <span>Votre Bulletin Secret</span>
+              </div>
+              <h1 class="phase-title">Votre vote</h1>
+              <p class="phase-instructions"><strong id="anon-current-voter-badge">Alex</strong>, touchez le joueur que vous suspectez :</p>
+            </div>
+
+            <div class="vote-grid-container">
+              <div id="anon-suspects-grid" class="voting-players-grid">
+                <!-- Suspects pour le vote secret -->
+              </div>
+            </div>
+
+            <div class="voting-actions-bar">
+              <button id="btn-anon-submit-vote" class="btn btn-primary btn-large" disabled>
+                <span>Confirmer mon vote secret 🔒</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- ÉTAPE 3 : DÉPOUILLEMENT & RÉSULTATS -->
+          <div id="anon-results-screen" class="anon-substep hidden">
+            <div class="phase-header">
+              <div class="phase-badge danger">
+                <span class="badge-dot pulse"></span>
+                <span>Dépouillement</span>
+              </div>
+              <h1 class="phase-title">Résultats du Vote</h1>
+              <p class="phase-instructions">Découvrez les votes exprimés par les joueurs :</p>
+            </div>
+
+            <!-- LISTE DES SCORES -->
+            <div class="card setup-card">
+              <div id="anon-tallies-list" class="anon-tallies-list">
+                <!-- Rempli dynamiquement avec les barres de score -->
+              </div>
+            </div>
+
+            <!-- VERDICT SIMPLE (PAS D'ÉGALITÉ) -->
+            <div id="anon-verdict-banner" class="verdict-card">
+              <div class="verdict-icon">⚡</div>
+              <h2 class="verdict-title" id="anon-verdict-title">Majorité contre Alex !</h2>
+              <p class="verdict-subtitle" id="anon-verdict-subtitle">Ce joueur a recueilli le plus de voix (3 votes).</p>
+              <button id="btn-anon-confirm-elim" class="btn btn-danger btn-large">
+                <span>Éliminer ce joueur</span> ⚡
+              </button>
+            </div>
+
+            <!-- CAS D'ÉGALITÉ (EX AEQUO) -->
+            <div id="anon-tie-banner" class="verdict-card tie-card hidden">
+              <div class="verdict-icon">⚖️</div>
+              <h2 class="verdict-title" id="anon-tie-title">Égalité / Ex æquo !</h2>
+              <p class="verdict-subtitle">Débattez entre vous pour vous mettre d'accord, puis sélectionnez qui éliminer :</p>
+              
+              <div id="anon-tied-suspects-grid" class="voting-players-grid">
+                <!-- Cartes des joueurs à égalité -->
+              </div>
+
+              <div class="tie-actions-bar">
+                <button id="btn-anon-eliminate-tied" class="btn btn-danger btn-large" disabled>
+                  <span>Éliminer après débat ⚡</span>
+                </button>
+                <button id="btn-anon-revote" class="btn btn-secondary btn-large">
+                  <span>🔄 Relancer un vote secret</span>
+                </button>
+              </div>
+            </div>
+
+          </div>
+
         </div>
 
-        <div class="voting-actions-bar">
-          <div id="selected-suspect-banner" class="selected-suspect-banner hidden">
-            <span>Suspect choisi :</span>
-            <strong id="selected-suspect-name">-</strong>
-          </div>
-          <button id="btn-confirm-elimination" class="btn btn-danger btn-large" disabled>
-            <span>Éliminer ce joueur</span> ⚡
-          </button>
-        </div>
       </section>
 
       <!-- ======================================================== -->
@@ -575,6 +721,49 @@
         <div class="modal-footer">
           <button id="btn-reset-stats" class="btn btn-danger btn-small">Réinitialiser les stats</button>
           <button class="btn btn-primary" data-close="modal-stats">Fermer</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- MODAL : PARAMÈTRES & RÈGLES OPTIONNELLES EN DIRECT        -->
+    <!-- ======================================================== -->
+    <div id="modal-settings" class="modal-overlay hidden">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h2 class="modal-title">⚙️ Options de la partie</h2>
+          <button class="modal-close-btn" data-close="modal-settings">✕</button>
+        </div>
+        <div class="modal-body">
+          <p class="modal-settings-intro">Ces réglages s'appliquent immédiatement, y compris pendant la partie :</p>
+          <div class="options-toggles-list">
+            <!-- RÈGLE 1 : RÔLES VISIBLES -->
+            <label class="option-toggle-row" for="modal-opt-show-roles">
+              <div class="option-text-col">
+                <span class="option-title">👁️ Rôles connus</span>
+                <span class="option-desc">Afficher si on est Civil ou Undercover dès la révélation</span>
+              </div>
+              <div class="toggle-wrapper">
+                <input type="checkbox" id="modal-opt-show-roles" class="toggle-checkbox">
+                <span class="toggle-switch"></span>
+              </div>
+            </label>
+
+            <!-- RÈGLE 2 : VOTE ANONYME -->
+            <label class="option-toggle-row" for="modal-opt-anon-voting">
+              <div class="option-text-col">
+                <span class="option-title">🗳️ Vote anonyme</span>
+                <span class="option-desc">Vote secret tour par tour sur le téléphone avec gestion des ex æquo</span>
+              </div>
+              <div class="toggle-wrapper">
+                <input type="checkbox" id="modal-opt-anon-voting" class="toggle-checkbox">
+                <span class="toggle-switch"></span>
+              </div>
+            </label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary" data-close="modal-settings">Fermer</button>
         </div>
       </div>
     </div>

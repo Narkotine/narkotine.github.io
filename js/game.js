@@ -40,6 +40,13 @@ export class UndercoverGame {
     this.winner = null; // 'civils' | 'undercovers' | 'mrwhite'
     this.winReason = '';
     this.playedWordPairs = [];
+
+    // Options et vote anonyme
+    this.options = {
+      showRoles: false,
+      anonymousVoting: false
+    };
+    this.anonymousVotes = {}; // { [voterId]: targetPlayerId }
   }
 
   /**
@@ -67,10 +74,13 @@ export class UndercoverGame {
   /**
    * Initialise une nouvelle partie
    */
-  startNewGame(playerNames, roleConfig, selectedCategories = []) {
+  startNewGame(playerNames, roleConfig, selectedCategories = [], options = {}) {
     if (playerNames.length < 3) {
       throw new Error("Il faut au moins 3 joueurs pour démarrer.");
     }
+
+    this.options = Object.assign({ showRoles: false, anonymousVoting: false }, options);
+    this.anonymousVotes = {};
 
     const totalRoles = roleConfig.civils + roleConfig.undercovers + roleConfig.mrWhite;
     if (totalRoles !== playerNames.length) {
@@ -128,6 +138,10 @@ export class UndercoverGame {
     this.mrWhiteAwaitingGuess = null;
     this.winner = null;
     this.winReason = '';
+  }
+
+  setOptions(options) {
+    this.options = Object.assign(this.options, options);
   }
 
   getCurrentRevealPlayer() {
@@ -188,6 +202,52 @@ export class UndercoverGame {
 
   startVotingPhase() {
     this.phase = PHASES.VOTING;
+    this.resetAnonymousVotes();
+  }
+
+  /**
+   * Enregistre le vote anonyme d'un joueur
+   */
+  recordAnonymousVote(voterId, targetPlayerId) {
+    this.anonymousVotes[voterId] = targetPlayerId;
+  }
+
+  resetAnonymousVotes() {
+    this.anonymousVotes = {};
+  }
+
+  /**
+   * Calcule les résultats du vote anonyme
+   * @returns {Object} { tallies: [{ player, votes }], maxVotes, topCandidates: [player], isTie: boolean, totalVotes }
+   */
+  getAnonymousVoteResults() {
+    const alive = this.getAlivePlayers();
+    const counts = {};
+    alive.forEach(p => { counts[p.id] = 0; });
+
+    Object.values(this.anonymousVotes).forEach(targetId => {
+      if (counts[targetId] !== undefined) {
+        counts[targetId]++;
+      }
+    });
+
+    const tallies = alive.map(p => ({
+      player: p,
+      votes: counts[p.id] || 0
+    })).sort((a, b) => b.votes - a.votes);
+
+    const maxVotes = tallies.length > 0 ? tallies[0].votes : 0;
+    const topCandidates = tallies.filter(t => t.votes === maxVotes && maxVotes > 0).map(t => t.player);
+    const isTie = topCandidates.length > 1;
+    const totalVotes = Object.keys(this.anonymousVotes).length;
+
+    return {
+      tallies,
+      maxVotes,
+      topCandidates,
+      isTie,
+      totalVotes
+    };
   }
 
   /**

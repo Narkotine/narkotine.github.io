@@ -1,5 +1,5 @@
-const CACHE_NAME = 'undercover-v1';
-const ASSETS_TO_CACHE = [
+const CACHE_NAME = 'undercover-v2';
+const ASSETS_TO_PRECACHE = [
   './',
   './index.html',
   './css/style.css',
@@ -10,17 +10,19 @@ const ASSETS_TO_CACHE = [
   './manifest.json'
 ];
 
-self.addEventListener('install', (e) => {
-  e.waitUntil(
+// Installation : préchargement initial des fichiers en cache
+self.addEventListener('install', (event) => {
+  event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS_TO_CACHE);
+      return cache.addAll(ASSETS_TO_PRECACHE);
     })
   );
   self.skipWaiting();
 });
 
-self.addEventListener('activate', (e) => {
-  e.waitUntil(
+// Activation : suppression immédiate des anciens caches
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
     caches.keys().then((keys) => {
       return Promise.all(
         keys.map((key) => {
@@ -29,15 +31,37 @@ self.addEventListener('activate', (e) => {
           }
         })
       );
-    })
+    }).then(() => self.clients.claim())
   );
-  self.clients.claim();
 });
 
-self.addEventListener('fetch', (e) => {
-  e.respondWith(
-    caches.match(e.request).then((cachedResponse) => {
-      return cachedResponse || fetch(e.request);
-    })
+// Fetch : Stratégie Network-First (Priorité au direct) avec repli automatique sur le cache hors-ligne
+self.addEventListener('fetch', (event) => {
+  if (event.request.method !== 'GET') return;
+
+  event.respondWith(
+    fetch(event.request)
+      .then((networkResponse) => {
+        // Mise à jour discrète du cache local avec la dernière version reçue
+        if (networkResponse && networkResponse.status === 200) {
+          const responseClone = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseClone);
+          });
+        }
+        return networkResponse;
+      })
+      .catch(() => {
+        // Repli sur le cache si l'utilisateur est hors-ligne / sans réseau
+        return caches.match(event.request).then((cachedResponse) => {
+          if (cachedResponse) {
+            return cachedResponse;
+          }
+          if (event.request.mode === 'navigate') {
+            return caches.match('./index.html');
+          }
+          return new Response("Mode hors-ligne", { status: 503, statusText: "Offline" });
+        });
+      })
   );
 });

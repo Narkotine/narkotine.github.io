@@ -1126,6 +1126,13 @@ class UndercoverApp {
 
     this.hasRevealedCurrentCard = false;
 
+    // Options de jeu & Vote anonyme
+    this.options = this.loadOptions();
+    this.anonCurrentVoterIndex = 0;
+    this.anonVoters = [];
+    this.anonSelectedSuspectId = null;
+    this.anonTiedSelectedSuspectId = null;
+
     this.cacheDom();
     this.bindEvents();
     this.initUi();
@@ -1152,6 +1159,51 @@ class UndercoverApp {
     }
   }
 
+  loadOptions() {
+    try {
+      const saved = localStorage.getItem('undercover_game_options');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return Object.assign({ showRoles: false, anonymousVoting: false }, parsed);
+      }
+    } catch (e) {
+      console.warn("Impossible de charger les options", e);
+    }
+    return { showRoles: false, anonymousVoting: false };
+  }
+
+  saveOptions() {
+    try {
+      localStorage.setItem('undercover_game_options', JSON.stringify(this.options));
+      if (this.game) this.game.setOptions(this.options);
+      this.syncOptionsUi();
+    } catch (e) {
+      console.warn("Impossible de sauvegarder les options", e);
+    }
+  }
+
+  setOption(key, value) {
+    this.options[key] = Boolean(value);
+    this.saveOptions();
+    sounds.playTap();
+
+    if (key === 'showRoles') {
+      this.showToast(this.options.showRoles ? "Rôles connus activés 👁️" : "Rôles masqués par défaut 🤫");
+    } else if (key === 'anonymousVoting') {
+      this.showToast(this.options.anonymousVoting ? "Vote anonyme activé 🗳️" : "Vote public activé 🗣️");
+      if (this.game && this.game.phase === PHASES.VOTING) {
+        this.renderVotingScreen();
+      }
+    }
+  }
+
+  syncOptionsUi() {
+    if (this.optShowRoles) this.optShowRoles.checked = this.options.showRoles;
+    if (this.modalOptShowRoles) this.modalOptShowRoles.checked = this.options.showRoles;
+    if (this.optAnonVoting) this.optAnonVoting.checked = this.options.anonymousVoting;
+    if (this.modalOptAnonVoting) this.modalOptAnonVoting.checked = this.options.anonymousVoting;
+  }
+
   cacheDom() {
     this.screens = {
       setup: document.getElementById('screen-setup'),
@@ -1165,6 +1217,7 @@ class UndercoverApp {
     this.brandHomeBtn = document.getElementById('brand-home-btn');
     this.btnSoundToggle = document.getElementById('btn-sound-toggle');
     this.soundIcon = document.getElementById('sound-icon');
+    this.btnSettingsModal = document.getElementById('btn-settings-modal');
     this.btnWordsModal = document.getElementById('btn-words-modal');
     this.btnRulesModal = document.getElementById('btn-rules-modal');
     this.btnStatsModal = document.getElementById('btn-stats-modal');
@@ -1203,6 +1256,8 @@ class UndercoverApp {
     
     this.categoriesChipsContainer = document.getElementById('categories-chips-container');
     this.btnSelectAllCats = document.getElementById('btn-select-all-cats');
+    this.optShowRoles = document.getElementById('opt-show-roles');
+    this.optAnonVoting = document.getElementById('opt-anon-voting');
     this.btnStartGame = document.getElementById('btn-start-game');
 
     // Écran Reveal (Passe & Joue)
@@ -1228,11 +1283,37 @@ class UndercoverApp {
     this.btnTimerReset = document.getElementById('btn-timer-reset');
     this.btnGoToVote = document.getElementById('btn-go-to-vote');
 
-    // Écran Voting (Vote)
+    // Écran Voting (Vote Public & Anonyme)
+    this.votingPublicMode = document.getElementById('voting-public-mode');
     this.votingPlayersGrid = document.getElementById('voting-players-grid');
     this.selectedSuspectBanner = document.getElementById('selected-suspect-banner');
     this.selectedSuspectName = document.getElementById('selected-suspect-name');
     this.btnConfirmElimination = document.getElementById('btn-confirm-elimination');
+
+    this.votingAnonymousMode = document.getElementById('voting-anonymous-mode');
+    this.anonPassScreen = document.getElementById('anon-pass-screen');
+    this.anonVoterAvatar = document.getElementById('anon-voter-avatar');
+    this.anonVoterName = document.getElementById('anon-voter-name');
+    this.anonVoterStepBadge = document.getElementById('anon-voter-step-badge');
+    this.btnAnonStartVote = document.getElementById('btn-anon-start-vote');
+
+    this.anonBallotScreen = document.getElementById('anon-ballot-screen');
+    this.anonCurrentVoterBadge = document.getElementById('anon-current-voter-badge');
+    this.anonSuspectsGrid = document.getElementById('anon-suspects-grid');
+    this.btnAnonSubmitVote = document.getElementById('btn-anon-submit-vote');
+
+    this.anonResultsScreen = document.getElementById('anon-results-screen');
+    this.anonTalliesList = document.getElementById('anon-tallies-list');
+    this.anonVerdictBanner = document.getElementById('anon-verdict-banner');
+    this.anonVerdictTitle = document.getElementById('anon-verdict-title');
+    this.anonVerdictSubtitle = document.getElementById('anon-verdict-subtitle');
+    this.btnAnonConfirmElim = document.getElementById('btn-anon-confirm-elim');
+
+    this.anonTieBanner = document.getElementById('anon-tie-banner');
+    this.anonTieTitle = document.getElementById('anon-tie-title');
+    this.anonTiedSuspectsGrid = document.getElementById('anon-tied-suspects-grid');
+    this.btnAnonEliminateTied = document.getElementById('btn-anon-eliminate-tied');
+    this.btnAnonRevote = document.getElementById('btn-anon-revote');
 
     // Écran Game Over
     this.victoryIcon = document.getElementById('victory-icon');
@@ -1245,6 +1326,10 @@ class UndercoverApp {
     this.btnNewGameSetup = document.getElementById('btn-new-game-setup');
 
     // Modales
+    this.modalSettings = document.getElementById('modal-settings');
+    this.modalOptShowRoles = document.getElementById('modal-opt-show-roles');
+    this.modalOptAnonVoting = document.getElementById('modal-opt-anon-voting');
+
     this.modalRules = document.getElementById('modal-rules');
     this.modalMrWhiteGuess = document.getElementById('modal-mrwhite-guess');
     this.mrwhiteGuessIntro = document.getElementById('mrwhite-guess-intro');
@@ -1294,6 +1379,14 @@ class UndercoverApp {
       });
     }
 
+    if (this.btnSettingsModal) {
+      this.btnSettingsModal.addEventListener('click', () => {
+        sounds.playTap();
+        this.syncOptionsUi();
+        this.openModal(this.modalSettings);
+      });
+    }
+
     if (this.btnRulesModal) {
       this.btnRulesModal.addEventListener('click', () => {
         sounds.playTap();
@@ -1326,7 +1419,7 @@ class UndercoverApp {
       });
     });
 
-    [this.modalRules, this.modalWords, this.modalStats].forEach(modal => {
+    [this.modalRules, this.modalWords, this.modalStats, this.modalSettings].forEach(modal => {
       if (modal) {
         modal.addEventListener('click', (e) => {
           if (e.target === modal) {
@@ -1336,6 +1429,20 @@ class UndercoverApp {
         });
       }
     });
+
+    // Toggles d'options (Étape 2 et Modale Live)
+    if (this.optShowRoles) {
+      this.optShowRoles.addEventListener('change', (e) => this.setOption('showRoles', e.target.checked));
+    }
+    if (this.modalOptShowRoles) {
+      this.modalOptShowRoles.addEventListener('change', (e) => this.setOption('showRoles', e.target.checked));
+    }
+    if (this.optAnonVoting) {
+      this.optAnonVoting.addEventListener('change', (e) => this.setOption('anonymousVoting', e.target.checked));
+    }
+    if (this.modalOptAnonVoting) {
+      this.modalOptAnonVoting.addEventListener('change', (e) => this.setOption('anonymousVoting', e.target.checked));
+    }
 
     // Formulaire d'ajout joueur
     if (this.formAddPlayer) {
@@ -1449,19 +1556,28 @@ class UndercoverApp {
 
         // Remplir le mot secret UNIQUEMENT au moment où le joueur clique sur Révéler
         if (this.revealRoleFlag) {
-          this.revealRoleFlag.className = `role-flag ${player.role}`;
-          if (player.role === ROLES.CIVIL) {
-            this.revealRoleFlag.textContent = '🛡️ VOUS ÊTES CIVIL';
-            if (this.revealWordDisplay) this.revealWordDisplay.textContent = player.word;
-            if (this.revealDescDisplay) this.revealDescDisplay.textContent = "Donnez un indice subtil pour vous faire reconnaître des autres Civils sans aider M. Blanc !";
-          } else if (player.role === ROLES.UNDERCOVER) {
-            this.revealRoleFlag.textContent = '🕶️ VOUS ÊTES UNDERCOVER';
-            if (this.revealWordDisplay) this.revealWordDisplay.textContent = player.word;
-            if (this.revealDescDisplay) this.revealDescDisplay.textContent = "Votre mot est légèrement différent des civils. Fondez-vous dans la masse !";
-          } else {
+          if (player.role === ROLES.MR_WHITE) {
+            this.revealRoleFlag.className = 'role-flag mrwhite';
             this.revealRoleFlag.textContent = '🎭 VOUS ÊTES M. BLANC';
             if (this.revealWordDisplay) this.revealWordDisplay.textContent = 'CARTE BLANCHE';
             if (this.revealDescDisplay) this.revealDescDisplay.textContent = "Vous n'avez aucun mot secret ! Écoutez attentivement les indices pour bluffer.";
+          } else if (this.options.showRoles) {
+            this.revealRoleFlag.className = `role-flag ${player.role}`;
+            if (player.role === ROLES.CIVIL) {
+              this.revealRoleFlag.textContent = '🛡️ VOUS ÊTES CIVIL';
+              if (this.revealWordDisplay) this.revealWordDisplay.textContent = player.word;
+              if (this.revealDescDisplay) this.revealDescDisplay.textContent = "Donnez un indice subtil pour vous faire reconnaître des autres Civils sans aider M. Blanc !";
+            } else if (player.role === ROLES.UNDERCOVER) {
+              this.revealRoleFlag.textContent = '🕶️ VOUS ÊTES UNDERCOVER';
+              if (this.revealWordDisplay) this.revealWordDisplay.textContent = player.word;
+              if (this.revealDescDisplay) this.revealDescDisplay.textContent = "Votre mot est légèrement différent des civils. Fondez-vous dans la masse !";
+            }
+          } else {
+            // RÈGLES PAR DÉFAUT : Rôles masqués pour Civils & Undercovers
+            this.revealRoleFlag.className = 'role-flag secret';
+            this.revealRoleFlag.textContent = '🤫 MOT SECRET';
+            if (this.revealWordDisplay) this.revealWordDisplay.textContent = player.word;
+            if (this.revealDescDisplay) this.revealDescDisplay.textContent = "Mémorisez bien votre mot ! Donnez un indice subtil sans vous faire repérer.";
           }
         }
 
@@ -1794,6 +1910,7 @@ class UndercoverApp {
 
     this.applyRecommendedRoles();
     this.renderCategoryChips();
+    this.syncOptionsUi();
   }
 
   applyRecommendedRoles() {
@@ -1884,7 +2001,7 @@ class UndercoverApp {
   handleStartGame() {
     try {
       sounds.playTap();
-      this.game.startNewGame(this.players, this.roleConfig, this.selectedCategories, this.currentAgeFilter);
+      this.game.startNewGame(this.players, this.roleConfig, this.selectedCategories, this.currentAgeFilter, this.options);
       this.renderRevealScreen();
       this.showScreen('reveal');
     } catch (e) {
@@ -2028,6 +2145,18 @@ class UndercoverApp {
   }
 
   renderVotingScreen() {
+    if (this.options.anonymousVoting) {
+      if (this.votingPublicMode) this.votingPublicMode.classList.add('hidden');
+      if (this.votingAnonymousMode) this.votingAnonymousMode.classList.remove('hidden');
+      this.startAnonymousVoting();
+    } else {
+      if (this.votingPublicMode) this.votingPublicMode.classList.remove('hidden');
+      if (this.votingAnonymousMode) this.votingAnonymousMode.classList.add('hidden');
+      this.renderPublicVotingGrid();
+    }
+  }
+
+  renderPublicVotingGrid() {
     this.selectedSuspectId = null;
     if (this.selectedSuspectBanner) this.selectedSuspectBanner.classList.add('hidden');
     if (this.btnConfirmElimination) this.btnConfirmElimination.disabled = true;
@@ -2061,13 +2190,233 @@ class UndercoverApp {
     });
   }
 
+  startAnonymousVoting() {
+    this.anonVoters = this.game.getAlivePlayers();
+    this.anonCurrentVoterIndex = 0;
+    this.anonSelectedSuspectId = null;
+    this.anonTiedSelectedSuspectId = null;
+    this.game.resetAnonymousVotes();
+    this.showAnonPassScreen();
+  }
+
+  showAnonPassScreen() {
+    if (this.anonCurrentVoterIndex >= this.anonVoters.length) {
+      this.renderAnonymousVoteResults();
+      return;
+    }
+
+    const voter = this.anonVoters[this.anonCurrentVoterIndex];
+    if (this.anonVoterStepBadge) {
+      this.anonVoterStepBadge.textContent = `Vote ${this.anonCurrentVoterIndex + 1} sur ${this.anonVoters.length}`;
+    }
+    if (this.anonVoterAvatar) {
+      this.anonVoterAvatar.style.background = voter.avatarColor;
+      this.anonVoterAvatar.textContent = voter.name.charAt(0).toUpperCase();
+    }
+    if (this.anonVoterName) {
+      this.anonVoterName.textContent = voter.name;
+    }
+
+    if (this.anonPassScreen) this.anonPassScreen.classList.remove('hidden');
+    if (this.anonBallotScreen) this.anonBallotScreen.classList.add('hidden');
+    if (this.anonResultsScreen) this.anonResultsScreen.classList.add('hidden');
+
+    if (this.btnAnonStartVote) {
+      this.btnAnonStartVote.onclick = () => {
+        sounds.playTap();
+        this.showAnonBallotScreen();
+      };
+    }
+  }
+
+  showAnonBallotScreen() {
+    const voter = this.anonVoters[this.anonCurrentVoterIndex];
+    if (this.anonCurrentVoterBadge) {
+      this.anonCurrentVoterBadge.textContent = voter.name;
+    }
+
+    this.anonSelectedSuspectId = null;
+    if (this.btnAnonSubmitVote) this.btnAnonSubmitVote.disabled = true;
+
+    if (this.anonSuspectsGrid) {
+      this.anonSuspectsGrid.innerHTML = '';
+      const alive = this.game.getAlivePlayers();
+
+      alive.forEach(player => {
+        const card = document.createElement('div');
+        card.className = 'suspect-card';
+        card.setAttribute('data-id', player.id);
+        const isSelf = player.id === voter.id;
+        card.innerHTML = `
+          <div class="player-avatar large" style="background: ${player.avatarColor}; width: 56px; height: 56px; font-size: 1.4rem;">
+            ${player.name.charAt(0).toUpperCase()}
+          </div>
+          <div class="suspect-name">${player.name} ${isSelf ? '<small style="display:block;font-size:0.75rem;color:var(--text-muted);">(Vous)</small>' : ''}</div>
+        `;
+
+        card.addEventListener('click', () => {
+          sounds.playTap();
+          this.vibrate(30);
+          this.anonSuspectsGrid.querySelectorAll('.suspect-card').forEach(c => c.classList.remove('selected'));
+          card.classList.add('selected');
+          this.anonSelectedSuspectId = player.id;
+          if (this.btnAnonSubmitVote) this.btnAnonSubmitVote.disabled = false;
+        });
+
+        this.anonSuspectsGrid.appendChild(card);
+      });
+    }
+
+    if (this.btnAnonSubmitVote) {
+      this.btnAnonSubmitVote.onclick = () => {
+        this.handleAnonVoteSubmit();
+      };
+    }
+
+    if (this.anonPassScreen) this.anonPassScreen.classList.add('hidden');
+    if (this.anonBallotScreen) this.anonBallotScreen.classList.remove('hidden');
+    if (this.anonResultsScreen) this.anonResultsScreen.classList.add('hidden');
+  }
+
+  handleAnonVoteSubmit() {
+    if (!this.anonSelectedSuspectId) return;
+    const voter = this.anonVoters[this.anonCurrentVoterIndex];
+    this.game.recordAnonymousVote(voter.id, this.anonSelectedSuspectId);
+
+    sounds.playTap();
+    this.vibrate(40);
+    this.showToast(`Vote de ${voter.name} enregistré 🔒`);
+
+    this.anonCurrentVoterIndex++;
+    if (this.anonCurrentVoterIndex < this.anonVoters.length) {
+      this.showAnonPassScreen();
+    } else {
+      sounds.playReveal();
+      this.renderAnonymousVoteResults();
+    }
+  }
+
+  renderAnonymousVoteResults() {
+    if (this.anonPassScreen) this.anonPassScreen.classList.add('hidden');
+    if (this.anonBallotScreen) this.anonBallotScreen.classList.add('hidden');
+    if (this.anonResultsScreen) this.anonResultsScreen.classList.remove('hidden');
+
+    const { tallies, maxVotes, topCandidates, isTie, totalVotes } = this.game.getAnonymousVoteResults();
+
+    // Remplir la liste des scores
+    if (this.anonTalliesList) {
+      this.anonTalliesList.innerHTML = '';
+      tallies.forEach(item => {
+        const row = document.createElement('div');
+        const isTop = item.votes === maxVotes && maxVotes > 0;
+        row.className = `anon-tally-item ${isTop ? 'is-top' : ''}`;
+
+        const pct = totalVotes > 0 ? Math.round((item.votes / totalVotes) * 100) : 0;
+        row.innerHTML = `
+          <div class="anon-tally-header">
+            <div class="anon-tally-user">
+              <div class="player-avatar" style="background: ${item.player.avatarColor}; width: 26px; height: 26px; font-size: 0.75rem;">
+                ${item.player.name.charAt(0).toUpperCase()}
+              </div>
+              <span>${item.player.name}</span>
+            </div>
+            <div class="anon-tally-votes">${item.votes} vote${item.votes > 1 ? 's' : ''} (${pct}%)</div>
+          </div>
+          <div class="anon-tally-track">
+            <div class="anon-tally-fill" style="width: ${pct}%;"></div>
+          </div>
+        `;
+        this.anonTalliesList.appendChild(row);
+      });
+    }
+
+    if (!isTie && topCandidates.length === 1 && maxVotes > 0) {
+      // Majorité nette
+      const target = topCandidates[0];
+      if (this.anonVerdictBanner) this.anonVerdictBanner.classList.remove('hidden');
+      if (this.anonTieBanner) this.anonTieBanner.classList.add('hidden');
+
+      if (this.anonVerdictTitle) this.anonVerdictTitle.textContent = `Majorité contre ${target.name} !`;
+      if (this.anonVerdictSubtitle) this.anonVerdictSubtitle.textContent = `Ce joueur a recueilli le plus de voix (${maxVotes} vote${maxVotes > 1 ? 's' : ''} sur ${totalVotes}).`;
+
+      if (this.btnAnonConfirmElim) {
+        this.btnAnonConfirmElim.onclick = () => {
+          this.handleElimination(target.id);
+        };
+      }
+    } else {
+      // Égalité (Ex æquo)
+      if (this.anonVerdictBanner) this.anonVerdictBanner.classList.add('hidden');
+      if (this.anonTieBanner) this.anonTieBanner.classList.remove('hidden');
+
+      const candidates = topCandidates.length > 0 ? topCandidates : this.game.getAlivePlayers();
+      if (this.anonTieTitle) {
+        this.anonTieTitle.textContent = `Égalité ! (${candidates.map(p => p.name).join(' & ')})`;
+      }
+
+      this.anonTiedSelectedSuspectId = null;
+      if (this.btnAnonEliminateTied) {
+        this.btnAnonEliminateTied.disabled = true;
+        this.btnAnonEliminateTied.innerHTML = `<span>Éliminer après débat</span> ⚡`;
+      }
+
+      if (this.anonTiedSuspectsGrid) {
+        this.anonTiedSuspectsGrid.innerHTML = '';
+        candidates.forEach(player => {
+          const card = document.createElement('div');
+          card.className = 'suspect-card';
+          card.setAttribute('data-id', player.id);
+          card.innerHTML = `
+            <div class="player-avatar large" style="background: ${player.avatarColor}; width: 56px; height: 56px; font-size: 1.4rem;">
+              ${player.name.charAt(0).toUpperCase()}
+            </div>
+            <div class="suspect-name">${player.name}</div>
+          `;
+
+          card.addEventListener('click', () => {
+            sounds.playTap();
+            this.vibrate(30);
+            this.anonTiedSuspectsGrid.querySelectorAll('.suspect-card').forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
+            this.anonTiedSelectedSuspectId = player.id;
+            if (this.btnAnonEliminateTied) {
+              this.btnAnonEliminateTied.disabled = false;
+              this.btnAnonEliminateTied.innerHTML = `<span>Éliminer <strong>${player.name}</strong> après débat</span> ⚡`;
+            }
+          });
+
+          this.anonTiedSuspectsGrid.appendChild(card);
+        });
+      }
+
+      if (this.btnAnonEliminateTied) {
+        this.btnAnonEliminateTied.onclick = () => {
+          if (this.anonTiedSelectedSuspectId) {
+            this.handleElimination(this.anonTiedSelectedSuspectId);
+          }
+        };
+      }
+
+      if (this.btnAnonRevote) {
+        this.btnAnonRevote.onclick = () => {
+          sounds.playTap();
+          this.showToast("Nouveau vote secret lancé ! 🔄");
+          this.startAnonymousVoting();
+        };
+      }
+    }
+  }
+
   handleConfirmElimination() {
     if (!this.selectedSuspectId) return;
+    this.handleElimination(this.selectedSuspectId);
+  }
 
+  handleElimination(playerId) {
     sounds.playElimination();
     this.vibrate([100, 60, 100]);
 
-    const result = this.game.eliminatePlayer(this.selectedSuspectId);
+    const result = this.game.eliminatePlayer(playerId);
 
     if (result.requiresMrWhiteGuess) {
       if (this.mrwhiteGuessIntro) {
@@ -2240,7 +2589,10 @@ window.addEventListener('DOMContentLoaded', () => {
   window.undercoverApp = new UndercoverApp();
 
   if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
-    navigator.serviceWorker.register('./sw.js').catch(err => {
+    navigator.serviceWorker.register('./sw.js').then(reg => {
+      // Force la vérification de mise à jour dès le lancement
+      reg.update();
+    }).catch(err => {
       console.log('SW non enregistré:', err);
     });
   }
