@@ -1,0 +1,19 @@
+{
+  "name": "undercover-game",
+  "version": "1.0.0",
+  "description": "Jeu d'ambiance et de déduction sociale Undercover en version Web & Mobile PWA",
+  "type": "module",
+  "scripts": {
+    "dev": "npx serve . -l 3000",
+    "start": "npx serve . -l 3000"
+  },
+  "keywords": [
+    "undercover",
+    "party-game",
+    "game",
+    "pwa",
+    "french"
+  ],
+  "author": "",
+  "license": "MIT"
+}

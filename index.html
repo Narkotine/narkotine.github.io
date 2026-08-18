@@ -1,38 +1,590 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nguhma — Snacks</title>
-  <meta
-    name="description"
-    content="Snacks rassemble les briefs quotidiens AI & Robotics et Geopolitiks en français et en anglais."
-  />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
-  <link rel="stylesheet" href="assets/styles.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Undercover - Le Jeu d'Ambiance & Déduction</title>
+  <meta name="description" content="Jeu d'ambiance Undercover gratuit en français. Jouez entre amis en mode Passe et Joue avec des centaines de mots secrets !">
+  <meta name="theme-color" content="#0d1117">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🕵️</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <div class="page-shell">
-    <header class="site-header">
-      <div class="brand-block">
-        <p class="eyebrow">Daily briefing terminal</p>
+  <!-- EFFET LUMINEUX D'AMBIANCE DE FOND -->
+  <div class="ambient-glow glow-1"></div>
+  <div class="ambient-glow glow-2"></div>
+
+  <!-- APPLICATION CONTAINER -->
+  <div id="app" class="app-container">
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="app-header">
+      <div class="brand" id="brand-home-btn" role="button" tabindex="0" title="Retour accueil">
+        <span class="brand-icon">🕵️</span>
+        <span class="brand-name">UNDERCOVER</span>
       </div>
-      <nav class="feed-nav header-feed-nav" id="feed-nav" aria-label="Feed categories"></nav>
-      <div class="header-controls">
-        <div class="theme-switch" id="theme-switch" aria-label="Theme switcher"></div>
-        <div class="lang-switch" id="lang-switch" aria-label="Language switcher"></div>
+      <div class="header-actions">
+        <button id="btn-sound-toggle" class="icon-btn" aria-label="Activer ou couper le son" title="Son">
+          <span id="sound-icon">🔊</span>
+        </button>
+        <button id="btn-words-modal" class="icon-btn" aria-label="Gérer les mots et catégories" title="Mots & Thèmes">
+          <span>🏷️</span>
+        </button>
+        <button id="btn-rules-modal" class="icon-btn" aria-label="Règles du jeu" title="Règles">
+          <span>📖</span>
+        </button>
+        <button id="btn-stats-modal" class="icon-btn" aria-label="Statistiques" title="Statistiques">
+          <span>📊</span>
+        </button>
       </div>
     </header>
 
-    <main class="layout" id="app">
-      <section class="feed-panel">
-        <div id="content" class="feed-content">
-          <div class="loading">Loading</div>
+    <!-- MAIN VIEWS WRAPPER -->
+    <main class="main-content">
+
+      <!-- ======================================================== -->
+      <!-- 1. ÉCRAN D'INSCRIPTION DES JOUEURS (STEP 1)              -->
+      <!-- ======================================================== -->
+      <section id="screen-setup" class="screen active">
+        <div class="screen-header">
+          <div class="step-badge">Étape 1 / 2</div>
+          <h1 class="screen-title">Qui participe à la partie ?</h1>
+          <p class="screen-subtitle">Entrez les prénoms des joueurs un par un (3 minimum)</p>
+        </div>
+
+        <!-- FORMULAIRE D'AJOUT RAPIDE -->
+        <div class="card setup-card">
+          <form id="form-add-player" class="add-player-form" onsubmit="return false;">
+            <input type="text" id="input-new-player-name" placeholder="Ex: Julie, Thomas, Sarah..." maxlength="18" autocomplete="off" autofocus>
+            <button type="submit" id="btn-add-player" class="btn btn-primary">
+              <span>Ajouter</span> ➕
+            </button>
+          </form>
+        </div>
+
+        <!-- LISTE DES JOUEURS INSCRITS -->
+        <div class="card setup-card">
+          <div class="card-header-row">
+            <h2 class="card-title">
+              <span>👥 Joueurs inscrits</span>
+              <span id="player-count-badge" class="badge">0</span>
+            </h2>
+            <button id="btn-clear-players" class="text-btn text-danger" title="Effacer tous les noms">🗑️ Tout effacer</button>
+          </div>
+
+          <div id="player-inputs-list" class="player-inputs-list">
+            <!-- Rempli dynamiquement en JS -->
+          </div>
+
+          <div id="players-empty-hint" class="players-empty-hint">
+            <span>👋 Aucun joueur inscrit. Tapez un prénom ci-dessus pour commencer !</span>
+          </div>
+        </div>
+
+        <!-- BOUTON VALIDER LES JOUEURS -->
+        <div class="setup-submit-bar">
+          <button id="btn-to-review" class="btn btn-primary btn-large btn-glow" disabled>
+            <span>Valider les joueurs & Réglages</span> ➡️
+          </button>
         </div>
       </section>
+
+      <!-- ======================================================== -->
+      <!-- 1 BIS. ÉCRAN DE VÉRIFICATION & RÉGLAGES (STEP 2)         -->
+      <!-- ======================================================== -->
+      <section id="screen-review" class="screen">
+        <div class="screen-header">
+          <div class="step-badge">Étape 2 / 2</div>
+          <h1 class="screen-title">Vérification & Réglages</h1>
+          <p class="screen-subtitle">Vérifiez les participants et personnalisez les rôles</p>
+        </div>
+
+        <!-- RÉCAPITULATIF DES JOUEURS -->
+        <div class="card setup-card">
+          <div class="card-header-row">
+            <h2 class="card-title">
+              <span>👥 Participants</span>
+              <span id="review-player-count-badge" class="badge">4</span>
+            </h2>
+            <button id="btn-back-to-players" class="text-btn">✏️ Modifier la liste</button>
+          </div>
+          <div id="review-players-chips" class="review-players-chips">
+            <!-- Chips des joueurs inscrits -->
+          </div>
+        </div>
+
+        <!-- CONFIGURATION DES RÔLES -->
+        <div class="card setup-card">
+          <div class="card-header-row">
+            <h2 class="card-title">🎭 Répartition des rôles</h2>
+            <button id="btn-auto-balance" class="text-btn" title="Appliquer le ratio recommandé">⚖️ Équilibrer</button>
+          </div>
+
+          <div class="roles-sliders">
+            <!-- CIVILS -->
+            <div class="role-control-row role-civil">
+              <div class="role-info">
+                <span class="role-badge-tag civil">Civil</span>
+                <span class="role-desc">Reçoivent le mot majoritaire</span>
+              </div>
+              <div class="counter-control">
+                <button class="counter-btn" id="btn-dec-civils" aria-label="Moins de civils">-</button>
+                <span class="counter-value" id="val-civils">3</span>
+                <button class="counter-btn" id="btn-inc-civils" aria-label="Plus de civils">+</button>
+              </div>
+            </div>
+
+            <!-- UNDERCOVER -->
+            <div class="role-control-row role-undercover">
+              <div class="role-info">
+                <span class="role-badge-tag undercover">Undercover</span>
+                <span class="role-desc">Reçoivent un mot très proche</span>
+              </div>
+              <div class="counter-control">
+                <button class="counter-btn" id="btn-dec-undercovers" aria-label="Moins d'undercovers">-</button>
+                <span class="counter-value" id="val-undercovers">1</span>
+                <button class="counter-btn" id="btn-inc-undercovers" aria-label="Plus d'undercovers">+</button>
+              </div>
+            </div>
+
+            <!-- M. BLANC -->
+            <div class="role-control-row role-mrwhite">
+              <div class="role-info">
+                <span class="role-badge-tag mrwhite">M. Blanc</span>
+                <span class="role-desc">N'a aucun mot, doit bluffer</span>
+              </div>
+              <div class="counter-control">
+                <button class="counter-btn" id="btn-dec-mrwhite" aria-label="Moins de M. Blanc">-</button>
+                <span class="counter-value" id="val-mrwhite">0</span>
+                <button class="counter-btn" id="btn-inc-mrwhite" aria-label="Plus de M. Blanc">+</button>
+              </div>
+            </div>
+          </div>
+
+          <div id="role-validation-hint" class="role-hint">
+            <!-- Message de validation automatique -->
+          </div>
+        </div>
+
+        <!-- NIVEAU D'ÂGE & DIFFICULTÉ -->
+        <div class="card setup-card">
+          <div class="card-header-row">
+            <h2 class="card-title">
+              <span>🎯 Tranche d'âge & Difficulté</span>
+            </h2>
+          </div>
+          <div class="age-filter-selector">
+            <button type="button" class="age-btn" data-age="kids" id="btn-age-kids">
+              <span class="age-icon">👶</span>
+              <div class="age-text-col">
+                <strong>Enfants (-8 ans)</strong>
+                <small>Mots simples, concrets et faciles à lire</small>
+              </div>
+            </button>
+            <button type="button" class="age-btn active" data-age="standard" id="btn-age-standard">
+              <span class="age-icon">👥</span>
+              <div class="age-text-col">
+                <strong>Tout public (+8 ans)</strong>
+                <small>Culture générale, cinéma, vie courante</small>
+              </div>
+            </button>
+            <button type="button" class="age-btn" data-age="adult" id="btn-age-adult">
+              <span class="age-icon">🎉</span>
+              <div class="age-text-col">
+                <strong>Ados & Adultes (16+)</strong>
+                <small>Inclut thèmes de soirée, fêtes et pop culture</small>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- CATÉGORIES ACTIVES -->
+        <div class="card setup-card">
+          <div class="card-header-row">
+            <h2 class="card-title">🏷️ Thèmes de mots</h2>
+            <button id="btn-select-all-cats" class="text-btn">Tous</button>
+          </div>
+          <div id="categories-chips-container" class="categories-chips-grid">
+            <!-- Rempli dynamiquement -->
+          </div>
+        </div>
+
+        <!-- BOUTONS D'ACTION FINALE -->
+        <div class="setup-submit-bar dual-buttons">
+          <button id="btn-back-to-setup" class="btn btn-secondary btn-large">
+            <span>⬅️ Prénoms</span>
+          </button>
+          <button id="btn-start-game" class="btn btn-primary btn-large btn-glow">
+            <span>Lancer la partie pour de vrai ! 🚀</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ======================================================== -->
+      <!-- 2. ÉCRAN DE DISTRIBUTION SECRÈTE (PASSE & JOUE)          -->
+      <!-- ======================================================== -->
+      <section id="screen-reveal" class="screen">
+        <div class="reveal-header">
+          <div class="step-badge">Passe & Joue</div>
+          <div class="progress-bar-container">
+            <div id="reveal-progress-bar" class="progress-bar" style="width: 25%;"></div>
+          </div>
+          <div class="step-counter" id="reveal-step-text">Joueur 1 sur 4</div>
+        </div>
+
+        <div class="reveal-player-banner">
+          <div class="player-avatar large" id="reveal-player-avatar">?</div>
+          <div class="reveal-callout">
+            <span class="subtext">Passez l'appareil à</span>
+            <h2 class="current-player-name" id="reveal-player-name">Alex</h2>
+          </div>
+        </div>
+
+        <!-- CARTE SECRÈTE INTERACTIVE -->
+        <div class="secret-card-container">
+          <div id="secret-card" class="secret-card locked">
+            <!-- Face cachée (par défaut) -->
+            <div class="card-face card-front">
+              <div class="card-lock-icon">🔒</div>
+              <p class="card-prompt-text">Appuyez ou maintenez pour découvrir votre mot secret</p>
+              <div class="card-instructions">Assurez-vous que personne ne regarde votre écran !</div>
+              <button id="btn-reveal-card" class="btn btn-secondary btn-reveal-action">
+                <span>👁️ Révéler mon mot</span>
+              </button>
+            </div>
+
+            <!-- Face révélée -->
+            <div class="card-face card-back">
+              <div class="secret-revealed-content">
+                <div class="role-flag" id="reveal-role-flag">VOTRE RÔLE</div>
+                <div class="secret-word-display" id="reveal-word-display">CROISSANT</div>
+                <p class="secret-description" id="reveal-desc-display">Mémorisez bien votre mot ! Donnez des indices sans vous faire repérer.</p>
+              </div>
+              <button id="btn-hide-card" class="btn btn-secondary btn-small">
+                <span>🙈 Masquer</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- BOUTON DE CONFIRMATION SUIVANT -->
+        <div class="reveal-footer">
+          <button id="btn-next-player" class="btn btn-primary btn-large" disabled>
+            <span>C'est fait, joueur suivant</span> ➡️
+          </button>
+        </div>
+      </section>
+
+      <!-- ======================================================== -->
+      <!-- 3. ÉCRAN DES INDICES & DÉBATS (CLUES PHASE)              -->
+      <!-- ======================================================== -->
+      <section id="screen-clues" class="screen">
+        <div class="phase-header">
+          <div class="phase-badge">
+            <span class="badge-dot"></span>
+            <span id="clue-round-title">Manche 1 : Tour de table</span>
+          </div>
+          <h1 class="phase-title">Donnez vos indices !</h1>
+          <p class="phase-instructions">Chaque joueur donne <strong>un seul mot ou une phrase courte</strong> à tour de rôle.</p>
+        </div>
+
+        <!-- STARTER CALLOUT BANNER -->
+        <div class="starter-banner" id="starter-banner">
+          <span class="speaker-icon">🎙️</span>
+          <div>
+            <div class="starter-label">Premier joueur à parler :</div>
+            <strong id="starter-player-name" class="starter-name">Sarah</strong>
+          </div>
+        </div>
+
+        <!-- ORDRE DE PAROLE INTERACTIF -->
+        <div class="card order-card">
+          <div class="card-header-row">
+            <h2 class="card-title">📋 Ordre de passage</h2>
+            <span class="badge" id="alive-count-badge">4 survivants</span>
+          </div>
+          <div id="clues-players-list" class="clues-players-list">
+            <!-- Rempli dynamiquement -->
+          </div>
+        </div>
+
+        <!-- CHRONOMÈTRE OPTIONNEL -->
+        <div class="card timer-card">
+          <div class="timer-display">
+            <span class="timer-digits" id="timer-display">00:45</span>
+            <div class="timer-controls">
+              <button id="btn-timer-toggle" class="btn btn-secondary btn-icon" title="Démarrer/Pause">▶️</button>
+              <button id="btn-timer-reset" class="btn btn-secondary btn-icon" title="Réinitialiser">🔄</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- BOUTON POUR PASSER AU VOTE -->
+        <div class="phase-actions">
+          <button id="btn-go-to-vote" class="btn btn-primary btn-large btn-glow">
+            <span>Passer au Débat & Vote</span> 🗳️
+          </button>
+        </div>
+      </section>
+
+      <!-- ======================================================== -->
+      <!-- 4. ÉCRAN DE VOTE & ÉLIMINATION                          -->
+      <!-- ======================================================== -->
+      <section id="screen-voting" class="screen">
+        <div class="phase-header">
+          <div class="phase-badge danger">
+            <span class="badge-dot pulse"></span>
+            <span>Tribunal & Vote</span>
+          </div>
+          <h1 class="phase-title">Qui est l'imposteur ?</h1>
+          <p class="phase-instructions">Débattez entre vous et sélectionnez le joueur le plus suspect pour l'éliminer.</p>
+        </div>
+
+        <!-- GRILLE DES JOUEURS À ÉLIMINER -->
+        <div class="vote-grid-container">
+          <div id="voting-players-grid" class="voting-players-grid">
+            <!-- Cartes des joueurs vivants -->
+          </div>
+        </div>
+
+        <div class="voting-actions-bar">
+          <div id="selected-suspect-banner" class="selected-suspect-banner hidden">
+            <span>Suspect choisi :</span>
+            <strong id="selected-suspect-name">-</strong>
+          </div>
+          <button id="btn-confirm-elimination" class="btn btn-danger btn-large" disabled>
+            <span>Éliminer ce joueur</span> ⚡
+          </button>
+        </div>
+      </section>
+
+      <!-- ======================================================== -->
+      <!-- 5. ÉCRAN DE FIN DE PARTIE & RÉSULTATS (GAME OVER)         -->
+      <!-- ======================================================== -->
+      <section id="screen-game-over" class="screen">
+        <div class="victory-banner" id="victory-banner">
+          <div class="victory-trophy" id="victory-icon">🏆</div>
+          <h1 class="victory-title" id="victory-title">Victoire des Civils !</h1>
+          <p class="victory-reason" id="victory-reason">Tous les Undercovers et M. Blanc ont été démasqués.</p>
+        </div>
+
+        <!-- RÉSUMÉ DES MOTS SECRETS -->
+        <div class="card words-summary-card">
+          <h2 class="card-title">🔍 Mots secrets de la partie</h2>
+          <div class="words-summary-grid">
+            <div class="word-box civil-box">
+              <span class="word-box-label">Mot des Civils</span>
+              <strong class="word-box-val" id="end-civil-word">Croissant</strong>
+            </div>
+            <div class="word-box undercover-box">
+              <span class="word-box-label">Mot des Undercovers</span>
+              <strong class="word-box-val" id="end-undercover-word">Pain au chocolat</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- TABLEAU RÉCAPITULATIF DE TOUS LES JOUEURS -->
+        <div class="card players-summary-card">
+          <h2 class="card-title">🎭 Rôles révélés</h2>
+          <div id="end-players-list" class="end-players-list">
+            <!-- Liste détaillée des rôles -->
+          </div>
+        </div>
+
+        <!-- ACTIONS DE FIN -->
+        <div class="game-over-actions">
+          <button id="btn-play-again-same" class="btn btn-primary btn-large btn-glow">
+            <span>Rejouer (Mêmes joueurs)</span> 🔄
+          </button>
+          <button id="btn-new-game-setup" class="btn btn-secondary btn-large">
+            <span>Changer la configuration</span> ⚙️
+          </button>
+        </div>
+      </section>
+
     </main>
+
+    <!-- ======================================================== -->
+    <!-- MODAL : RÈGLES DU JEU                                    -->
+    <!-- ======================================================== -->
+    <div id="modal-rules" class="modal-overlay hidden">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h2 class="modal-title">📖 Règles d'Undercover</h2>
+          <button class="modal-close-btn" data-close="modal-rules">✕</button>
+        </div>
+        <div class="modal-body rules-body">
+          <div class="rule-section">
+            <h3>🎯 Le But du jeu</h3>
+            <p>Démasquer les imposteurs (Undercovers et M. Blanc) ou survivre si vous en faites partie !</p>
+          </div>
+
+          <div class="rule-section">
+            <h3>🎭 Les 3 Rôles</h3>
+            <div class="rule-role-item civil">
+              <strong>🛡️ Les Civils :</strong> Ils reçoivent tous le même mot secret. Ils doivent se reconnaître entre eux et éliminer les intrus.
+            </div>
+            <div class="rule-role-item undercover">
+              <strong>🕶️ L'Undercover :</strong> Il reçoit un mot très proche mais différent de celui des civils. Il ne sait pas qu'il est infiltré au début !
+            </div>
+            <div class="rule-role-item mrwhite">
+              <strong>🎭 M. Blanc :</strong> Il ne reçoit aucun mot. Son but est de deviner de quoi parlent les autres, de bluffer et d'échapper aux votes.
+            </div>
+          </div>
+
+          <div class="rule-section">
+            <h3>🔄 Déroulement</h3>
+            <ol class="rules-steps-list">
+              <li><strong>Passe & Joue :</strong> Chacun regarde discrètement son mot.</li>
+              <li><strong>Tour d'indices :</strong> Chaque joueur donne 1 mot ou 1 phrase d'indice décrivant son mot secret.</li>
+              <li><strong>Vote :</strong> Les joueurs débattent et votent pour éliminer un joueur suspect.</li>
+              <li><strong>Dernière chance M. Blanc :</strong> Si M. Blanc est éliminé, il a une chance unique de deviner le mot civil pour voler la victoire !</li>
+            </ol>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary" data-close="modal-rules">Compris !</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- MODAL : DERNIÈRE CHANCE DE M. BLANC                      -->
+    <!-- ======================================================== -->
+    <div id="modal-mrwhite-guess" class="modal-overlay hidden">
+      <div class="modal-card special-mrwhite-modal">
+        <div class="modal-header">
+          <h2 class="modal-title">🎭 Dernière Chance de M. Blanc !</h2>
+        </div>
+        <div class="modal-body text-center">
+          <div class="mrwhite-avatar-badge">M. Blanc</div>
+          <p id="mrwhite-guess-intro" class="mrwhite-modal-text">
+            <strong>Alex</strong> a été éliminé mais était M. Blanc !
+          </p>
+          <p class="mrwhite-modal-subtext">
+            S'il devine le mot secret exact des Civils, il gagne immédiatement la partie !
+          </p>
+
+          <div class="guess-input-container">
+            <input type="text" id="input-mrwhite-guess" placeholder="Entrez le mot secret civil..." maxlength="30" autocomplete="off">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button id="btn-submit-mrwhite-guess" class="btn btn-primary btn-large">
+            <span>Tenter ma chance 🎯</span>
+          </button>
+          <button id="btn-skip-mrwhite-guess" class="btn btn-secondary">
+            <span>Je ne sais pas (Passer)</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- MODAL : MOTS & GESTIONNAIRE DE CATÉGORIES                 -->
+    <!-- ======================================================== -->
+    <div id="modal-words" class="modal-overlay hidden">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h2 class="modal-title">🏷️ Base de Mots & Thèmes</h2>
+          <button class="modal-close-btn" data-close="modal-words">✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="words-stats-row">
+            <span>Total de paires disponibles :</span>
+            <strong id="words-total-count" class="badge">600+</strong>
+          </div>
+
+          <h3 class="subsection-title">Ajouter vos propres mots</h3>
+          <form id="form-custom-words" class="custom-words-form" onsubmit="return false;">
+            <div class="input-pair-row">
+              <input type="text" id="input-custom-word1" placeholder="Mot Civil (ex: Pain)" maxlength="25" required>
+              <input type="text" id="input-custom-word2" placeholder="Mot Undercover (ex: Brioche)" maxlength="25" required>
+            </div>
+            <button type="submit" id="btn-add-custom-word" class="btn btn-secondary">
+              <span>Ajouter cette paire</span> ➕
+            </button>
+          </form>
+
+          <div id="custom-words-list-container" class="custom-words-list-container">
+            <h4 class="custom-list-title">Vos paires personnalisées :</h4>
+            <div id="custom-words-items" class="custom-words-items">
+              <!-- Liste dynamique -->
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary" data-close="modal-words">Fermer</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- MODAL : STATISTIQUES                                     -->
+    <!-- ======================================================== -->
+    <div id="modal-stats" class="modal-overlay hidden">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h2 class="modal-title">📊 Statistiques</h2>
+          <button class="modal-close-btn" data-close="modal-stats">✕</button>
+        </div>
+        <div class="modal-body stats-body">
+          <div class="stat-highlight">
+            <div class="stat-highlight-val" id="stat-total-games">0</div>
+            <div class="stat-highlight-lbl">Parties jouées</div>
+          </div>
+
+          <div class="stats-bars-container">
+            <div class="stat-bar-group">
+              <div class="stat-bar-label">
+                <span>🛡️ Civils</span>
+                <strong id="stat-civil-pct">0%</strong>
+              </div>
+              <div class="stat-progress-track">
+                <div id="stat-civil-bar" class="stat-progress-fill civil" style="width: 0%;"></div>
+              </div>
+            </div>
+
+            <div class="stat-bar-group">
+              <div class="stat-bar-label">
+                <span>🕶️ Undercovers</span>
+                <strong id="stat-undercover-pct">0%</strong>
+              </div>
+              <div class="stat-progress-track">
+                <div id="stat-undercover-bar" class="stat-progress-fill undercover" style="width: 0%;"></div>
+              </div>
+            </div>
+
+            <div class="stat-bar-group">
+              <div class="stat-bar-label">
+                <span>🎭 M. Blanc</span>
+                <strong id="stat-white-pct">0%</strong>
+              </div>
+              <div class="stat-progress-track">
+                <div id="stat-white-bar" class="stat-progress-fill mrwhite" style="width: 0%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button id="btn-reset-stats" class="btn btn-danger btn-small">Réinitialiser les stats</button>
+          <button class="btn btn-primary" data-close="modal-stats">Fermer</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
   </div>
 
-  <script type="module" src="assets/app.js?v=20260507"></script>
+  <!-- SCRIPTS -->
+  <script src="js/app.js"></script>
 </body>
 </html>
