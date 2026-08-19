@@ -545,9 +545,6 @@ html, body {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  max-height: 240px;
-  overflow-y: auto;
-  padding-right: 4px;
 }
 
 .player-input-item {
@@ -1094,6 +1091,7 @@ html, body {
   transform-style: preserve-3d;
   transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   border-radius: var(--radius-xl);
+  cursor: pointer;
 }
 
 .secret-card.revealed {
@@ -1115,13 +1113,15 @@ html, body {
   justify-content: center;
   text-align: center;
   box-shadow: var(--shadow-lg);
+  cursor: pointer;
 }
 
 /* Face cachée */
 .card-front {
   background: linear-gradient(145deg, var(--bg-secondary) 0%, var(--bg-surface) 100%);
   border: 2px dashed var(--border-color-strong);
-  gap: 14px;
+  gap: 16px;
+  justify-content: center;
 }
 
 .card-lock-icon {
@@ -1129,20 +1129,14 @@ html, body {
   filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
 }
 
-.card-prompt-text {
-  font-family: var(--font-heading);
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: var(--text-primary);
-}
-
 .card-instructions {
   font-size: 0.85rem;
   color: var(--text-muted);
+  max-width: 280px;
 }
 
 .btn-reveal-action {
-  margin-top: 8px;
+  margin-top: 4px;
 }
 
 /* Face révélée */
@@ -2181,3 +2175,63 @@ html, body {
     grid-template-columns: 1fr;
   }
 }
+
+/* ==========================================================================
+   MODE ÉPURÉ / SANS DÉTAILS (.hide-details)
+   ========================================================================== */
+
+body.hide-details .role-desc,
+body.hide-details .age-text-col small,
+body.hide-details .option-desc,
+body.hide-details .card-instructions,
+body.hide-details .secret-description {
+  display: none !important;
+}
+
+body.hide-details .role-control-row {
+  padding: 8px 12px;
+}
+
+body.hide-details .role-info {
+  display: flex;
+  align-items: center;
+}
+
+body.hide-details .role-badge-tag {
+  margin-bottom: 0;
+}
+
+body.hide-details .age-btn {
+  padding: 8px 12px;
+}
+
+body.hide-details .option-toggle-row {
+  padding: 10px 14px;
+}
+
+body.hide-details .secret-card {
+  height: 220px;
+}
+
+body.hide-details .secret-card-container {
+  min-height: 220px;
+}
+
+body.hide-details .card-front {
+  gap: 8px;
+}
+
+body.hide-details .card-face {
+  padding: 16px;
+}
+
+body.hide-details .secret-revealed-content {
+  gap: 10px;
+  justify-content: center;
+}
+
+body.hide-details .secret-word-display {
+  margin: 4px 0;
+  font-size: clamp(1.6rem, 7vw, 2.5rem);
+}
+

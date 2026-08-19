@@ -255,6 +255,18 @@
                 <span class="toggle-switch"></span>
               </div>
             </label>
+
+            <!-- RÈGLE 3 : AFFICHER LES DÉTAILS -->
+            <label class="option-toggle-row" for="opt-show-details">
+              <div class="option-text-col">
+                <span class="option-title">💡 Explications & Détails</span>
+                <span class="option-desc">Afficher les descriptions et aides de jeu dans l'interface</span>
+              </div>
+              <div class="toggle-wrapper">
+                <input type="checkbox" id="opt-show-details" class="toggle-checkbox" checked>
+                <span class="toggle-switch"></span>
+              </div>
+            </label>
           </div>
         </div>
 
@@ -295,7 +307,6 @@
             <!-- Face cachée (par défaut) -->
             <div class="card-face card-front">
               <div class="card-lock-icon">🔒</div>
-              <p class="card-prompt-text">Appuyez ou maintenez pour découvrir votre mot secret</p>
               <div class="card-instructions">Assurez-vous que personne ne regarde votre écran !</div>
               <button id="btn-reveal-card" class="btn btn-secondary btn-reveal-action">
                 <span>👁️ Révéler mon mot</span>
@@ -319,7 +330,7 @@
         <!-- BOUTON DE CONFIRMATION SUIVANT -->
         <div class="reveal-footer">
           <button id="btn-next-player" class="btn btn-primary btn-large" disabled>
-            <span>C'est fait, joueur suivant</span> ➡️
+            <span>Joueur suivant</span> ➡️
           </button>
         </div>
       </section>
@@ -834,6 +845,18 @@
                 </div>
                 <div class="toggle-wrapper">
                   <input type="checkbox" id="modal-opt-anon-voting" class="toggle-checkbox">
+                  <span class="toggle-switch"></span>
+                </div>
+              </label>
+
+              <!-- RÈGLE 3 : AFFICHER LES DÉTAILS -->
+              <label class="option-toggle-row" for="modal-opt-show-details">
+                <div class="option-text-col">
+                  <span class="option-title">💡 Explications & Détails</span>
+                  <span class="option-desc">Afficher les descriptions et aides de jeu dans l'interface</span>
+                </div>
+                <div class="toggle-wrapper">
+                  <input type="checkbox" id="modal-opt-show-details" class="toggle-checkbox" checked>
                   <span class="toggle-switch"></span>
                 </div>
               </label>

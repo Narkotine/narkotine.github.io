@@ -1164,12 +1164,12 @@ class UndercoverApp {
       const saved = localStorage.getItem('undercover_game_options');
       if (saved) {
         const parsed = JSON.parse(saved);
-        return Object.assign({ showRoles: false, anonymousVoting: false }, parsed);
+        return Object.assign({ showRoles: false, anonymousVoting: false, showDetails: true }, parsed);
       }
     } catch (e) {
       console.warn("Impossible de charger les options", e);
     }
-    return { showRoles: false, anonymousVoting: false };
+    return { showRoles: false, anonymousVoting: false, showDetails: true };
   }
 
   saveOptions() {
@@ -1180,6 +1180,11 @@ class UndercoverApp {
     } catch (e) {
       console.warn("Impossible de sauvegarder les options", e);
     }
+  }
+
+  applyDetailsMode() {
+    const show = this.options.showDetails !== false;
+    document.body.classList.toggle('hide-details', !show);
   }
 
   setOption(key, value) {
@@ -1194,6 +1199,9 @@ class UndercoverApp {
       if (this.game && this.game.phase === PHASES.VOTING) {
         this.renderVotingScreen();
       }
+    } else if (key === 'showDetails') {
+      this.applyDetailsMode();
+      this.showToast(this.options.showDetails ? "Mode détaillé activé 💡" : "Mode épuré activé (détails masqués) ⚡");
     }
   }
 
@@ -1202,6 +1210,9 @@ class UndercoverApp {
     if (this.modalOptShowRoles) this.modalOptShowRoles.checked = this.options.showRoles;
     if (this.optAnonVoting) this.optAnonVoting.checked = this.options.anonymousVoting;
     if (this.modalOptAnonVoting) this.modalOptAnonVoting.checked = this.options.anonymousVoting;
+    if (this.optShowDetails) this.optShowDetails.checked = this.options.showDetails !== false;
+    if (this.modalOptShowDetails) this.modalOptShowDetails.checked = this.options.showDetails !== false;
+    this.applyDetailsMode();
   }
 
   cacheDom() {
@@ -1258,6 +1269,7 @@ class UndercoverApp {
     this.btnSelectAllCats = document.getElementById('btn-select-all-cats');
     this.optShowRoles = document.getElementById('opt-show-roles');
     this.optAnonVoting = document.getElementById('opt-anon-voting');
+    this.optShowDetails = document.getElementById('opt-show-details');
     this.btnStartGame = document.getElementById('btn-start-game');
 
     // Écran Reveal (Passe & Joue)
@@ -1329,6 +1341,7 @@ class UndercoverApp {
     this.modalSettings = document.getElementById('modal-settings');
     this.modalOptShowRoles = document.getElementById('modal-opt-show-roles');
     this.modalOptAnonVoting = document.getElementById('modal-opt-anon-voting');
+    this.modalOptShowDetails = document.getElementById('modal-opt-show-details');
 
     this.modalRules = document.getElementById('modal-rules');
     this.modalMrWhiteGuess = document.getElementById('modal-mrwhite-guess');
@@ -1458,6 +1471,12 @@ class UndercoverApp {
     if (this.modalOptAnonVoting) {
       this.modalOptAnonVoting.addEventListener('change', (e) => this.setOption('anonymousVoting', e.target.checked));
     }
+    if (this.optShowDetails) {
+      this.optShowDetails.addEventListener('change', (e) => this.setOption('showDetails', e.target.checked));
+    }
+    if (this.modalOptShowDetails) {
+      this.modalOptShowDetails.addEventListener('change', (e) => this.setOption('showDetails', e.target.checked));
+    }
 
     // Formulaire d'ajout joueur
     if (this.formAddPlayer) {
@@ -1524,11 +1543,17 @@ class UndercoverApp {
         }
       });
       if (age === 'kids') {
-        this.selectedCategories = this.selectedCategories.filter(c => c !== 'party');
+        this.selectedCategories = this.selectedCategories.filter(c => c !== 'party' && c !== 'popculture' && c !== 'geek');
         this.showToast('Mode Enfants (-8 ans) activé 👶');
       } else if (age === 'standard') {
+        this.selectedCategories = this.selectedCategories.filter(c => c !== 'party');
+        if (!this.selectedCategories.includes('popculture')) this.selectedCategories.push('popculture');
+        if (!this.selectedCategories.includes('geek')) this.selectedCategories.push('geek');
         this.showToast('Mode Tout public (+8 ans) activé 👥');
       } else {
+        if (!this.selectedCategories.includes('party')) this.selectedCategories.push('party');
+        if (!this.selectedCategories.includes('popculture')) this.selectedCategories.push('popculture');
+        if (!this.selectedCategories.includes('geek')) this.selectedCategories.push('geek');
         this.showToast('Mode Ados & Adultes (16+) activé 🎉');
       }
       this.renderCategoryChips();
@@ -1551,6 +1576,8 @@ class UndercoverApp {
         sounds.playTap();
         this.selectedCategories = Object.keys(WORD_CATEGORIES);
         if (this.currentAgeFilter === 'kids') {
+          this.selectedCategories = this.selectedCategories.filter(c => c !== 'party' && c !== 'popculture' && c !== 'geek');
+        } else if (this.currentAgeFilter === 'standard') {
           this.selectedCategories = this.selectedCategories.filter(c => c !== 'party');
         }
         this.renderCategoryChips();
@@ -1624,14 +1651,22 @@ class UndercoverApp {
       }
     };
 
-    if (this.btnRevealCard) this.btnRevealCard.addEventListener('click', revealCard);
-    if (this.btnHideCard) this.btnHideCard.addEventListener('click', hideCard);
+    if (this.btnRevealCard) this.btnRevealCard.addEventListener('click', (e) => {
+      e.stopPropagation();
+      revealCard();
+    });
+    if (this.btnHideCard) this.btnHideCard.addEventListener('click', (e) => {
+      e.stopPropagation();
+      hideCard();
+    });
 
     if (this.secretCard) {
       this.secretCard.addEventListener('pointerdown', (e) => {
-        if (e.target.closest('#btn-hide-card') || e.target.closest('#btn-next-player')) return;
+        if (e.target.closest('#btn-next-player')) return;
         if (this.secretCard.classList.contains('locked')) {
           revealCard();
+        } else if (this.secretCard.classList.contains('revealed')) {
+          hideCard();
         }
       });
     }
@@ -1762,6 +1797,7 @@ class UndercoverApp {
 
   initUi() {
     this.applyTheme(this.currentTheme, false);
+    this.applyDetailsMode();
     this.renderPlayersList();
     this.updateWordsCountBadge();
     if (this.soundIcon) {
@@ -2087,7 +2123,14 @@ class UndercoverApp {
       this.secretCard.classList.add('locked');
     }
     this.hasRevealedCurrentCard = false;
-    if (this.btnNextPlayer) this.btnNextPlayer.disabled = true;
+    if (this.btnNextPlayer) {
+      this.btnNextPlayer.disabled = true;
+      if (current === total) {
+        this.btnNextPlayer.innerHTML = `<span>Passer au Débat & Vote</span> ➡️`;
+      } else {
+        this.btnNextPlayer.innerHTML = `<span>Joueur suivant</span> ➡️`;
+      }
+    }
 
     // Le mot reste masqué et anonymisé tant que le joueur n'a pas cliqué sur Révéler
     if (this.revealWordDisplay) this.revealWordDisplay.textContent = '••••••••';
