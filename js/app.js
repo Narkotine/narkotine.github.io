@@ -1355,6 +1355,10 @@ class UndercoverApp {
     this.btnResetStats = document.getElementById('btn-reset-stats');
 
     this.toastContainer = document.getElementById('toast-container');
+
+    // Thème de l'interface
+    this.currentTheme = localStorage.getItem('undercover_ui_theme') || 'dark';
+    this.themeCardBtns = document.querySelectorAll('[data-theme-val]');
   }
 
   bindEvents() {
@@ -1407,6 +1411,17 @@ class UndercoverApp {
         sounds.playTap();
         this.renderStatsModal();
         this.openModal(this.modalStats);
+      });
+    }
+
+    // Sélection du thème d'ambiance UI
+    if (this.themeCardBtns) {
+      this.themeCardBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          sounds.playTap();
+          const theme = btn.getAttribute('data-theme-val');
+          this.applyTheme(theme, true);
+        });
       });
     }
 
@@ -1746,10 +1761,51 @@ class UndercoverApp {
   }
 
   initUi() {
+    this.applyTheme(this.currentTheme, false);
     this.renderPlayersList();
     this.updateWordsCountBadge();
     if (this.soundIcon) {
       this.soundIcon.textContent = sounds.soundEnabled ? '🔊' : '🔇';
+    }
+  }
+
+  applyTheme(theme, notify = true) {
+    const validThemes = ['dark', 'light', 'midnight', 'oled'];
+    if (!validThemes.includes(theme)) theme = 'dark';
+    this.currentTheme = theme;
+    document.documentElement.setAttribute('data-theme', theme);
+    try {
+      localStorage.setItem('undercover_ui_theme', theme);
+    } catch (e) {}
+
+    // Mise à jour de la couleur de la barre de statut pour mobile/PWA
+    const themeColors = {
+      dark: '#0b0f19',
+      light: '#f8f6f0',
+      midnight: '#060d19',
+      oled: '#000000'
+    };
+    const metaThemeColor = document.getElementById('meta-theme-color') || document.querySelector('meta[name="theme-color"]');
+    if (metaThemeColor && themeColors[theme]) {
+      metaThemeColor.setAttribute('content', themeColors[theme]);
+    }
+
+    // Mise à jour de l'état actif sur les cartes de sélection de thème
+    if (this.themeCardBtns) {
+      this.themeCardBtns.forEach(btn => {
+        const val = btn.getAttribute('data-theme-val');
+        btn.classList.toggle('active', val === theme);
+      });
+    }
+
+    if (notify) {
+      const themeLabels = {
+        dark: 'Nébuleuse Sombre 🌌',
+        light: 'Ivoire Raffiné ✨',
+        midnight: 'Minuit Saphir 🌊',
+        oled: 'Obsidienne OLED 🌑'
+      };
+      this.showToast(`Thème « ${themeLabels[theme] || theme} » appliqué`);
     }
   }
 

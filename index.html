@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Undercover - Le Jeu d'Ambiance & Déduction</title>
   <meta name="description" content="Jeu d'ambiance Undercover gratuit en français. Jouez entre amis en mode Passe et Joue avec des centaines de mots secrets !">
-  <meta name="theme-color" content="#0d1117">
+  <meta name="theme-color" content="#0b0f19" id="meta-theme-color">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <link rel="manifest" href="manifest.json">
@@ -14,6 +14,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
+  <script>
+    (function() {
+      try {
+        var savedTheme = localStorage.getItem('undercover_ui_theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+      } catch (e) {}
+    })();
+  </script>
 </head>
 <body>
   <!-- EFFET LUMINEUX D'AMBIANCE DE FOND -->
@@ -622,7 +630,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button id="btn-submit-mrwhite-guess" class="btn btn-primary btn-large">
+          <button id="btn-submit-mrwhite-guess" class="btn btn-primary">
             <span>Tenter ma chance 🎯</span>
           </button>
           <button id="btn-skip-mrwhite-guess" class="btn btn-secondary">
@@ -726,41 +734,112 @@
     </div>
 
     <!-- ======================================================== -->
-    <!-- MODAL : PARAMÈTRES & RÈGLES OPTIONNELLES EN DIRECT        -->
+    <!-- MODAL : PARAMÈTRES & THÈMES DE L'UI EN DIRECT            -->
     <!-- ======================================================== -->
     <div id="modal-settings" class="modal-overlay hidden">
       <div class="modal-card">
         <div class="modal-header">
-          <h2 class="modal-title">⚙️ Options de la partie</h2>
+          <h2 class="modal-title">⚙️ Paramètres & Thème</h2>
           <button class="modal-close-btn" data-close="modal-settings">✕</button>
         </div>
         <div class="modal-body">
-          <p class="modal-settings-intro">Ces réglages s'appliquent immédiatement, y compris pendant la partie :</p>
-          <div class="options-toggles-list">
-            <!-- RÈGLE 1 : RÔLES VISIBLES -->
-            <label class="option-toggle-row" for="modal-opt-show-roles">
-              <div class="option-text-col">
-                <span class="option-title">👁️ Rôles connus</span>
-                <span class="option-desc">Afficher si on est Civil ou Undercover dès la révélation</span>
-              </div>
-              <div class="toggle-wrapper">
-                <input type="checkbox" id="modal-opt-show-roles" class="toggle-checkbox">
-                <span class="toggle-switch"></span>
-              </div>
-            </label>
+          
+          <!-- SÉLECTEUR DE THÈME UI -->
+          <div class="settings-group">
+            <h3 class="settings-group-title">🎨 Thème de l'interface</h3>
+            <p class="modal-settings-intro">Choisissez l'ambiance visuelle de l'application :</p>
+            <div class="theme-picker-grid">
+              
+              <!-- THÈME 1 : NÉBULEUSE SOMBRE -->
+              <button type="button" class="theme-card-btn active" data-theme-val="dark" title="Thème Nébuleuse Sombre">
+                <div class="theme-swatch-row swatch-dark">
+                  <span class="swatch-circle bg" title="Fond"></span>
+                  <span class="swatch-circle surface" title="Surface"></span>
+                  <span class="swatch-circle accent" title="Accent"></span>
+                </div>
+                <div class="theme-card-text">
+                  <strong class="theme-card-name">Nébuleuse Sombre</strong>
+                  <span class="theme-card-desc">Bleu nuit & Indigo</span>
+                </div>
+                <span class="theme-selected-badge">✓</span>
+              </button>
 
-            <!-- RÈGLE 2 : VOTE ANONYME -->
-            <label class="option-toggle-row" for="modal-opt-anon-voting">
-              <div class="option-text-col">
-                <span class="option-title">🗳️ Vote anonyme</span>
-                <span class="option-desc">Vote secret tour par tour sur le téléphone avec gestion des ex æquo</span>
-              </div>
-              <div class="toggle-wrapper">
-                <input type="checkbox" id="modal-opt-anon-voting" class="toggle-checkbox">
-                <span class="toggle-switch"></span>
-              </div>
-            </label>
+              <!-- THÈME 2 : IVOIRE RAFFINÉ -->
+              <button type="button" class="theme-card-btn" data-theme-val="light" title="Thème Ivoire Raffiné">
+                <div class="theme-swatch-row swatch-light">
+                  <span class="swatch-circle bg" title="Fond"></span>
+                  <span class="swatch-circle surface" title="Surface"></span>
+                  <span class="swatch-circle accent" title="Accent"></span>
+                </div>
+                <div class="theme-card-text">
+                  <strong class="theme-card-name">Ivoire Raffiné ✨</strong>
+                  <span class="theme-card-desc">Blanc cassé & Lin chic</span>
+                </div>
+                <span class="theme-selected-badge">✓</span>
+              </button>
+
+              <!-- THÈME 3 : MINUIT SAPHIR -->
+              <button type="button" class="theme-card-btn" data-theme-val="midnight" title="Thème Minuit Saphir">
+                <div class="theme-swatch-row swatch-midnight">
+                  <span class="swatch-circle bg" title="Fond"></span>
+                  <span class="swatch-circle surface" title="Surface"></span>
+                  <span class="swatch-circle accent" title="Accent"></span>
+                </div>
+                <div class="theme-card-text">
+                  <strong class="theme-card-name">Minuit Saphir</strong>
+                  <span class="theme-card-desc">Abysses & Cyan</span>
+                </div>
+                <span class="theme-selected-badge">✓</span>
+              </button>
+
+              <!-- THÈME 4 : OBSIDIENNE OLED -->
+              <button type="button" class="theme-card-btn" data-theme-val="oled" title="Thème Obsidienne OLED">
+                <div class="theme-swatch-row swatch-oled">
+                  <span class="swatch-circle bg" title="Fond"></span>
+                  <span class="swatch-circle surface" title="Surface"></span>
+                  <span class="swatch-circle accent" title="Accent"></span>
+                </div>
+                <div class="theme-card-text">
+                  <strong class="theme-card-name">Obsidienne OLED</strong>
+                  <span class="theme-card-desc">Noir pur & Violet</span>
+                </div>
+                <span class="theme-selected-badge">✓</span>
+              </button>
+
+            </div>
           </div>
+
+          <!-- RÈGLES DU JEU -->
+          <div class="settings-group">
+            <h3 class="settings-group-title">⚙️ Règles de la partie</h3>
+            <p class="modal-settings-intro">Ces réglages s'appliquent immédiatement :</p>
+            <div class="options-toggles-list">
+              <!-- RÈGLE 1 : RÔLES VISIBLES -->
+              <label class="option-toggle-row" for="modal-opt-show-roles">
+                <div class="option-text-col">
+                  <span class="option-title">👁️ Rôles connus</span>
+                  <span class="option-desc">Afficher si on est Civil ou Undercover dès la révélation</span>
+                </div>
+                <div class="toggle-wrapper">
+                  <input type="checkbox" id="modal-opt-show-roles" class="toggle-checkbox">
+                  <span class="toggle-switch"></span>
+                </div>
+              </label>
+
+              <!-- RÈGLE 2 : VOTE ANONYME -->
+              <label class="option-toggle-row" for="modal-opt-anon-voting">
+                <div class="option-text-col">
+                  <span class="option-title">🗳️ Vote anonyme</span>
+                  <span class="option-desc">Vote secret tour par tour sur le téléphone avec gestion des ex æquo</span>
+                </div>
+                <div class="toggle-wrapper">
+                  <input type="checkbox" id="modal-opt-anon-voting" class="toggle-checkbox">
+                  <span class="toggle-switch"></span>
+                </div>
+              </label>
+            </div>
+          </div>
+
         </div>
         <div class="modal-footer">
           <button class="btn btn-primary" data-close="modal-settings">Fermer</button>
