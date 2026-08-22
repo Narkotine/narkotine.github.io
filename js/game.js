@@ -88,11 +88,15 @@ export class UndercoverGame {
     }
 
     // Choisir une paire de mots
-    const excluded = this.playedWordPairs.slice(-20);
-    this.wordPair = this.wordRepo.getRandomPair(selectedCategories, excluded);
+    const pairResult = this.wordRepo.getRandomPair(selectedCategories, options.ageFilter || 'standard');
+    if (pairResult.exhausted) {
+      const err = new Error("WORDS_EXHAUSTED");
+      err.stats = pairResult.stats;
+      throw err;
+    }
+    this.wordPair = pairResult;
     this.civilWord = this.wordPair.word1;
     this.undercoverWord = this.wordPair.word2;
-    this.playedWordPairs.push(`${this.wordPair.word1}-${this.wordPair.word2}`);
 
     // Créer la liste des rôles
     const rolesPool = [];

@@ -423,6 +423,7 @@ const INITIAL_WORD_PAIRS = [
 class WordRepository {
   constructor() {
     this.customPairs = this.loadCustomPairs();
+    this.playedPairs = this.loadPlayedPairs();
   }
 
   loadCustomPairs() {
@@ -444,11 +445,60 @@ class WordRepository {
     }
   }
 
-  addCustomPair(word1, word2, category = 'custom') {
+  getPairCanonicalKey(word1, word2) {
+    const w1 = String(word1 || '').trim().toLowerCase();
+    const w2 = String(word2 || '').trim().toLowerCase();
+    return w1 < w2 ? `${w1}::${w2}` : `${w2}::${w1}`;
+  }
+
+  loadPlayedPairs() {
+    try {
+      const stored = localStorage.getItem('undercover_played_word_pairs');
+      return stored ? JSON.parse(stored) : [];
+    } catch (e) {
+      console.warn("Impossible de charger l'historique des mots joués", e);
+      return [];
+    }
+  }
+
+  savePlayedPairs() {
+    try {
+      localStorage.setItem('undercover_played_word_pairs', JSON.stringify(this.playedPairs));
+    } catch (e) {
+      console.warn("Impossible de sauvegarder l'historique des mots joués", e);
+    }
+  }
+
+  markPairPlayed(word1, word2) {
+    const key = this.getPairCanonicalKey(word1, word2);
+    if (!this.playedPairs.includes(key)) {
+      this.playedPairs.push(key);
+      this.savePlayedPairs();
+    }
+  }
+
+  isPairPlayed(word1, word2) {
+    return this.playedPairs.includes(this.getPairCanonicalKey(word1, word2));
+  }
+
+  resetPlayedPairs() {
+    this.playedPairs = [];
+    try {
+      localStorage.removeItem('undercover_played_word_pairs');
+    } catch (e) {}
+    return true;
+  }
+
+  getPlayedPairsCount() {
+    return this.playedPairs.length;
+  }
+
+  addCustomPair(word1, word2, category = 'custom', age = 'standard') {
     const pair = {
       word1: word1.trim(),
       word2: word2.trim(),
       category: category,
+      age: age,
       id: Date.now() + Math.random().toString(36).substr(2, 4)
     };
     const pairs = [...this.customPairs, pair];
@@ -484,29 +534,53 @@ class WordRepository {
     return list;
   }
 
-  getRandomPair(selectedCategories = null, excludedWords = [], ageFilter = 'standard') {
-    const pool = this.getAllPairs(selectedCategories, ageFilter);
-    if (pool.length === 0) {
+  getPoolStats(selectedCategories = null, ageFilter = 'standard') {
+    const totalPool = this.getAllPairs(selectedCategories, ageFilter);
+    const available = totalPool.filter(p => !this.isPairPlayed(p.word1, p.word2));
+    const playedCount = totalPool.length - available.length;
+    const isExhausted = totalPool.length > 0 && available.length === 0;
+
+    return {
+      totalPool,
+      available,
+      playedCount,
+      totalCount: totalPool.length,
+      availableCount: available.length,
+      isExhausted
+    };
+  }
+
+  getRandomPair(selectedCategories = null, ageFilter = 'standard') {
+    const stats = this.getPoolStats(selectedCategories, ageFilter);
+    
+    if (stats.totalCount === 0) {
       const fallbackList = INITIAL_WORD_PAIRS.filter(p => ageFilter === 'kids' ? p.age === 'kids' : true);
       const chosenFallback = fallbackList.length > 0 ? fallbackList : INITIAL_WORD_PAIRS;
       const picked = chosenFallback[Math.floor(Math.random() * chosenFallback.length)];
-      return { ...picked };
+      return { ...picked, exhausted: false };
     }
 
-    const available = pool.filter(p => !excludedWords.includes(`${p.word1}-${p.word2}`));
-    const chosenList = available.length > 0 ? available : pool;
-    const picked = chosenList[Math.floor(Math.random() * chosenList.length)];
+    if (stats.isExhausted) {
+      return {
+        exhausted: true,
+        stats: stats
+      };
+    }
+
+    const picked = stats.available[Math.floor(Math.random() * stats.available.length)];
+    this.markPairPlayed(picked.word1, picked.word2);
 
     if (Math.random() > 0.5) {
       return {
         word1: picked.word2,
         word2: picked.word1,
         category: picked.category,
-        age: picked.age
+        age: picked.age,
+        exhausted: false
       };
     }
 
-    return { ...picked };
+    return { ...picked, exhausted: false };
   }
 }
 
@@ -787,7 +861,6 @@ class UndercoverGame {
     this.mrWhiteAwaitingGuess = null;
     this.winner = null;
     this.winReason = '';
-    this.playedWordPairs = [];
   }
 
   static getRecommendedRoles(playerCount) {
@@ -808,21 +881,29 @@ class UndercoverGame {
     return { civils: civ, undercovers: uc, mrWhite: mw };
   }
 
-  startNewGame(playerNames, roleConfig, selectedCategories = [], ageFilter = 'standard') {
+  startNewGame(playerNames, roleConfig, selectedCategories = [], ageFilter = 'standard', options = {}) {
     if (playerNames.length < 3) {
       throw new Error("Il faut au moins 3 joueurs pour démarrer.");
     }
+
+    this.options = Object.assign({ showRoles: false, anonymousVoting: false }, options);
+    this.anonymousVotes = {};
 
     const totalRoles = roleConfig.civils + roleConfig.undercovers + roleConfig.mrWhite;
     if (totalRoles !== playerNames.length) {
       throw new Error(`La somme des rôles (${totalRoles}) ne correspond pas au nombre de joueurs (${playerNames.length}).`);
     }
 
-    const excluded = this.playedWordPairs.slice(-20);
-    this.wordPair = this.wordRepo.getRandomPair(selectedCategories, excluded, ageFilter);
+    const pairResult = this.wordRepo.getRandomPair(selectedCategories, ageFilter);
+    if (pairResult.exhausted) {
+      const err = new Error("WORDS_EXHAUSTED");
+      err.stats = pairResult.stats;
+      throw err;
+    }
+
+    this.wordPair = pairResult;
     this.civilWord = this.wordPair.word1;
     this.undercoverWord = this.wordPair.word2;
-    this.playedWordPairs.push(`${this.wordPair.word1}-${this.wordPair.word2}`);
 
     const rolesPool = [];
     for (let i = 0; i < roleConfig.civils; i++) rolesPool.push(ROLES.CIVIL);
@@ -1367,6 +1448,17 @@ class UndercoverApp {
     this.statWhiteBar = document.getElementById('stat-white-bar');
     this.btnResetStats = document.getElementById('btn-reset-stats');
 
+    // Modale cycle épuisé & Mémoire des mots
+    this.modalWordsExhausted = document.getElementById('modal-words-exhausted');
+    this.exhaustedModalText = document.getElementById('exhausted-modal-text');
+    this.exhaustedStatsCount = document.getElementById('exhausted-stats-count');
+    this.btnExhaustedResetAndPlay = document.getElementById('btn-exhausted-reset-and-play');
+
+    this.settingsPlayedWordsBadge = document.getElementById('settings-played-words-badge');
+    this.settingsPlayedWordsDesc = document.getElementById('settings-played-words-desc');
+    this.btnResetPlayedWords = document.getElementById('btn-reset-played-words');
+    this.wordsPlayedCount = document.getElementById('words-played-count');
+
     this.toastContainer = document.getElementById('toast-container');
 
     // Thème de l'interface
@@ -1400,6 +1492,7 @@ class UndercoverApp {
       this.btnSettingsModal.addEventListener('click', () => {
         sounds.playTap();
         this.syncOptionsUi();
+        this.updatePlayedWordsStatusUi();
         this.openModal(this.modalSettings);
       });
     }
@@ -1415,6 +1508,7 @@ class UndercoverApp {
       this.btnWordsModal.addEventListener('click', () => {
         sounds.playTap();
         this.renderCustomWordsList();
+        this.updatePlayedWordsStatusUi();
         this.openModal(this.modalWords);
       });
     }
@@ -1424,6 +1518,28 @@ class UndercoverApp {
         sounds.playTap();
         this.renderStatsModal();
         this.openModal(this.modalStats);
+      });
+    }
+
+    // Réinitialisation de la mémoire des mots
+    if (this.btnResetPlayedWords) {
+      this.btnResetPlayedWords.addEventListener('click', () => {
+        sounds.playTap();
+        this.wordRepo.resetPlayedPairs();
+        this.updatePlayedWordsStatusUi();
+        this.showToast('Mémoire des mots réinitialisée ! 🔄');
+      });
+    }
+
+    // Bouton de reset direct depuis la modale d'épuisement
+    if (this.btnExhaustedResetAndPlay) {
+      this.btnExhaustedResetAndPlay.addEventListener('click', () => {
+        sounds.playTap();
+        this.wordRepo.resetPlayedPairs();
+        this.closeModal(this.modalWordsExhausted);
+        this.updatePlayedWordsStatusUi();
+        this.showToast('Nouveau cycle commencé ! 🚀');
+        this.handleStartGame();
       });
     }
 
@@ -1447,7 +1563,7 @@ class UndercoverApp {
       });
     });
 
-    [this.modalRules, this.modalWords, this.modalStats, this.modalSettings].forEach(modal => {
+    [this.modalRules, this.modalWords, this.modalStats, this.modalSettings, this.modalWordsExhausted].forEach(modal => {
       if (modal) {
         modal.addEventListener('click', (e) => {
           if (e.target === modal) {
@@ -1557,7 +1673,7 @@ class UndercoverApp {
         this.showToast('Mode Ados & Adultes (16+) activé 🎉');
       }
       this.renderCategoryChips();
-      this.updateWordsCountBadge();
+      this.updatePlayedWordsStatusUi();
     };
 
     if (this.btnAgeKids) this.btnAgeKids.addEventListener('click', () => setAgeFilter('kids'));
@@ -1581,6 +1697,7 @@ class UndercoverApp {
           this.selectedCategories = this.selectedCategories.filter(c => c !== 'party');
         }
         this.renderCategoryChips();
+        this.updatePlayedWordsStatusUi();
         this.showToast('Tous les thèmes sélectionnés');
       });
     }
@@ -1651,18 +1768,11 @@ class UndercoverApp {
       }
     };
 
-    if (this.btnRevealCard) this.btnRevealCard.addEventListener('click', (e) => {
-      e.stopPropagation();
-      revealCard();
-    });
-    if (this.btnHideCard) this.btnHideCard.addEventListener('click', (e) => {
-      e.stopPropagation();
-      hideCard();
-    });
+    if (this.btnRevealCard) this.btnRevealCard.addEventListener('click', revealCard);
+    if (this.btnHideCard) this.btnHideCard.addEventListener('click', hideCard);
 
     if (this.secretCard) {
-      this.secretCard.addEventListener('pointerdown', (e) => {
-        if (e.target.closest('#btn-next-player')) return;
+      this.secretCard.addEventListener('click', () => {
         if (this.secretCard.classList.contains('locked')) {
           revealCard();
         } else if (this.secretCard.classList.contains('revealed')) {
@@ -1673,21 +1783,6 @@ class UndercoverApp {
 
     if (this.btnNextPlayer) {
       this.btnNextPlayer.addEventListener('click', () => {
-        sounds.playTap();
-        // Vider immédiatement les textes secrets avant toute transition
-        if (this.revealWordDisplay) this.revealWordDisplay.textContent = '••••••••';
-        if (this.revealRoleFlag) {
-          this.revealRoleFlag.textContent = 'VOTRE RÔLE';
-          this.revealRoleFlag.className = 'role-flag';
-        }
-        if (this.revealDescDisplay) this.revealDescDisplay.textContent = '';
-
-        if (this.secretCard) {
-          this.secretCard.classList.remove('revealed');
-          this.secretCard.classList.add('locked');
-        }
-
-        // Transition propre au joueur suivant
         this.handleNextReveal();
       });
     }
@@ -1778,6 +1873,7 @@ class UndercoverApp {
           this.inputCustomWord1.value = '';
           this.inputCustomWord2.value = '';
           this.renderCustomWordsList();
+          this.updatePlayedWordsStatusUi();
           this.showToast(`Paire « ${w1} / ${w2} » ajoutée ! 🎉`);
         }
       });
@@ -1799,7 +1895,7 @@ class UndercoverApp {
     this.applyTheme(this.currentTheme, false);
     this.applyDetailsMode();
     this.renderPlayersList();
-    this.updateWordsCountBadge();
+    this.updatePlayedWordsStatusUi();
     if (this.soundIcon) {
       this.soundIcon.textContent = sounds.soundEnabled ? '🔊' : '🔇';
     }
@@ -2073,31 +2169,77 @@ class UndercoverApp {
           this.selectedCategories.push(cat.id);
         }
         this.renderCategoryChips();
-        this.updateWordsCountBadge();
+        this.updatePlayedWordsStatusUi();
       });
 
       this.categoriesChipsContainer.appendChild(chip);
     });
   }
 
-  updateWordsCountBadge() {
+  updatePlayedWordsStatusUi() {
+    const stats = this.wordRepo.getPoolStats(this.selectedCategories, this.currentAgeFilter);
+    const globalCount = this.wordRepo.getPlayedPairsCount();
+    const globalTotal = this.wordRepo.getAllPairs(null, 'adult').length;
+
+    if (this.settingsPlayedWordsBadge) {
+      this.settingsPlayedWordsBadge.textContent = `${stats.playedCount} / ${stats.totalCount}`;
+    }
+    if (this.settingsPlayedWordsDesc) {
+      if (stats.isExhausted) {
+        this.settingsPlayedWordsDesc.textContent = `⚠️ Catalogue épuisé (0 mot restant)`;
+      } else {
+        this.settingsPlayedWordsDesc.textContent = `${stats.availableCount} paire(s) encore disponible(s) sans répétition`;
+      }
+    }
+    if (this.wordsPlayedCount) {
+      this.wordsPlayedCount.textContent = `${globalCount} / ${globalTotal}`;
+    }
+    this.updateWordsCountBadge(stats);
+  }
+
+  updateWordsCountBadge(stats = null) {
     if (!this.wordsTotalCount) return;
-    const total = this.wordRepo.getAllPairs(this.selectedCategories, this.currentAgeFilter).length;
+    if (!stats) {
+      stats = this.wordRepo.getPoolStats(this.selectedCategories, this.currentAgeFilter);
+    }
     let ageSuffix = '';
     if (this.currentAgeFilter === 'kids') ageSuffix = ' (👶 -8 ans)';
     else if (this.currentAgeFilter === 'adult') ageSuffix = ' (🎉 16+)';
     else ageSuffix = ' (👥 +8 ans)';
-    this.wordsTotalCount.textContent = `${total} paires${ageSuffix}`;
+    this.wordsTotalCount.textContent = `${stats.availableCount} dispo / ${stats.totalCount} paires${ageSuffix}`;
+  }
+
+  showWordsExhaustedModal(stats) {
+    if (this.exhaustedStatsCount) {
+      this.exhaustedStatsCount.textContent = `${stats.playedCount} / ${stats.totalCount}`;
+    }
+    if (this.exhaustedModalText) {
+      this.exhaustedModalText.textContent = `Toutes les ${stats.totalCount} paires de mots correspondant à vos thèmes et filtre d'âge ont déjà été jouées dans ce cycle.`;
+    }
+    this.openModal(this.modalWordsExhausted);
   }
 
   handleStartGame() {
     try {
+      const stats = this.wordRepo.getPoolStats(this.selectedCategories, this.currentAgeFilter);
+      if (stats.isExhausted) {
+        sounds.playTap();
+        this.showWordsExhaustedModal(stats);
+        return;
+      }
+
       sounds.playTap();
       this.game.startNewGame(this.players, this.roleConfig, this.selectedCategories, this.currentAgeFilter, this.options);
+      this.updatePlayedWordsStatusUi();
       this.renderRevealScreen();
       this.showScreen('reveal');
     } catch (e) {
-      alert(e.message);
+      if (e.message === 'WORDS_EXHAUSTED' || e.stats) {
+        const stats = e.stats || this.wordRepo.getPoolStats(this.selectedCategories, this.currentAgeFilter);
+        this.showWordsExhaustedModal(stats);
+      } else {
+        alert(e.message);
+      }
     }
   }
 

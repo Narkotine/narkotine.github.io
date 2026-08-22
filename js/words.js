@@ -593,6 +593,7 @@ export const INITIAL_WORD_PAIRS = [
 export class WordRepository {
   constructor() {
     this.customPairs = this.loadCustomPairs();
+    this.playedPairs = this.loadPlayedPairs();
   }
 
   loadCustomPairs() {
@@ -614,11 +615,60 @@ export class WordRepository {
     }
   }
 
-  addCustomPair(word1, word2, category = 'custom') {
+  getPairCanonicalKey(word1, word2) {
+    const w1 = String(word1 || '').trim().toLowerCase();
+    const w2 = String(word2 || '').trim().toLowerCase();
+    return w1 < w2 ? `${w1}::${w2}` : `${w2}::${w1}`;
+  }
+
+  loadPlayedPairs() {
+    try {
+      const stored = localStorage.getItem('undercover_played_word_pairs');
+      return stored ? JSON.parse(stored) : [];
+    } catch (e) {
+      console.warn("Impossible de charger l'historique des mots joués", e);
+      return [];
+    }
+  }
+
+  savePlayedPairs() {
+    try {
+      localStorage.setItem('undercover_played_word_pairs', JSON.stringify(this.playedPairs));
+    } catch (e) {
+      console.warn("Impossible de sauvegarder l'historique des mots joués", e);
+    }
+  }
+
+  markPairPlayed(word1, word2) {
+    const key = this.getPairCanonicalKey(word1, word2);
+    if (!this.playedPairs.includes(key)) {
+      this.playedPairs.push(key);
+      this.savePlayedPairs();
+    }
+  }
+
+  isPairPlayed(word1, word2) {
+    return this.playedPairs.includes(this.getPairCanonicalKey(word1, word2));
+  }
+
+  resetPlayedPairs() {
+    this.playedPairs = [];
+    try {
+      localStorage.removeItem('undercover_played_word_pairs');
+    } catch (e) {}
+    return true;
+  }
+
+  getPlayedPairsCount() {
+    return this.playedPairs.length;
+  }
+
+  addCustomPair(word1, word2, category = 'custom', age = 'standard') {
     const pair = {
       word1: word1.trim(),
       word2: word2.trim(),
       category: category,
+      age: age,
       id: Date.now() + Math.random().toString(36).substr(2, 4)
     };
     const pairs = [...this.customPairs, pair];
@@ -631,10 +681,16 @@ export class WordRepository {
     this.saveCustomPairs(pairs);
   }
 
-  getAllPairs(selectedCategories = null) {
+  getAllPairs(selectedCategories = null, ageFilter = 'standard') {
     let list = [...INITIAL_WORD_PAIRS];
     if (this.customPairs.length > 0) {
       list = list.concat(this.customPairs);
+    }
+
+    if (ageFilter === 'kids') {
+      list = list.filter(pair => pair.age === 'kids');
+    } else if (ageFilter === 'standard') {
+      list = list.filter(pair => pair.age === 'kids' || pair.age === 'standard');
     }
 
     if (selectedCategories && selectedCategories.length > 0) {
@@ -647,32 +703,56 @@ export class WordRepository {
     return list;
   }
 
+  getPoolStats(selectedCategories = null, ageFilter = 'standard') {
+    const totalPool = this.getAllPairs(selectedCategories, ageFilter);
+    const available = totalPool.filter(p => !this.isPairPlayed(p.word1, p.word2));
+    const playedCount = totalPool.length - available.length;
+    const isExhausted = totalPool.length > 0 && available.length === 0;
+
+    return {
+      totalPool,
+      available,
+      playedCount,
+      totalCount: totalPool.length,
+      availableCount: available.length,
+      isExhausted
+    };
+  }
+
   /**
-   * Sélectionne une paire de mots aléatoire selon les catégories choisies
-   * en évitant les doublons récents si possible.
+   * Sélectionne une paire de mots aléatoire selon les catégories et filtre d'âge choisis
+   * en évitant les doublons tant que la liste n'est pas épuisée.
    */
-  getRandomPair(selectedCategories = null, excludedWords = []) {
-    const pool = this.getAllPairs(selectedCategories);
-    if (pool.length === 0) {
-      // Fallback au catalogue par défaut
-      const fallback = INITIAL_WORD_PAIRS[Math.floor(Math.random() * INITIAL_WORD_PAIRS.length)];
-      return { ...fallback };
+  getRandomPair(selectedCategories = null, ageFilter = 'standard') {
+    const stats = this.getPoolStats(selectedCategories, ageFilter);
+    
+    if (stats.totalCount === 0) {
+      const fallbackList = INITIAL_WORD_PAIRS.filter(p => ageFilter === 'kids' ? p.age === 'kids' : true);
+      const chosenFallback = fallbackList.length > 0 ? fallbackList : INITIAL_WORD_PAIRS;
+      const picked = chosenFallback[Math.floor(Math.random() * chosenFallback.length)];
+      return { ...picked, exhausted: false };
     }
 
-    // Filtrer les mots déjà joués récemment dans la session
-    const available = pool.filter(p => !excludedWords.includes(`${p.word1}-${p.word2}`));
-    const chosenList = available.length > 0 ? available : pool;
-    const picked = chosenList[Math.floor(Math.random() * chosenList.length)];
+    if (stats.isExhausted) {
+      return {
+        exhausted: true,
+        stats: stats
+      };
+    }
 
-    // 50% de chance d'inverser word1 et word2 pour varier qui a quel mot !
+    const picked = stats.available[Math.floor(Math.random() * stats.available.length)];
+    this.markPairPlayed(picked.word1, picked.word2);
+
     if (Math.random() > 0.5) {
       return {
         word1: picked.word2,
         word2: picked.word1,
-        category: picked.category
+        category: picked.category,
+        age: picked.age,
+        exhausted: false
       };
     }
 
-    return { ...picked };
+    return { ...picked, exhausted: false };
   }
 }

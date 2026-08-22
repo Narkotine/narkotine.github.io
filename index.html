@@ -665,6 +665,10 @@
             <span>Total de paires disponibles :</span>
             <strong id="words-total-count" class="badge">600+</strong>
           </div>
+          <div class="words-stats-row">
+            <span>Paires déjà jouées (cycle en cours) :</span>
+            <strong id="words-played-count" class="badge">0</strong>
+          </div>
 
           <h3 class="subsection-title">Ajouter vos propres mots</h3>
           <form id="form-custom-words" class="custom-words-form" onsubmit="return false;">
@@ -863,9 +867,61 @@
             </div>
           </div>
 
+          <!-- MÉMOIRE ANTI-RÉPÉTITION DES MOTS -->
+          <div class="settings-group">
+            <h3 class="settings-group-title">🧠 Mémoire des mots joués</h3>
+            <p class="modal-settings-intro">Undercover retient les paires déjà sorties pour ne jamais proposer de doublons tant que la liste n'est pas épuisée.</p>
+            <div class="played-words-status-box">
+              <div class="played-words-info-col">
+                <div class="played-words-counter-row">
+                  <span class="played-words-lbl">Paires jouées :</span>
+                  <strong id="settings-played-words-badge" class="played-words-badge">0 / 0</strong>
+                </div>
+                <span id="settings-played-words-desc" class="played-words-desc">Aucune répétition en cours</span>
+              </div>
+              <button type="button" id="btn-reset-played-words" class="btn btn-secondary btn-sm">
+                🔄 Réinitialiser la mémoire
+              </button>
+            </div>
+          </div>
+
         </div>
         <div class="modal-footer">
           <button class="btn btn-primary" data-close="modal-settings">Fermer</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- MODAL : MOTS ÉPUISÉS (CYCLE TERMINÉ)                      -->
+    <!-- ======================================================== -->
+    <div id="modal-words-exhausted" class="modal-overlay hidden">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h2 class="modal-title">🎉 Cycle de mots terminé !</h2>
+          <button class="modal-close-btn" data-close="modal-words-exhausted">✕</button>
+        </div>
+        <div class="modal-body text-center">
+          <div class="exhausted-badge">📚</div>
+          <h3 class="exhausted-title">Toutes les paires ont été jouées !</h3>
+          <p class="exhausted-text" id="exhausted-modal-text">
+            Vous avez exploré l'intégralité des paires de mots disponibles avec vos thèmes et filtre d'âge actuels.
+          </p>
+          <div class="exhausted-stats-box">
+            <span id="exhausted-stats-count" class="exhausted-count-highlight">0 / 0</span>
+            <span class="exhausted-count-label">paires jouées dans ce cycle</span>
+          </div>
+          <p class="exhausted-subtext">
+            Réinitialisez la mémoire pour recommencer un nouveau cycle de mots sans doublon, ou modifiez vos thèmes.
+          </p>
+        </div>
+        <div class="modal-footer modal-footer-stacked">
+          <button id="btn-exhausted-reset-and-play" class="btn btn-primary btn-block">
+            🔄 Réinitialiser & Démarrer la partie
+          </button>
+          <button class="btn btn-secondary btn-block" data-close="modal-words-exhausted">
+            ⚙️ Ajuster les thèmes & filtres
+          </button>
         </div>
       </div>
     </div>

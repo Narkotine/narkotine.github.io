@@ -2235,3 +2235,134 @@ body.hide-details .secret-word-display {
   font-size: clamp(1.6rem, 7vw, 2.5rem);
 }
 
+/* ==========================================================================
+   MÉMOIRE DES MOTS JOUÉS & POP-UP CYCLE ÉPUISÉ
+   ========================================================================== */
+
+.played-words-status-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  margin-top: 4px;
+  transition: all var(--transition-fast);
+}
+
+.played-words-info-col {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.played-words-counter-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.played-words-lbl {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.played-words-badge {
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--color-accent);
+  background: rgba(99, 102, 241, 0.12);
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-accent-glow);
+}
+
+[data-theme="light"] .played-words-badge {
+  background: rgba(79, 70, 229, 0.1);
+}
+
+.played-words-desc {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+}
+
+.exhausted-badge {
+  font-size: 3.2rem;
+  margin-bottom: 6px;
+  animation: bounce 2s infinite ease-in-out;
+}
+
+.exhausted-title {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+
+.exhausted-text {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  margin-bottom: 12px;
+}
+
+.exhausted-stats-box {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 20px;
+  background: rgba(99, 102, 241, 0.1);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-md);
+  margin-bottom: 12px;
+}
+
+.exhausted-count-highlight {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--color-accent);
+  letter-spacing: 0.5px;
+}
+
+.exhausted-count-label {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.exhausted-subtext {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.35;
+}
+
+.modal-footer-stacked {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.modal-footer-stacked .btn {
+  width: 100%;
+}
+
+@media (max-width: 480px) {
+  .played-words-status-box {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .played-words-status-box .btn {
+    width: 100%;
+  }
+}
+
+
