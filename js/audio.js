@@ -1,5 +1,5 @@
 /**
- * Moteur audio Web Audio API pour Undercover
+ * Moteur audio Web Audio API pour Espionnage
  * Génère tous les effets sonores synthétisés de manière dynamique (100% autonome, zéro dépendance)
  */
 
@@ -10,7 +10,7 @@ class SoundEngine {
     this.initOnUserGesture = this.initOnUserGesture.bind(this);
     
     // Charger la préférence
-    const saved = localStorage.getItem('undercover_sound_enabled');
+    const saved = localStorage.getItem('espionnage_sound_enabled');
     if (saved !== null) {
       this.soundEnabled = saved === 'true';
     }
@@ -47,7 +47,7 @@ class SoundEngine {
 
   toggleSound() {
     this.soundEnabled = !this.soundEnabled;
-    localStorage.setItem('undercover_sound_enabled', this.soundEnabled);
+    localStorage.setItem('espionnage_sound_enabled', this.soundEnabled);
     if (this.soundEnabled) {
       this.playTap();
     }
@@ -188,7 +188,7 @@ class SoundEngine {
     });
   }
 
-  // Victoire civils / Undercovers (Fanfare triomphale)
+  // Victoire civils / Espions (Fanfare triomphale)
   playVictory() {
     if (!this.soundEnabled) return;
     const ctx = this.ensureContext();
@@ -221,8 +221,8 @@ class SoundEngine {
     });
   }
 
-  // Victoire spéciale M. Blanc (Ambiance mystérieuse triomphale)
-  playWhiteVictory() {
+  // Victoire spéciale Diplomate (Ambiance mystérieuse triomphale)
+  playDiplomatVictory() {
     if (!this.soundEnabled) return;
     const ctx = this.ensureContext();
     if (!ctx) return;

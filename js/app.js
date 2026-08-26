@@ -1,6 +1,6 @@
 /**
  * ==========================================================================
- * UNDERCOVER - APPLICATION WEB & MOBILE COMPLETE (STANDALONE)
+ * ESPIONNAGE - APPLICATION WEB & MOBILE COMPLETE (STANDALONE)
  * Compatible avec tous les navigateurs et protocoles (file://, http://, https://)
  * ==========================================================================
  */
@@ -22,402 +22,386 @@ const WORD_CATEGORIES = {
 };
 
 const INITIAL_WORD_PAIRS = [
+  // ==========================================
   // 🌍 GÉNÉRAL & QUOTIDIEN
+  // ==========================================
+  { word1: "Mer", word2: "Plage", category: "general", age: "kids" },
+  { word1: "Soleil", word2: "Lune", category: "general", age: "kids" },
+  { word1: "Jour", word2: "Nuit", category: "general", age: "kids" },
+  { word1: "Ciel", word2: "Terre", category: "general", age: "kids" },
+  { word1: "Feu", word2: "Cendre", category: "general", age: "kids" },
+  { word1: "Fumée", word2: "Brouillard", category: "general", age: "kids" },
+  { word1: "Pluie", word2: "Neige", category: "general", age: "kids" },
+  { word1: "Vent", word2: "Orage", category: "general", age: "kids" },
+  { word1: "Étoile", word2: "Planète", category: "general", age: "kids" },
+  { word1: "Ombre", word2: "Reflet", category: "general", age: "kids" },
   { word1: "Stylo", word2: "Crayon", category: "general", age: "kids" },
+  { word1: "Cahier", word2: "Classeur", category: "general", age: "kids" },
+  { word1: "Feuille", word2: "Carton", category: "general", age: "kids" },
+  { word1: "Livre", word2: "Magazine", category: "general", age: "kids" },
+  { word1: "Roman", word2: "Bande dessinée", category: "general", age: "kids" },
+  { word1: "Colle", word2: "Ciseaux", category: "general", age: "kids" },
+  { word1: "Règle", word2: "Équerre", category: "general", age: "kids" },
+  { word1: "Gomme", word2: "Taille-crayon", category: "general", age: "kids" },
   { word1: "Lunettes", word2: "Lentilles", category: "general", age: "standard" },
   { word1: "Montre", word2: "Horloge", category: "general", age: "kids" },
-  { word1: "Coussin", word2: "Oreiller", category: "general", age: "kids" },
-  { word1: "Couette", word2: "Couverture", category: "general", age: "kids" },
-  { word1: "Savon", word2: "Gel douche", category: "general", age: "kids" },
-  { word1: "Shampoing", word2: "Après-shampoing", category: "general", age: "standard" },
+  { word1: "Lit", word2: "Canapé", category: "general", age: "kids" },
+  { word1: "Couverture", word2: "Matelas", category: "general", age: "kids" },
+  { word1: "Savon", word2: "Shampoing", category: "general", age: "kids" },
   { word1: "Brosse à dents", word2: "Dentifrice", category: "general", age: "kids" },
-  { word1: "Miroir", word2: "Vitre", category: "general", age: "kids" },
-  { word1: "Chaise", word2: "Fauteuil", category: "general", age: "kids" },
-  { word1: "Canapé", word2: "Banquette", category: "general", age: "kids" },
+  { word1: "Peigne", word2: "Sèche-cheveux", category: "general", age: "kids" },
+  { word1: "Baignoire", word2: "Douche", category: "general", age: "kids" },
+  { word1: "Lavabo", word2: "Évier", category: "general", age: "kids" },
+  { word1: "Serviette", word2: "Peignoir", category: "general", age: "kids" },
+  { word1: "Chaise", word2: "Tabouret", category: "general", age: "kids" },
   { word1: "Table", word2: "Bureau", category: "general", age: "kids" },
   { word1: "Porte", word2: "Fenêtre", category: "general", age: "kids" },
   { word1: "Lampe", word2: "Bougie", category: "general", age: "kids" },
   { word1: "Valise", word2: "Sac à dos", category: "general", age: "kids" },
-  { word1: "Parapluie", word2: "Imperméable", category: "general", age: "kids" },
-  { word1: "Écharpe", word2: "Foulard", category: "general", age: "kids" },
-  { word1: "Bonnet", word2: "Casquette", category: "general", age: "kids" },
-  { word1: "Gants", word2: "Moufles", category: "general", age: "kids" },
-  { word1: "Chaussettes", word2: "Collants", category: "general", age: "kids" },
-  { word1: "Baskets", word2: "Chaussures", category: "general", age: "kids" },
-  { word1: "Bottes", word2: "Bottines", category: "general", age: "kids" },
-  { word1: "Manteau", word2: "Veste", category: "general", age: "kids" },
-  { word1: "Chemise", word2: "T-shirt", category: "general", age: "kids" },
-  { word1: "Pantalon", word2: "Jean", category: "general", age: "kids" },
-  { word1: "Short", word2: "Bermuda", category: "general", age: "standard" },
+  { word1: "Parapluie", word2: "Bottes de pluie", category: "general", age: "kids" },
+  { word1: "Écharpe", word2: "Bonnet", category: "general", age: "kids" },
+  { word1: "Gants", word2: "Manteau", category: "general", age: "kids" },
+  { word1: "Chapeau", word2: "Casquette", category: "general", age: "kids" },
+  { word1: "Chaussettes", word2: "Chaussures", category: "general", age: "kids" },
+  { word1: "Baskets", word2: "Sandales", category: "general", age: "kids" },
+  { word1: "Pull", word2: "T-shirt", category: "general", age: "kids" },
+  { word1: "Pantalon", word2: "Short", category: "general", age: "kids" },
+  { word1: "Robe", word2: "Jupe", category: "general", age: "kids" },
   { word1: "Ceinture", word2: "Bretelles", category: "general", age: "kids" },
-  { word1: "Ciseaux", word2: "Cutter", category: "general", age: "standard" },
-  { word1: "Colle", word2: "Scotch", category: "general", age: "kids" },
-  { word1: "Cahier", word2: "Carnet", category: "general", age: "kids" },
-  { word1: "Feuille", word2: "Carton", category: "general", age: "kids" },
-  { word1: "Livre", word2: "Magazine", category: "general", age: "kids" },
-  { word1: "Journal", word2: "Gazette", category: "general", age: "standard" },
-  { word1: "Roman", word2: "Bande dessinée", category: "general", age: "kids" },
-  { word1: "Clé", word2: "Badge", category: "general", age: "kids" },
-  { word1: "Serrure", word2: "Cadenas", category: "general", age: "kids" },
-  { word1: "Pile", word2: "Batterie", category: "general", age: "kids" },
+  { word1: "Clé", word2: "Serrure", category: "general", age: "kids" },
+  { word1: "Cadenas", word2: "Chaîne", category: "general", age: "kids" },
+  { word1: "Pile", word2: "Chargeur", category: "general", age: "kids" },
   { word1: "Prise", word2: "Rallonge", category: "general", age: "standard" },
-  { word1: "Poubelle", word2: "Benne", category: "general", age: "standard" },
-  { word1: "Balai", word2: "Aspirateur", category: "general", age: "kids" },
-  { word1: "Serpillière", word2: "Éponge", category: "general", age: "kids" },
+  { word1: "Aspirateur", word2: "Balai", category: "general", age: "kids" },
+  { word1: "Éponge", word2: "Torchon", category: "general", age: "kids" },
   { word1: "Assiette", word2: "Bol", category: "general", age: "kids" },
   { word1: "Verre", word2: "Tasse", category: "general", age: "kids" },
-  { word1: "Fourchette", word2: "Cuillère", category: "general", age: "kids" },
-  { word1: "Couteau", word2: "Économe", category: "general", age: "standard" },
+  { word1: "Fourchette", word2: "Couteau", category: "general", age: "kids" },
+  { word1: "Cuillère", word2: "Fourchette", category: "general", age: "kids" },
   { word1: "Poêle", word2: "Casserole", category: "general", age: "kids" },
   { word1: "Four", word2: "Micro-ondes", category: "general", age: "kids" },
   { word1: "Frigo", word2: "Congélateur", category: "general", age: "kids" },
   { word1: "Bouteille", word2: "Gourde", category: "general", age: "kids" },
   { word1: "Bouilloire", word2: "Cafetière", category: "general", age: "standard" },
-  { word1: "Placard", word2: "Armoire", category: "general", age: "kids" },
-  { word1: "Tiroir", word2: "Boîte", category: "general", age: "kids" },
-  { word1: "Tapis", word2: "Moquette", category: "general", age: "kids" },
-  { word1: "Rideau", word2: "Store", category: "general", age: "kids" },
-  { word1: "Peigne", word2: "Brosse", category: "general", age: "kids" },
-  { word1: "Baignoire", word2: "Douche", category: "general", age: "kids" },
-  { word1: "Lavabo", word2: "Évier", category: "general", age: "kids" },
-  { word1: "Serviette", word2: "Peignoir", category: "general", age: "kids" },
-  { word1: "Bague", word2: "Alliance", category: "general", age: "standard" },
-  { word1: "Collier", word2: "Bracelet", category: "general", age: "kids" },
-  { word1: "Portefeuille", word2: "Porte-monnaie", category: "general", age: "kids" },
+  { word1: "Tiroir", word2: "Étagère", category: "general", age: "kids" },
+  { word1: "Tapis", word2: "Carrelage", category: "general", age: "kids" },
+  { word1: "Rideau", word2: "Volet", category: "general", age: "kids" },
+  { word1: "Bague", word2: "Bracelet", category: "general", age: "kids" },
+  { word1: "Collier", word2: "Boucles d'oreilles", category: "general", age: "kids" },
+  { word1: "Portefeuille", word2: "Sac à main", category: "general", age: "kids" },
   { word1: "Billet", word2: "Pièce de monnaie", category: "general", age: "kids" },
-  { word1: "Carte bancaire", word2: "Chéquier", category: "general", age: "standard" },
+  { word1: "Carte bancaire", word2: "Chèque", category: "general", age: "standard" },
   { word1: "Ascenseur", word2: "Escalier", category: "general", age: "kids" },
   { word1: "Balcon", word2: "Terrasse", category: "general", age: "kids" },
   { word1: "Grenier", word2: "Cave", category: "general", age: "kids" },
-  { word1: "Toit", word2: "Plafond", category: "general", age: "kids" },
-  { word1: "Mur", word2: "Cloison", category: "general", age: "standard" },
-  { word1: "Feu", word2: "Flamme", category: "general", age: "kids" },
-  { word1: "Fumée", word2: "Brouillard", category: "general", age: "kids" },
-  { word1: "Pluie", word2: "Averse", category: "general", age: "kids" },
-  { word1: "Neige", word2: "Grêle", category: "general", age: "kids" },
-  { word1: "Vent", word2: "Tempête", category: "general", age: "kids" },
-  { word1: "Ombre", word2: "Reflet", category: "general", age: "kids" },
-  { word1: "Soleil", word2: "Lune", category: "general", age: "kids" },
-  { word1: "Étoile", word2: "Planète", category: "general", age: "kids" },
-  { word1: "Silence", word2: "Chuchotement", category: "general", age: "kids" },
-  { word1: "Cri", word2: "Hurlement", category: "general", age: "kids" },
+  { word1: "Toit", word2: "Cheminée", category: "general", age: "kids" },
+  { word1: "Mur", word2: "Clôture", category: "general", age: "kids" },
   { word1: "Rêve", word2: "Cauchemar", category: "general", age: "kids" },
-  { word1: "Secret", word2: "Mystère", category: "general", age: "kids" },
-  { word1: "Béret", word2: "Chapeau", category: "general", age: "kids" },
-  { word1: "Tricot", word2: "Couture", category: "general", age: "standard" },
-  { word1: "Chaussons", word2: "Pantoufles", category: "general", age: "kids" },
-  { word1: "Parfum", word2: "Déodorant", category: "general", age: "standard" },
+  { word1: "Larme", word2: "Sourire", category: "general", age: "kids" },
+  { word1: "Secret", word2: "Rumeur", category: "general", age: "standard" },
   { word1: "Briquet", word2: "Allumette", category: "general", age: "standard" },
-  { word1: "Trombone", word2: "Punaise", category: "general", age: "kids" },
-  { word1: "Règle", word2: "Équerre", category: "general", age: "kids" },
-  { word1: "Gomme", word2: "Correcteur", category: "general", age: "kids" },
-  { word1: "Poussette", word2: "Landeau", category: "general", age: "kids" },
-  { word1: "Doudou", word2: "Peluche", category: "general", age: "kids" },
-  { word1: "Biberon", word2: "Tétine", category: "general", age: "kids" },
-  { word1: "Marteau", word2: "Maillet", category: "general", age: "kids" },
-  { word1: "Tournevis", word2: "Clé à molette", category: "general", age: "kids" },
-  { word1: "Perceuse", word2: "Visseuse", category: "general", age: "standard" },
-  { word1: "Tente", word2: "Caravane", category: "general", age: "kids" },
-  { word1: "Sac de couchage", word2: "Matelas gonflable", category: "general", age: "kids" },
-  { word1: "Lampe torche", word2: "Frontale", category: "general", age: "kids" },
+  { word1: "Parfum", word2: "Savon", category: "general", age: "kids" },
+  { word1: "Marteau", word2: "Clou", category: "general", age: "kids" },
+  { word1: "Tournevis", word2: "Vis", category: "general", age: "kids" },
+  { word1: "Poussette", word2: "Tricycle", category: "general", age: "kids" },
+  { word1: "Doudou", word2: "Tétine", category: "general", age: "kids" },
+  { word1: "Tente", word2: "Sac de couchage", category: "general", age: "kids" },
+  { word1: "Lampe torche", word2: "Lanterne", category: "general", age: "kids" },
 
+  // ==========================================
   // 🍕 NOURRITURE & BOISSONS
+  // ==========================================
   { word1: "Croissant", word2: "Pain au chocolat", category: "food", age: "kids" },
-  { word1: "Baguette", word2: "Pain de mie", category: "food", age: "kids" },
+  { word1: "Pain", word2: "Brioche", category: "food", age: "kids" },
+  { word1: "Baguette", word2: "Biscotte", category: "food", age: "kids" },
   { word1: "Café", word2: "Thé", category: "food", age: "standard" },
-  { word1: "Chocolat chaud", word2: "Cappuccino", category: "food", age: "kids" },
-  { word1: "Bière", word2: "Cidre", category: "food", age: "adult" },
-  { word1: "Vin rouge", word2: "Vin blanc", category: "food", age: "adult" },
-  { word1: "Champagne", word2: "Prosecco", category: "food", age: "adult" },
+  { word1: "Chocolat chaud", word2: "Lait fraise", category: "food", age: "kids" },
+  { word1: "Bière", word2: "Vin", category: "food", age: "adult" },
+  { word1: "Vin rouge", word2: "Vin rosé", category: "food", age: "adult" },
+  { word1: "Champagne", word2: "Cidre", category: "food", age: "adult" },
   { word1: "Eau plate", word2: "Eau gazeuse", category: "food", age: "kids" },
-  { word1: "Coca-Cola", word2: "Pepsi", category: "food", age: "kids" },
+  { word1: "Coca-Cola", word2: "Limonade", category: "food", age: "kids" },
   { word1: "Jus d'orange", word2: "Jus de pomme", category: "food", age: "kids" },
-  { word1: "Limonade", word2: "Citronnade", category: "food", age: "kids" },
-  { word1: "Pizza", word2: "Flammekueche", category: "food", age: "standard" },
-  { word1: "Burger", word2: "Sandwich", category: "food", age: "kids" },
-  { word1: "Frites", word2: "Pommes noisettes", category: "food", age: "kids" },
+  { word1: "Pizza", word2: "Burger", category: "food", age: "kids" },
+  { word1: "Frites", word2: "Purée", category: "food", age: "kids" },
   { word1: "Chips", word2: "Pop-corn", category: "food", age: "kids" },
   { word1: "Pâtes", word2: "Riz", category: "food", age: "kids" },
-  { word1: "Spaghetti", word2: "Tagliatelles", category: "food", age: "kids" },
-  { word1: "Lasagnes", word2: "Gratin", category: "food", age: "kids" },
+  { word1: "Lasagnes", word2: "Pizza", category: "food", age: "kids" },
   { word1: "Raclette", word2: "Fondue", category: "food", age: "standard" },
-  { word1: "Tartiflette", word2: "Gratin dauphinois", category: "food", age: "standard" },
   { word1: "Crêpe", word2: "Gaufre", category: "food", age: "kids" },
-  { word1: "Pancake", word2: "Crêpe", category: "food", age: "kids" },
   { word1: "Gâteau", word2: "Tarte", category: "food", age: "kids" },
-  { word1: "Éclair", word2: "Religieuse", category: "food", age: "kids" },
-  { word1: "Macaron", word2: "Meringue", category: "food", age: "kids" },
-  { word1: "Donut", word2: "Beignet", category: "food", age: "kids" },
+  { word1: "Éclair", word2: "Tarte aux fraises", category: "food", age: "kids" },
+  { word1: "Macaron", word2: "Cookie", category: "food", age: "kids" },
+  { word1: "Muffin", word2: "Donut", category: "food", age: "kids" },
   { word1: "Glace", word2: "Sorbet", category: "food", age: "kids" },
-  { word1: "Yaourt", word2: "Fromage blanc", category: "food", age: "kids" },
-  { word1: "Beurre", word2: "Margarine", category: "food", age: "standard" },
-  { word1: "Lait", word2: "Crème fraîche", category: "food", age: "kids" },
-  { word1: "Confiture", word2: "Marmelade", category: "food", age: "kids" },
-  { word1: "Nutella", word2: "Pâte à tartiner", category: "food", age: "kids" },
+  { word1: "Yaourt", word2: "Compote", category: "food", age: "kids" },
+  { word1: "Beurre", word2: "Confiture", category: "food", age: "kids" },
+  { word1: "Nutella", word2: "Confiture", category: "food", age: "kids" },
   { word1: "Miel", word2: "Sirop d'érable", category: "food", age: "kids" },
-  { word1: "Sucre", word2: "Édulcorant", category: "food", age: "standard" },
+  { word1: "Sucre", word2: "Sel", category: "food", age: "kids" },
   { word1: "Sel", word2: "Poivre", category: "food", age: "kids" },
-  { word1: "Ketchup", word2: "Mayonnaise", category: "food", age: "kids" },
-  { word1: "Moutarde", word2: "Sauce burger", category: "food", age: "standard" },
+  { word1: "Ketchup", word2: "Moutarde", category: "food", age: "kids" },
+  { word1: "Mayonnaise", word2: "Ketchup", category: "food", age: "kids" },
   { word1: "Huile d'olive", word2: "Vinaigre", category: "food", age: "standard" },
   { word1: "Pomme", word2: "Poire", category: "food", age: "kids" },
-  { word1: "Orange", word2: "Clémentine", category: "food", age: "kids" },
-  { word1: "Citron", word2: "Pamplemousse", category: "food", age: "kids" },
+  { word1: "Orange", word2: "Citron", category: "food", age: "kids" },
   { word1: "Fraise", word2: "Framboise", category: "food", age: "kids" },
   { word1: "Cerise", word2: "Prune", category: "food", age: "kids" },
-  { word1: "Banane", word2: "Plantain", category: "food", age: "standard" },
+  { word1: "Banane", word2: "Ananas", category: "food", age: "kids" },
   { word1: "Pastèque", word2: "Melon", category: "food", age: "kids" },
-  { word1: "Pêche", word2: "Nectarine", category: "food", age: "kids" },
+  { word1: "Pêche", word2: "Abricot", category: "food", age: "kids" },
   { word1: "Raisin", word2: "Figue", category: "food", age: "kids" },
-  { word1: "Tomate", word2: "Poivron", category: "food", age: "kids" },
-  { word1: "Carotte", word2: "Panais", category: "food", age: "standard" },
-  { word1: "Pomme de terre", word2: "Patate douce", category: "food", age: "kids" },
-  { word1: "Courgette", word2: "Concombre", category: "food", age: "kids" },
-  { word1: "Oignon", word2: "Échalote", category: "food", age: "standard" },
-  { word1: "Ail", word2: "Oignon", category: "food", age: "kids" },
+  { word1: "Tomate", word2: "Concombre", category: "food", age: "kids" },
+  { word1: "Carotte", word2: "Radis", category: "food", age: "kids" },
+  { word1: "Pomme de terre", word2: "Carotte", category: "food", age: "kids" },
+  { word1: "Courgette", word2: "Aubergine", category: "food", age: "kids" },
+  { word1: "Oignon", word2: "Ail", category: "food", age: "kids" },
   { word1: "Brocoli", word2: "Chou-fleur", category: "food", age: "kids" },
   { word1: "Salade", word2: "Épinards", category: "food", age: "kids" },
-  { word1: "Poulet", word2: "Dinde", category: "food", age: "kids" },
-  { word1: "Bœuf", word2: "Veau", category: "food", age: "standard" },
-  { word1: "Porc", word2: "Agneau", category: "food", age: "standard" },
-  { word1: "Jambon", word2: "Bacon", category: "food", age: "kids" },
-  { word1: "Saucisson", word2: "Chorizo", category: "food", age: "standard" },
-  { word1: "Saumon", word2: "Truite", category: "food", age: "kids" },
-  { word1: "Thon", word2: "Sardine", category: "food", age: "kids" },
-  { word1: "Crevette", word2: "Gambas", category: "food", age: "standard" },
-  { word1: "Sushi", word2: "Maki", category: "food", age: "standard" },
-  { word1: "Tacos", word2: "Burrito", category: "food", age: "standard" },
-  { word1: "Soupe", word2: "Bouillon", category: "food", age: "kids" },
-  { word1: "Camembert", word2: "Brie", category: "food", age: "standard" },
-  { word1: "Comté", word2: "Emmental", category: "food", age: "kids" },
-  { word1: "Roquefort", word2: "Bleu d'Auvergne", category: "food", age: "standard" },
-  { word1: "Mozzarella", word2: "Burrata", category: "food", age: "standard" },
-  { word1: "Parmesan", word2: "Pecorino", category: "food", age: "standard" },
-  { word1: "Tiramisu", word2: "Panna Cotta", category: "food", age: "standard" },
-  { word1: "Millefeuille", word2: "Opéra", category: "food", age: "standard" },
-  { word1: "Mousse au chocolat", word2: "Crème brûlée", category: "food", age: "kids" },
-  { word1: "Fondant au chocolat", word2: "Brownie", category: "food", age: "kids" },
-  { word1: "Cookie", word2: "Muffin", category: "food", age: "kids" },
-  { word1: "Pastis", word2: "Ricard", category: "food", age: "adult" },
-  { word1: "Kir", word2: "Sangria", category: "food", age: "adult" },
-  { word1: "Thé vert", word2: "Thé noir", category: "food", age: "standard" },
-  { word1: "Infusion", word2: "Tisane", category: "food", age: "standard" },
-  { word1: "Sirop de grenadine", word2: "Sirop de menthe", category: "food", age: "kids" },
-  { word1: "Foie gras", word2: "Pâté", category: "food", age: "standard" },
+  { word1: "Poulet", word2: "Canard", category: "food", age: "kids" },
+  { word1: "Bœuf", word2: "Poulet", category: "food", age: "kids" },
+  { word1: "Jambon", word2: "Saucisson", category: "food", age: "kids" },
+  { word1: "Saumon", word2: "Thon", category: "food", age: "kids" },
+  { word1: "Crevette", word2: "Crabe", category: "food", age: "kids" },
+  { word1: "Sushi", word2: "Ramen", category: "food", age: "standard" },
+  { word1: "Tacos", word2: "Burger", category: "food", age: "kids" },
+  { word1: "Soupe", word2: "Salade", category: "food", age: "kids" },
+  { word1: "Camembert", word2: "Chèvre", category: "food", age: "standard" },
+  { word1: "Comté", word2: "Mozzarella", category: "food", age: "standard" },
+  { word1: "Tiramisu", word2: "Mousse au chocolat", category: "food", age: "kids" },
+  { word1: "Crème brûlée", word2: "Île flottante", category: "food", age: "kids" },
+  { word1: "Pastis", word2: "Bière", category: "food", age: "adult" },
+  { word1: "Mojito", word2: "Piña Colada", category: "food", age: "adult" },
+  { word1: "Thé", word2: "Tisane", category: "food", age: "kids" },
+  { word1: "Foie gras", word2: "Caviar", category: "food", age: "adult" },
   { word1: "Huître", word2: "Moule", category: "food", age: "standard" },
-  { word1: "Ratatouille", word2: "Piperade", category: "food", age: "standard" },
-  { word1: "Couscous", word2: "Tajine", category: "food", age: "standard" },
-  { word1: "Paëlla", word2: "Risotto", category: "food", age: "standard" },
-  { word1: "Ramen", word2: "Nouilles sautées", category: "food", age: "standard" },
-  { word1: "Croque-monsieur", word2: "Panini", category: "food", age: "kids" },
-  { word1: "Quiche lorraine", word2: "Tarte aux poireaux", category: "food", age: "standard" },
+  { word1: "Couscous", word2: "Paëlla", category: "food", age: "standard" },
+  { word1: "Croque-monsieur", word2: "Hot-dog", category: "food", age: "kids" },
+  { word1: "Quiche lorraine", word2: "Pizza", category: "food", age: "kids" },
+  { word1: "Chocolat noir", word2: "Chocolat au lait", category: "food", age: "kids" },
+  { word1: "Bonbon", word2: "Chocolat", category: "food", age: "kids" },
 
+  // ==========================================
   // 🦁 ANIMAUX & NATURE
+  // ==========================================
+  { word1: "Chien", word2: "Chat", category: "animals", age: "kids" },
   { word1: "Chien", word2: "Loup", category: "animals", age: "kids" },
   { word1: "Chat", word2: "Tigre", category: "animals", age: "kids" },
-  { word1: "Lion", word2: "Léopard", category: "animals", age: "kids" },
-  { word1: "Guépard", word2: "Jaguar", category: "animals", age: "kids" },
-  { word1: "Cheval", word2: "Poney", category: "animals", age: "kids" },
-  { word1: "Âne", word2: "Mule", category: "animals", age: "kids" },
-  { word1: "Vache", word2: "Taureau", category: "animals", age: "kids" },
-  { word1: "Mouton", word2: "Chèvre", category: "animals", age: "kids" },
-  { word1: "Cochon", word2: "Sanglier", category: "animals", age: "kids" },
-  { word1: "Lapin", word2: "Lièvre", category: "animals", age: "kids" },
-  { word1: "Souris", word2: "Rat", category: "animals", age: "kids" },
-  { word1: "Hamster", word2: "Cochon d'Inde", category: "animals", age: "kids" },
-  { word1: "Écureuil", word2: "Marmotte", category: "animals", age: "kids" },
-  { word1: "Ours", word2: "Panda", category: "animals", age: "kids" },
-  { word1: "Renard", word2: "Chacal", category: "animals", age: "kids" },
-  { word1: "Hérisson", word2: "Porc-épic", category: "animals", age: "kids" },
-  { word1: "Cerf", word2: "Chevreuil", category: "animals", age: "kids" },
-  { word1: "Élan", word2: "Renne", category: "animals", age: "kids" },
-  { word1: "Kangourou", word2: "Wallaby", category: "animals", age: "kids" },
-  { word1: "Singe", word2: "Chimpanzé", category: "animals", age: "kids" },
-  { word1: "Gorille", word2: "Orang-outan", category: "animals", age: "kids" },
-  { word1: "Aigle", word2: "Faucon", category: "animals", age: "kids" },
-  { word1: "Chouette", word2: "Hibou", category: "animals", age: "kids" },
-  { word1: "Pigeon", word2: "Tourterelle", category: "animals", age: "kids" },
-  { word1: "Canard", word2: "Oie", category: "animals", age: "kids" },
-  { word1: "Cygne", word2: "Pélican", category: "animals", age: "kids" },
-  { word1: "Mouette", word2: "Goéland", category: "animals", age: "kids" },
-  { word1: "Perroquet", word2: "Perruche", category: "animals", age: "kids" },
-  { word1: "Corbeau", word2: "Pie", category: "animals", age: "kids" },
-  { word1: "Moineau", word2: "Rouge-gorge", category: "animals", age: "kids" },
-  { word1: "Manchot", word2: "Pingouin", category: "animals", age: "kids" },
+  { word1: "Lion", word2: "Tigre", category: "animals", age: "kids" },
+  { word1: "Guépard", word2: "Gazelle", category: "animals", age: "kids" },
+  { word1: "Cheval", word2: "Zèbre", category: "animals", age: "kids" },
+  { word1: "Âne", word2: "Chameau", category: "animals", age: "kids" },
+  { word1: "Vache", word2: "Mouton", category: "animals", age: "kids" },
+  { word1: "Cochon", word2: "Mouton", category: "animals", age: "kids" },
+  { word1: "Lapin", word2: "Écureuil", category: "animals", age: "kids" },
+  { word1: "Souris", word2: "Hamster", category: "animals", age: "kids" },
+  { word1: "Ours", word2: "Loup", category: "animals", age: "kids" },
+  { word1: "Renard", word2: "Loup", category: "animals", age: "kids" },
+  { word1: "Hérisson", word2: "Tortue", category: "animals", age: "kids" },
+  { word1: "Cerf", word2: "Sanglier", category: "animals", age: "kids" },
+  { word1: "Kangourou", word2: "Koala", category: "animals", age: "kids" },
+  { word1: "Singe", word2: "Paresseux", category: "animals", age: "kids" },
+  { word1: "Aigle", word2: "Chouette", category: "animals", age: "kids" },
+  { word1: "Pigeon", word2: "Mouette", category: "animals", age: "kids" },
+  { word1: "Canard", word2: "Cygne", category: "animals", age: "kids" },
+  { word1: "Perroquet", word2: "Toucan", category: "animals", age: "kids" },
+  { word1: "Corbeau", word2: "Chouette", category: "animals", age: "kids" },
+  { word1: "Pingouin", word2: "Phoque", category: "animals", age: "kids" },
   { word1: "Dauphin", word2: "Baleine", category: "animals", age: "kids" },
-  { word1: "Requin", word2: "Orque", category: "animals", age: "kids" },
-  { word1: "Poulpe", word2: "Calmar", category: "animals", age: "kids" },
-  { word1: "Crabe", word2: "Homard", category: "animals", age: "kids" },
-  { word1: "Tortue de terre", word2: "Tortue de mer", category: "animals", age: "kids" },
-  { word1: "Grenouille", word2: "Crapaud", category: "animals", age: "kids" },
-  { word1: "Lézard", word2: "Caméléon", category: "animals", age: "kids" },
-  { word1: "Crocodile", word2: "Alligator", category: "animals", age: "kids" },
-  { word1: "Serpent", word2: "Vipère", category: "animals", age: "kids" },
-  { word1: "Abeille", word2: "Guêpe", category: "animals", age: "kids" },
-  { word1: "Bourdon", word2: "Frelon", category: "animals", age: "kids" },
-  { word1: "Papillon", word2: "Libellule", category: "animals", age: "kids" },
-  { word1: "Mouche", word2: "Moustique", category: "animals", age: "kids" },
+  { word1: "Requin", word2: "Dauphin", category: "animals", age: "kids" },
+  { word1: "Poulpe", word2: "Crabe", category: "animals", age: "kids" },
+  { word1: "Tortue", word2: "Escargot", category: "animals", age: "kids" },
+  { word1: "Grenouille", word2: "Lézard", category: "animals", age: "kids" },
+  { word1: "Crocodile", word2: "Serpent", category: "animals", age: "kids" },
+  { word1: "Abeille", word2: "Papillon", category: "animals", age: "kids" },
+  { word1: "Moustique", word2: "Mouche", category: "animals", age: "kids" },
   { word1: "Araignée", word2: "Scorpion", category: "animals", age: "kids" },
-  { word1: "Fourmi", word2: "Termite", category: "animals", age: "kids" },
+  { word1: "Fourmi", word2: "Abeille", category: "animals", age: "kids" },
   { word1: "Forêt", word2: "Jungle", category: "animals", age: "kids" },
   { word1: "Montagne", word2: "Colline", category: "animals", age: "kids" },
-  { word1: "Rivière", word2: "Fleuve", category: "animals", age: "kids" },
-  { word1: "Lac", word2: "Étang", category: "animals", age: "kids" },
-  { word1: "Océan", word2: "Mer", category: "animals", age: "kids" },
-  { word1: "Plage", word2: "Dune", category: "animals", age: "kids" },
-  { word1: "Désert", word2: "Savane", category: "animals", age: "kids" },
-  { word1: "Cascade", word2: "Fontaine", category: "animals", age: "kids" },
-  { word1: "Volcan", word2: "Geyser", category: "animals", age: "kids" },
+  { word1: "Rivière", word2: "Cascade", category: "animals", age: "kids" },
+  { word1: "Lac", word2: "Mer", category: "animals", age: "kids" },
+  { word1: "Désert", word2: "Oasis", category: "animals", age: "kids" },
+  { word1: "Volcan", word2: "Montagne", category: "animals", age: "kids" },
+  { word1: "Grotte", word2: "Falaise", category: "animals", age: "kids" },
+  { word1: "Rose", word2: "Tulipe", category: "animals", age: "kids" },
+  { word1: "Chêne", word2: "Sapin", category: "animals", age: "kids" },
 
+  // ==========================================
   // ✈️ LIEUX & VOYAGES
-  { word1: "Avion", word2: "Hélicoptère", category: "places", age: "kids" },
-  { word1: "Train", word2: "Métro", category: "places", age: "kids" },
-  { word1: "Tramway", word2: "Bus", category: "places", age: "kids" },
-  { word1: "Voiture", word2: "Camion", category: "places", age: "kids" },
-  { word1: "Moto", word2: "Scooter", category: "places", age: "kids" },
+  // ==========================================
+  { word1: "Avion", word2: "Train", category: "places", age: "kids" },
+  { word1: "Hélicoptère", word2: "Avion", category: "places", age: "kids" },
+  { word1: "Train", word2: "Bus", category: "places", age: "kids" },
+  { word1: "Voiture", word2: "Moto", category: "places", age: "kids" },
   { word1: "Vélo", word2: "Trottinette", category: "places", age: "kids" },
-  { word1: "Bateau", word2: "Yacht", category: "places", age: "kids" },
-  { word1: "Sous-marin", word2: "Paquebot", category: "places", age: "kids" },
+  { word1: "Bateau", word2: "Sous-marin", category: "places", age: "kids" },
   { word1: "Aéroport", word2: "Gare", category: "places", age: "kids" },
-  { word1: "Hôtel", word2: "Auberge", category: "places", age: "kids" },
-  { word1: "Camping", word2: "Bivouac", category: "places", age: "standard" },
-  { word1: "Musée", word2: "Galerie d'art", category: "places", age: "standard" },
+  { word1: "Hôtel", word2: "Camping", category: "places", age: "kids" },
+  { word1: "Musée", word2: "Cinéma", category: "places", age: "kids" },
   { word1: "Cinéma", word2: "Théâtre", category: "places", age: "kids" },
-  { word1: "Stade", word2: "Gymnase", category: "places", age: "kids" },
+  { word1: "Stade", word2: "Piscine", category: "places", age: "kids" },
   { word1: "Piscine", word2: "Plage", category: "places", age: "kids" },
-  { word1: "Parc", word2: "Jardin", category: "places", age: "kids" },
-  { word1: "Château", word2: "Palais", category: "places", age: "kids" },
-  { word1: "Église", word2: "Cathédrale", category: "places", age: "kids" },
+  { word1: "Parc", word2: "Forêt", category: "places", age: "kids" },
+  { word1: "Château", word2: "Cathédrale", category: "places", age: "kids" },
   { word1: "Tour Eiffel", word2: "Arc de Triomphe", category: "places", age: "kids" },
   { word1: "Pyramide", word2: "Sphinx", category: "places", age: "kids" },
   { word1: "Paris", word2: "Londres", category: "places", age: "kids" },
-  { word1: "New York", word2: "Los Angeles", category: "places", age: "standard" },
-  { word1: "Tokyo", word2: "Séoul", category: "places", age: "standard" },
+  { word1: "New York", word2: "Tokyo", category: "places", age: "standard" },
   { word1: "Rome", word2: "Venise", category: "places", age: "standard" },
-  { word1: "Madrid", word2: "Barcelone", category: "places", age: "standard" },
   { word1: "Marseille", word2: "Lyon", category: "places", age: "kids" },
-  { word1: "Bordeaux", word2: "Toulouse", category: "places", age: "standard" },
-  { word1: "Nice", word2: "Cannes", category: "places", age: "standard" },
-  { word1: "Mont Saint-Michel", word2: "Château de Versailles", category: "places", age: "standard" },
-  { word1: "Corse", word2: "Sardaigne", category: "places", age: "standard" },
-  { word1: "Alpes", word2: "Pyrénées", category: "places", age: "kids" },
-  { word1: "Mont Blanc", word2: "Everest", category: "places", age: "kids" },
-  { word1: "Dubaï", word2: "Doha", category: "places", age: "standard" },
-  { word1: "Rio de Janeiro", word2: "Buenos Aires", category: "places", age: "standard" },
-  { word1: "Marrakech", word2: "Casablanca", category: "places", age: "standard" },
+  { word1: "Corse", word2: "Bretagne", category: "places", age: "standard" },
+  { word1: "Everest", word2: "Kilimandjaro", category: "places", age: "kids" },
+  { word1: "Désert", word2: "Plage", category: "places", age: "kids" },
+  { word1: "Île", word2: "Presqu'île", category: "places", age: "kids" },
+  { word1: "Village", word2: "Ville", category: "places", age: "kids" },
+  { word1: "Supermarché", word2: "Marché", category: "places", age: "kids" },
+  { word1: "Boulangerie", word2: "Boucherie", category: "places", age: "kids" },
+  { word1: "Pharmacie", word2: "Hôpital", category: "places", age: "kids" },
+  { word1: "Poste", word2: "Banque", category: "places", age: "kids" },
+  { word1: "Restaurant", word2: "Fast-food", category: "places", age: "kids" },
+  { word1: "Bar", word2: "Boîte de nuit", category: "places", age: "adult" },
+  { word1: "Zoo", word2: "Aquarium", category: "places", age: "kids" },
+  { word1: "Cirque", word2: "Fête foraine", category: "places", age: "kids" },
 
+  // ==========================================
   // 🎬 CINÉMA & CULTURE POP
+  // ==========================================
   { word1: "Batman", word2: "Superman", category: "popculture", age: "kids" },
   { word1: "Spider-Man", word2: "Iron Man", category: "popculture", age: "kids" },
   { word1: "Hulk", word2: "Thor", category: "popculture", age: "kids" },
-  { word1: "Joker", word2: "Pingouin", category: "popculture", age: "kids" },
+  { word1: "Joker", word2: "Batman", category: "popculture", age: "kids" },
   { word1: "Harry Potter", word2: "Le Seigneur des Anneaux", category: "popculture", age: "kids" },
-  { word1: "Voldemort", word2: "Sauron", category: "popculture", age: "standard" },
+  { word1: "Voldemort", word2: "Dark Vador", category: "popculture", age: "kids" },
   { word1: "Dumbledore", word2: "Gandalf", category: "popculture", age: "standard" },
   { word1: "Star Wars", word2: "Star Trek", category: "popculture", age: "kids" },
   { word1: "Luke Skywalker", word2: "Han Solo", category: "popculture", age: "kids" },
-  { word1: "Dark Vador", word2: "Empereur Palpatine", category: "popculture", age: "kids" },
   { word1: "Sabre laser", word2: "Baguette magique", category: "popculture", age: "kids" },
   { word1: "Marvel", word2: "DC Comics", category: "popculture", age: "kids" },
   { word1: "Disney", word2: "Pixar", category: "popculture", age: "kids" },
   { word1: "Le Roi Lion", word2: "Le Livre de la Jungle", category: "popculture", age: "kids" },
   { word1: "La Reine des Neiges", word2: "Raiponce", category: "popculture", age: "kids" },
   { word1: "Mickey", word2: "Donald", category: "popculture", age: "kids" },
-  { word1: "Tom et Jerry", word2: "Bugs Bunny", category: "popculture", age: "kids" },
-  { word1: "Les Simpson", word2: "Futurama", category: "popculture", age: "standard" },
-  { word1: "Homer", word2: "Peter Griffin", category: "popculture", age: "standard" },
+  { word1: "Tom et Jerry", word2: "Titi et Grosminet", category: "popculture", age: "kids" },
+  { word1: "Les Simpson", word2: "South Park", category: "popculture", age: "standard" },
   { word1: "Game of Thrones", word2: "Vikings", category: "popculture", age: "adult" },
-  { word1: "Stranger Things", word2: "Dark", category: "popculture", age: "standard" },
-  { word1: "Squid Game", word2: "Alice in Borderland", category: "popculture", age: "adult" },
+  { word1: "Stranger Things", word2: "Harry Potter", category: "popculture", age: "standard" },
+  { word1: "Squid Game", word2: "Hunger Games", category: "popculture", age: "standard" },
   { word1: "La Casa de Papel", word2: "Lupin", category: "popculture", age: "standard" },
   { word1: "Friends", word2: "How I Met Your Mother", category: "popculture", age: "standard" },
-  { word1: "The Walking Dead", word2: "The Last of Us", category: "popculture", age: "standard" },
   { word1: "Zombie", word2: "Vampire", category: "popculture", age: "kids" },
-  { word1: "Loup-garou", word2: "Fantôme", category: "popculture", age: "kids" },
-  { word1: "Momie", word2: "Squelette", category: "popculture", age: "kids" },
-  { word1: "Alien", word2: "Predator", category: "popculture", age: "standard" },
-  { word1: "James Bond", word2: "Mission Impossible", category: "popculture", age: "standard" },
-  { word1: "Kaamelott", word2: "Astérix Mission Cléopâtre", category: "popculture", age: "standard" },
-  { word1: "Arthur", word2: "Perceval", category: "popculture", age: "standard" },
-  { word1: "Le Dîner de Cons", word2: "Les Visiteurs", category: "popculture", age: "standard" },
-  { word1: "OSS 117", word2: "James Bond", category: "popculture", age: "standard" },
+  { word1: "Fantôme", word2: "Momie", category: "popculture", age: "kids" },
+  { word1: "Alien", word2: "Robot", category: "popculture", age: "kids" },
+  { word1: "James Bond", word2: "Sherlock Holmes", category: "popculture", age: "standard" },
+  { word1: "Indiana Jones", word2: "Lara Croft", category: "popculture", age: "standard" },
+  { word1: "Titanic", word2: "Avatar", category: "popculture", age: "standard" },
+  { word1: "Matrix", word2: "Inception", category: "popculture", age: "standard" },
+  { word1: "Jurassic Park", word2: "King Kong", category: "popculture", age: "kids" },
+  { word1: "Astérix", word2: "Tintin", category: "popculture", age: "kids" },
   { word1: "One Piece", word2: "Naruto", category: "popculture", age: "kids" },
-  { word1: "Luffy", word2: "Zoro", category: "popculture", age: "kids" },
-  { word1: "Dragon Ball", word2: "Bleach", category: "popculture", age: "kids" },
-  { word1: "Death Note", word2: "Attack on Titan", category: "popculture", age: "standard" },
+  { word1: "Dragon Ball", word2: "Pokemon", category: "popculture", age: "kids" },
   { word1: "Pikachu", word2: "Évoli", category: "popculture", age: "kids" },
   { word1: "Dracaufeu", word2: "Tortank", category: "popculture", age: "kids" },
 
+  // ==========================================
   // 💼 MÉTIERS & SOCIÉTÉ
+  // ==========================================
   { word1: "Médecin", word2: "Infirmier", category: "jobs", age: "kids" },
   { word1: "Chirurgien", word2: "Dentiste", category: "jobs", age: "kids" },
-  { word1: "Pharmacien", word2: "Biologiste", category: "jobs", age: "standard" },
-  { word1: "Vétérinaire", word2: "Zoologiste", category: "jobs", age: "kids" },
+  { word1: "Pharmacien", word2: "Médecin", category: "jobs", age: "kids" },
+  { word1: "Vétérinaire", word2: "Médecin", category: "jobs", age: "kids" },
   { word1: "Pompier", word2: "Policier", category: "jobs", age: "kids" },
-  { word1: "Gendarme", word2: "Militaire", category: "jobs", age: "kids" },
+  { word1: "Militaire", word2: "Policier", category: "jobs", age: "kids" },
   { word1: "Juge", word2: "Avocat", category: "jobs", age: "standard" },
   { word1: "Détective", word2: "Espion", category: "jobs", age: "kids" },
-  { word1: "Professeur", word2: "Instituteur", category: "jobs", age: "kids" },
-  { word1: "Élève", word2: "Étudiant", category: "jobs", age: "kids" },
-  { word1: "Cuisinier", word2: "Pâtissier", category: "jobs", age: "kids" },
-  { word1: "Serveur", word2: "Barman", category: "jobs", age: "kids" },
+  { word1: "Professeur", word2: "Élève", category: "jobs", age: "kids" },
+  { word1: "Cuisinier", word2: "Serveur", category: "jobs", age: "kids" },
   { word1: "Boulanger", word2: "Boucher", category: "jobs", age: "kids" },
-  { word1: "Architecte", word2: "Ingénieur", category: "jobs", age: "standard" },
+  { word1: "Architecte", word2: "Maçon", category: "jobs", age: "kids" },
   { word1: "Électricien", word2: "Plombier", category: "jobs", age: "kids" },
-  { word1: "Chanteur", word2: "Musicien", category: "jobs", age: "kids" },
-  { word1: "Acteur", word2: "Doubleur", category: "jobs", age: "standard" },
+  { word1: "Peintre", word2: "Sculpteur", category: "jobs", age: "kids" },
+  { word1: "Chanteur", word2: "Acteur", category: "jobs", age: "kids" },
+  { word1: "Journaliste", word2: "Écrivain", category: "jobs", age: "standard" },
+  { word1: "Photographe", word2: "Caméraman", category: "jobs", age: "kids" },
   { word1: "Pilote d'avion", word2: "Astronaute", category: "jobs", age: "kids" },
-  { word1: "Président", word2: "Premier ministre", category: "jobs", age: "kids" },
-  { word1: "Roi", word2: "Empereur", category: "jobs", age: "kids" },
+  { word1: "Facteur", word2: "Livreur", category: "jobs", age: "kids" },
+  { word1: "Président", word2: "Maire", category: "jobs", age: "kids" },
+  { word1: "Roi", word2: "Reine", category: "jobs", age: "kids" },
+  { word1: "Coiffeur", word2: "Esthéticienne", category: "jobs", age: "kids" },
+  { word1: "Jardinier", word2: "Agriculteur", category: "jobs", age: "kids" },
 
+  // ==========================================
   // 🎉 SOIRÉE & FUN
-  { word1: "Soirée", word2: "Fête", category: "party", age: "kids" },
-  { word1: "Apéro", word2: "Dîner", category: "party", age: "standard" },
+  // ==========================================
+  { word1: "Soirée", word2: "Festival", category: "party", age: "kids" },
+  { word1: "Apéro", word2: "Barbecue", category: "party", age: "standard" },
   { word1: "Tequila", word2: "Vodka", category: "party", age: "adult" },
   { word1: "Rhum", word2: "Whisky", category: "party", age: "adult" },
-  { word1: "Mojito", word2: "Caïpirinha", category: "party", age: "adult" },
+  { word1: "Mojito", word2: "Piña Colada", category: "party", age: "adult" },
   { word1: "Shot", word2: "Cocktail", category: "party", age: "adult" },
   { word1: "Karaoké", word2: "Blind test", category: "party", age: "kids" },
+  { word1: "Danse", word2: "Chant", category: "party", age: "kids" },
   { word1: "Action ou Vérité", word2: "Je n'ai jamais", category: "party", age: "adult" },
-  { word1: "Beer Pong", word2: "Flip Cup", category: "party", age: "adult" },
-  { word1: "Anniversaire", word2: "Nouvel An", category: "party", age: "kids" },
-  { word1: "Halloween", word2: "Carnaval", category: "party", age: "kids" },
-  { word1: "Cadeau", word2: "Surprise", category: "party", age: "kids" },
+  { word1: "Beer Pong", word2: "Fléchettes", category: "party", age: "adult" },
+  { word1: "Confetti", word2: "Feu d'artifice", category: "party", age: "kids" },
+  { word1: "Déguisement", word2: "Masque", category: "party", age: "kids" },
+  { word1: "Anniversaire", word2: "Mariage", category: "party", age: "kids" },
+  { word1: "Halloween", word2: "Noël", category: "party", age: "kids" },
+  { word1: "Cadeau", word2: "Gâteau", category: "party", age: "kids" },
+  { word1: "DJ", word2: "Orchestre", category: "party", age: "kids" },
+  { word1: "Selfie", word2: "Autographe", category: "party", age: "kids" },
 
-  // 🕹️ GEEK & GAMING
+  // ==========================================
+  // 🕹️ GEEK & JEUX VIDÉO
+  // ==========================================
   { word1: "PlayStation", word2: "Xbox", category: "geek", age: "kids" },
-  { word1: "Nintendo Switch", word2: "Game Boy", category: "geek", age: "kids" },
-  { word1: "Mario", word2: "Luigi", category: "geek", age: "kids" },
-  { word1: "Peach", word2: "Zelda", category: "geek", age: "kids" },
+  { word1: "Nintendo", word2: "PlayStation", category: "geek", age: "kids" },
+  { word1: "Mario", word2: "Sonic", category: "geek", age: "kids" },
   { word1: "Minecraft", word2: "Roblox", category: "geek", age: "kids" },
-  { word1: "Fortnite", word2: "PUBG", category: "geek", age: "standard" },
-  { word1: "Call of Duty", word2: "Battlefield", category: "geek", age: "standard" },
-  { word1: "GTA", word2: "Red Dead Redemption", category: "geek", age: "adult" },
+  { word1: "Fortnite", word2: "Minecraft", category: "geek", age: "kids" },
+  { word1: "GTA", word2: "Cyberpunk", category: "geek", age: "adult" },
+  { word1: "FIFA", word2: "Mario Kart", category: "geek", age: "kids" },
+  { word1: "League of Legends", word2: "World of Warcraft", category: "geek", age: "standard" },
   { word1: "Among Us", word2: "Loup-Garou", category: "geek", age: "kids" },
-  { word1: "Souris", word2: "Manette", category: "geek", age: "kids" },
-  { word1: "Clavier", word2: "Écran", category: "geek", age: "kids" },
-  { word1: "Casque", word2: "Écouteurs", category: "geek", age: "kids" },
+  { word1: "Clavier", word2: "Manette", category: "geek", age: "kids" },
+  { word1: "Souris", word2: "Tapis de souris", category: "geek", age: "kids" },
+  { word1: "Casque", word2: "Micro", category: "geek", age: "kids" },
+  { word1: "Ordinateur", word2: "Tablette", category: "geek", age: "kids" },
+  { word1: "Smartphone", word2: "Ordinateur", category: "geek", age: "kids" },
+  { word1: "Wi-Fi", word2: "Bluetooth", category: "geek", age: "kids" },
   { word1: "YouTube", word2: "Twitch", category: "geek", age: "kids" },
   { word1: "TikTok", word2: "Instagram", category: "geek", age: "standard" },
-  { word1: "ChatGPT", word2: "Siri", category: "geek", age: "kids" },
+  { word1: "Discord", word2: "WhatsApp", category: "geek", age: "kids" },
+  { word1: "ChatGPT", word2: "Google", category: "geek", age: "kids" },
+  { word1: "Robot", word2: "Humain", category: "geek", age: "kids" },
   { word1: "Développeur", word2: "Hacker", category: "geek", age: "standard" },
 
+  // ==========================================
   // ⚽ SPORTS & LOISIRS
+  // ==========================================
   { word1: "Football", word2: "Rugby", category: "sport", age: "kids" },
   { word1: "Basketball", word2: "Handball", category: "sport", age: "kids" },
   { word1: "Tennis", word2: "Badminton", category: "sport", age: "kids" },
   { word1: "Tennis de table", word2: "Baby-foot", category: "sport", age: "kids" },
   { word1: "Natation", word2: "Plongée", category: "sport", age: "kids" },
   { word1: "Ski", word2: "Snowboard", category: "sport", age: "kids" },
-  { word1: "Surf", word2: "Bodyboard", category: "sport", age: "kids" },
-  { word1: "Boxe", word2: "Karaté", category: "sport", age: "kids" },
-  { word1: "Course à pied", word2: "Marathon", category: "sport", age: "kids" },
+  { word1: "Surf", word2: "Skateboard", category: "sport", age: "kids" },
+  { word1: "Patin à glace", word2: "Roller", category: "sport", age: "kids" },
+  { word1: "Boxe", word2: "Judo", category: "sport", age: "kids" },
+  { word1: "Course à pied", word2: "Vélo", category: "sport", age: "kids" },
   { word1: "Escalade", word2: "Randonnée", category: "sport", age: "kids" },
+  { word1: "Yoga", word2: "Musculation", category: "sport", age: "standard" },
   { word1: "Échecs", word2: "Dames", category: "sport", age: "kids" },
   { word1: "Poker", word2: "Blackjack", category: "sport", age: "adult" },
+  { word1: "Monopoly", word2: "Scrabble", category: "sport", age: "kids" },
   { word1: "Bowling", word2: "Pétanque", category: "sport", age: "kids" },
+  { word1: "Fléchettes", word2: "Billard", category: "sport", age: "kids" },
+  { word1: "Golf", word2: "Tennis", category: "sport", age: "kids" },
   { word1: "Formule 1", word2: "MotoGP", category: "sport", age: "kids" },
-  { word1: "Karting", word2: "Quad", category: "sport", age: "kids" }
+  { word1: "Karting", word2: "Quad", category: "sport", age: "kids" },
+  { word1: "Kayak", word2: "Planche à voile", category: "sport", age: "kids" },
+  { word1: "Guitare", word2: "Piano", category: "sport", age: "kids" },
+  { word1: "Batterie", word2: "Trompette", category: "sport", age: "kids" }
 ];
 
 class WordRepository {
@@ -428,7 +412,7 @@ class WordRepository {
 
   loadCustomPairs() {
     try {
-      const stored = localStorage.getItem('undercover_custom_words');
+      const stored = localStorage.getItem('espionnage_custom_words');
       return stored ? JSON.parse(stored) : [];
     } catch (e) {
       console.warn("Impossible de charger les mots personnalisés", e);
@@ -439,7 +423,7 @@ class WordRepository {
   saveCustomPairs(pairs) {
     this.customPairs = pairs;
     try {
-      localStorage.setItem('undercover_custom_words', JSON.stringify(pairs));
+      localStorage.setItem('espionnage_custom_words', JSON.stringify(pairs));
     } catch (e) {
       console.warn("Impossible de sauvegarder les mots personnalisés", e);
     }
@@ -453,7 +437,7 @@ class WordRepository {
 
   loadPlayedPairs() {
     try {
-      const stored = localStorage.getItem('undercover_played_word_pairs');
+      const stored = localStorage.getItem('espionnage_played_word_pairs');
       return stored ? JSON.parse(stored) : [];
     } catch (e) {
       console.warn("Impossible de charger l'historique des mots joués", e);
@@ -463,7 +447,7 @@ class WordRepository {
 
   savePlayedPairs() {
     try {
-      localStorage.setItem('undercover_played_word_pairs', JSON.stringify(this.playedPairs));
+      localStorage.setItem('espionnage_played_word_pairs', JSON.stringify(this.playedPairs));
     } catch (e) {
       console.warn("Impossible de sauvegarder l'historique des mots joués", e);
     }
@@ -484,7 +468,7 @@ class WordRepository {
   resetPlayedPairs() {
     this.playedPairs = [];
     try {
-      localStorage.removeItem('undercover_played_word_pairs');
+      localStorage.removeItem('espionnage_played_word_pairs');
     } catch (e) {}
     return true;
   }
@@ -550,6 +534,61 @@ class WordRepository {
     };
   }
 
+  getDetailedStats() {
+    const ageLevels = [
+      { id: 'kids', name: 'Enfants (-8 ans)', icon: '👶', filter: 'kids' },
+      { id: 'standard', name: 'Tout public (+8 ans)', icon: '👥', filter: 'standard' },
+      { id: 'adult', name: 'Ados & Adultes (16+)', icon: '🎉', filter: 'adult' }
+    ];
+
+    const byAge = ageLevels.map(lvl => {
+      const stats = this.getPoolStats(null, lvl.filter);
+      return {
+        ...lvl,
+        totalCount: stats.totalCount,
+        availableCount: stats.availableCount,
+        playedCount: stats.playedCount,
+        isExhausted: stats.isExhausted
+      };
+    });
+
+    const global = this.getPoolStats(null, 'adult');
+
+    const byCategory = Object.values(WORD_CATEGORIES).map(cat => {
+      const allForCat = this.getAllPairs([cat.id], 'adult');
+      const availableForCat = allForCat.filter(p => !this.isPairPlayed(p.word1, p.word2));
+      return {
+        id: cat.id,
+        name: cat.name,
+        icon: cat.icon,
+        totalCount: allForCat.length,
+        availableCount: availableForCat.length,
+        playedCount: allForCat.length - availableForCat.length,
+        isExhausted: allForCat.length > 0 && availableForCat.length === 0
+      };
+    });
+
+    if (this.customPairs.length > 0) {
+      const allCustom = this.customPairs;
+      const availableCustom = allCustom.filter(p => !this.isPairPlayed(p.word1, p.word2));
+      byCategory.push({
+        id: 'custom',
+        name: '✍️ Mots personnalisés',
+        icon: '✍️',
+        totalCount: allCustom.length,
+        availableCount: availableCustom.length,
+        playedCount: allCustom.length - availableCustom.length,
+        isExhausted: allCustom.length > 0 && availableCustom.length === 0
+      });
+    }
+
+    return {
+      global,
+      byAge,
+      byCategory
+    };
+  }
+
   getRandomPair(selectedCategories = null, ageFilter = 'standard') {
     const stats = this.getPoolStats(selectedCategories, ageFilter);
     
@@ -557,7 +596,14 @@ class WordRepository {
       const fallbackList = INITIAL_WORD_PAIRS.filter(p => ageFilter === 'kids' ? p.age === 'kids' : true);
       const chosenFallback = fallbackList.length > 0 ? fallbackList : INITIAL_WORD_PAIRS;
       const picked = chosenFallback[Math.floor(Math.random() * chosenFallback.length)];
-      return { ...picked, exhausted: false };
+      const swap = Math.random() > 0.5;
+      return {
+        word1: swap ? picked.word2 : picked.word1,
+        word2: swap ? picked.word1 : picked.word2,
+        category: picked.category,
+        age: picked.age,
+        exhausted: false
+      };
     }
 
     if (stats.isExhausted) {
@@ -594,7 +640,7 @@ class SoundEngine {
     this.soundEnabled = true;
     this.initOnUserGesture = this.initOnUserGesture.bind(this);
     
-    const saved = localStorage.getItem('undercover_sound_enabled');
+    const saved = localStorage.getItem('espionnage_sound_enabled');
     if (saved !== null) {
       this.soundEnabled = saved === 'true';
     }
@@ -630,7 +676,7 @@ class SoundEngine {
 
   toggleSound() {
     this.soundEnabled = !this.soundEnabled;
-    localStorage.setItem('undercover_sound_enabled', this.soundEnabled);
+    localStorage.setItem('espionnage_sound_enabled', this.soundEnabled);
     if (this.soundEnabled) {
       this.playTap();
     }
@@ -773,7 +819,7 @@ class SoundEngine {
     } catch (e) {}
   }
 
-  playWhiteVictory() {
+  playDiplomatVictory() {
     if (!this.soundEnabled) return;
     const ctx = this.ensureContext();
     if (!ctx) return;
@@ -832,8 +878,14 @@ const sounds = new SoundEngine();
 
 const ROLES = {
   CIVIL: 'civil',
-  UNDERCOVER: 'undercover',
-  MR_WHITE: 'mrwhite'
+  SPY: 'spy',
+  DIPLOMAT: 'diplomat'
+};
+
+const POINTS_CONFIG = {
+  [ROLES.CIVIL]: 2,
+  [ROLES.DIPLOMAT]: 6,
+  [ROLES.SPY]: 10
 };
 
 const PHASES = {
@@ -841,44 +893,45 @@ const PHASES = {
   REVEAL: 'reveal',
   CLUES: 'clues',
   VOTING: 'voting',
-  MR_WHITE_GUESS: 'mr_white_guess',
+  DIPLOMAT_GUESS: 'diplomat_guess',
   GAME_OVER: 'game_over'
 };
 
-class UndercoverGame {
+class EspionnageGame {
   constructor(wordRepository) {
     this.wordRepo = wordRepository;
     this.players = [];
     this.wordPair = null;
     this.civilWord = '';
-    this.undercoverWord = '';
+    this.spyWord = '';
     this.phase = PHASES.SETUP;
     this.currentRevealIndex = 0;
     this.roundNumber = 1;
     this.startingPlayerIndex = 0;
     this.clueCurrentPlayerIndex = 0;
     this.eliminatedThisRound = null;
-    this.mrWhiteAwaitingGuess = null;
-    this.winner = null;
+    this.diplomatAwaitingGuess = null;
+    this.winner = null; // 'civil' | 'spy' | 'diplomat' | 'infiltrators'
     this.winReason = '';
+    this.roundPoints = {}; // { [playerId]: number }
   }
 
   static getRecommendedRoles(playerCount) {
-    if (playerCount < 3) return { civils: 3, undercovers: 0, mrWhite: 0 };
-    if (playerCount === 3) return { civils: 2, undercovers: 1, mrWhite: 0 };
-    if (playerCount === 4) return { civils: 3, undercovers: 1, mrWhite: 0 };
-    if (playerCount === 5) return { civils: 3, undercovers: 1, mrWhite: 1 };
-    if (playerCount === 6) return { civils: 4, undercovers: 1, mrWhite: 1 };
-    if (playerCount === 7) return { civils: 5, undercovers: 1, mrWhite: 1 };
-    if (playerCount === 8) return { civils: 5, undercovers: 2, mrWhite: 1 };
-    if (playerCount === 9) return { civils: 6, undercovers: 2, mrWhite: 1 };
-    if (playerCount === 10) return { civils: 6, undercovers: 2, mrWhite: 2 };
-    if (playerCount <= 12) return { civils: playerCount - 4, undercovers: 3, mrWhite: 1 };
+    if (playerCount < 3) return { civils: 3, spies: 0, diplomats: 0 };
+    if (playerCount === 3) return { civils: 2, spies: 1, diplomats: 0 };
+    if (playerCount === 4) return { civils: 3, spies: 1, diplomats: 0 };
+    if (playerCount === 5) return { civils: 3, spies: 1, diplomats: 1 };
+    if (playerCount === 6) return { civils: 4, spies: 1, diplomats: 1 };
+    if (playerCount === 7) return { civils: 5, spies: 1, diplomats: 1 };
+    if (playerCount === 8) return { civils: 5, spies: 2, diplomats: 1 };
+    if (playerCount === 9) return { civils: 6, spies: 2, diplomats: 1 };
+    if (playerCount === 10) return { civils: 6, spies: 2, diplomats: 2 };
+    if (playerCount <= 12) return { civils: playerCount - 4, spies: 3, diplomats: 1 };
     
-    const uc = Math.max(2, Math.floor(playerCount / 4));
-    const mw = Math.max(1, Math.floor(playerCount / 6));
-    const civ = playerCount - uc - mw;
-    return { civils: civ, undercovers: uc, mrWhite: mw };
+    const sp = Math.max(2, Math.floor(playerCount / 4));
+    const dip = Math.max(1, Math.floor(playerCount / 6));
+    const civ = playerCount - sp - dip;
+    return { civils: civ, spies: sp, diplomats: dip };
   }
 
   startNewGame(playerNames, roleConfig, selectedCategories = [], ageFilter = 'standard', options = {}) {
@@ -889,7 +942,7 @@ class UndercoverGame {
     this.options = Object.assign({ showRoles: false, anonymousVoting: false }, options);
     this.anonymousVotes = {};
 
-    const totalRoles = roleConfig.civils + roleConfig.undercovers + roleConfig.mrWhite;
+    const totalRoles = roleConfig.civils + roleConfig.spies + roleConfig.diplomats;
     if (totalRoles !== playerNames.length) {
       throw new Error(`La somme des rôles (${totalRoles}) ne correspond pas au nombre de joueurs (${playerNames.length}).`);
     }
@@ -903,12 +956,12 @@ class UndercoverGame {
 
     this.wordPair = pairResult;
     this.civilWord = this.wordPair.word1;
-    this.undercoverWord = this.wordPair.word2;
+    this.spyWord = this.wordPair.word2;
 
     const rolesPool = [];
     for (let i = 0; i < roleConfig.civils; i++) rolesPool.push(ROLES.CIVIL);
-    for (let i = 0; i < roleConfig.undercovers; i++) rolesPool.push(ROLES.UNDERCOVER);
-    for (let i = 0; i < roleConfig.mrWhite; i++) rolesPool.push(ROLES.MR_WHITE);
+    for (let i = 0; i < roleConfig.spies; i++) rolesPool.push(ROLES.SPY);
+    for (let i = 0; i < roleConfig.diplomats; i++) rolesPool.push(ROLES.DIPLOMAT);
 
     for (let i = rolesPool.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -926,7 +979,7 @@ class UndercoverGame {
       const role = rolesPool[index];
       let word = '';
       if (role === ROLES.CIVIL) word = this.civilWord;
-      else if (role === ROLES.UNDERCOVER) word = this.undercoverWord;
+      else if (role === ROLES.SPY) word = this.spyWord;
       else word = null;
 
       return {
@@ -943,9 +996,10 @@ class UndercoverGame {
     this.currentRevealIndex = 0;
     this.roundNumber = 1;
     this.eliminatedThisRound = null;
-    this.mrWhiteAwaitingGuess = null;
+    this.diplomatAwaitingGuess = null;
     this.winner = null;
     this.winReason = '';
+    this.roundPoints = {};
   }
 
   getCurrentRevealPlayer() {
@@ -998,8 +1052,52 @@ class UndercoverGame {
     return ordered;
   }
 
+  setOptions(options) {
+    this.options = Object.assign(this.options || {}, options);
+  }
+
   startVotingPhase() {
     this.phase = PHASES.VOTING;
+    this.resetAnonymousVotes();
+  }
+
+  recordAnonymousVote(voterId, targetPlayerId) {
+    if (!this.anonymousVotes) this.anonymousVotes = {};
+    this.anonymousVotes[voterId] = targetPlayerId;
+  }
+
+  resetAnonymousVotes() {
+    this.anonymousVotes = {};
+  }
+
+  getAnonymousVoteResults() {
+    const alive = this.getAlivePlayers();
+    const counts = {};
+    alive.forEach(p => { counts[p.id] = 0; });
+
+    Object.values(this.anonymousVotes || {}).forEach(targetId => {
+      if (counts[targetId] !== undefined) {
+        counts[targetId]++;
+      }
+    });
+
+    const tallies = alive.map(p => ({
+      player: p,
+      votes: counts[p.id] || 0
+    })).sort((a, b) => b.votes - a.votes);
+
+    const maxVotes = tallies.length > 0 ? tallies[0].votes : 0;
+    const topCandidates = tallies.filter(t => t.votes === maxVotes && maxVotes > 0).map(t => t.player);
+    const isTie = topCandidates.length > 1;
+    const totalVotes = Object.keys(this.anonymousVotes || {}).length;
+
+    return {
+      tallies,
+      maxVotes,
+      topCandidates,
+      isTie,
+      totalVotes
+    };
   }
 
   eliminatePlayer(playerId) {
@@ -1011,13 +1109,14 @@ class UndercoverGame {
     target.isAlive = false;
     this.eliminatedThisRound = target;
 
-    if (target.role === ROLES.MR_WHITE) {
-      this.phase = PHASES.MR_WHITE_GUESS;
-      this.mrWhiteAwaitingGuess = target;
+    if (target.role === ROLES.DIPLOMAT) {
+      this.phase = PHASES.DIPLOMAT_GUESS;
+      this.diplomatAwaitingGuess = target;
       return {
         eliminatedPlayer: target,
-        requiresMrWhiteGuess: true,
-        winStatus: null
+        requiresDiplomatGuess: true,
+        winStatus: null,
+        roundPoints: {}
       };
     }
 
@@ -1026,6 +1125,7 @@ class UndercoverGame {
       this.phase = PHASES.GAME_OVER;
       this.winner = winStatus.winner;
       this.winReason = winStatus.reason;
+      this.roundPoints = this.calculateRoundPoints(winStatus.winner);
       this.recordGameStats(winStatus.winner);
     } else {
       this.roundNumber++;
@@ -1033,13 +1133,38 @@ class UndercoverGame {
 
     return {
       eliminatedPlayer: target,
-      requiresMrWhiteGuess: false,
-      winStatus: winStatus
+      requiresDiplomatGuess: false,
+      winStatus: winStatus,
+      roundPoints: this.roundPoints
     };
   }
 
-  handleMrWhiteGuess(guessedWord) {
-    if (!this.mrWhiteAwaitingGuess) return null;
+  /**
+   * Calcule les points remportés par chaque joueur lors de la manche
+   * @param {string} winner
+   * @returns {Object} { [playerId]: points }
+   */
+  calculateRoundPoints(winner) {
+    const pointsMap = {};
+    this.players.forEach(player => {
+      let earned = 0;
+      if (winner === ROLES.CIVIL && player.role === ROLES.CIVIL) {
+        earned = POINTS_CONFIG[ROLES.CIVIL];
+      } else if (winner === ROLES.SPY && player.role === ROLES.SPY) {
+        earned = POINTS_CONFIG[ROLES.SPY];
+      } else if (winner === ROLES.DIPLOMAT && player.role === ROLES.DIPLOMAT) {
+        earned = POINTS_CONFIG[ROLES.DIPLOMAT];
+      } else if (winner === 'infiltrators') {
+        if (player.role === ROLES.SPY) earned = POINTS_CONFIG[ROLES.SPY];
+        else if (player.role === ROLES.DIPLOMAT) earned = POINTS_CONFIG[ROLES.DIPLOMAT];
+      }
+      pointsMap[player.id] = earned;
+    });
+    return pointsMap;
+  }
+
+  handleDiplomatGuess(guessedWord) {
+    if (!this.diplomatAwaitingGuess) return null;
 
     const cleanGuess = this.normalizeWord(guessedWord);
     const cleanCivil = this.normalizeWord(this.civilWord);
@@ -1048,27 +1173,31 @@ class UndercoverGame {
 
     if (isCorrect) {
       this.phase = PHASES.GAME_OVER;
-      this.winner = ROLES.MR_WHITE;
-      this.winReason = `${this.mrWhiteAwaitingGuess.name} (M. Blanc) a trouvé le mot exact des Civils : « ${this.civilWord} » !`;
-      this.recordGameStats(ROLES.MR_WHITE);
+      this.winner = ROLES.DIPLOMAT;
+      this.winReason = `${this.diplomatAwaitingGuess.name} (le Diplomate) a trouvé le mot exact des Civils : « ${this.civilWord} » !`;
+      this.roundPoints = this.calculateRoundPoints(ROLES.DIPLOMAT);
+      this.recordGameStats(ROLES.DIPLOMAT);
       return {
         isCorrect: true,
-        winner: ROLES.MR_WHITE,
-        reason: this.winReason
+        winner: ROLES.DIPLOMAT,
+        reason: this.winReason,
+        roundPoints: this.roundPoints
       };
     }
 
-    this.mrWhiteAwaitingGuess = null;
+    this.diplomatAwaitingGuess = null;
     const winStatus = this.checkWinCondition();
     if (winStatus) {
       this.phase = PHASES.GAME_OVER;
       this.winner = winStatus.winner;
       this.winReason = winStatus.reason;
+      this.roundPoints = this.calculateRoundPoints(winStatus.winner);
       this.recordGameStats(winStatus.winner);
       return {
         isCorrect: false,
         winner: winStatus.winner,
-        reason: winStatus.reason
+        reason: winStatus.reason,
+        roundPoints: this.roundPoints
       };
     }
 
@@ -1078,19 +1207,24 @@ class UndercoverGame {
     return {
       isCorrect: false,
       winner: null,
-      reason: "Mauvaise réponse ! La partie continue."
+      reason: "Mauvaise réponse ! La partie continue.",
+      roundPoints: {}
     };
   }
 
-  skipMrWhiteGuess() {
-    this.mrWhiteAwaitingGuess = null;
+  skipDiplomatGuess() {
+    this.diplomatAwaitingGuess = null;
     const winStatus = this.checkWinCondition();
     if (winStatus) {
       this.phase = PHASES.GAME_OVER;
       this.winner = winStatus.winner;
       this.winReason = winStatus.reason;
+      this.roundPoints = this.calculateRoundPoints(winStatus.winner);
       this.recordGameStats(winStatus.winner);
-      return winStatus;
+      return {
+        ...winStatus,
+        roundPoints: this.roundPoints
+      };
     }
 
     this.roundNumber++;
@@ -1102,32 +1236,59 @@ class UndercoverGame {
   checkWinCondition() {
     const alive = this.getAlivePlayers();
     const aliveCivils = alive.filter(p => p.role === ROLES.CIVIL);
-    const aliveUndercovers = alive.filter(p => p.role === ROLES.UNDERCOVER);
-    const aliveWhites = alive.filter(p => p.role === ROLES.MR_WHITE);
+    const aliveSpies = alive.filter(p => p.role === ROLES.SPY);
+    const aliveDiplomats = alive.filter(p => p.role === ROLES.DIPLOMAT);
 
-    if (aliveUndercovers.length === 0 && aliveWhites.length === 0) {
+    // 1. Les Civils gagnent s'il n'y a plus AUCUN Espion ni AUCUN Diplomate
+    if (aliveSpies.length === 0 && aliveDiplomats.length === 0) {
       return {
         winner: ROLES.CIVIL,
         reason: "Les Civils ont éliminé tous les imposteurs !"
       };
     }
 
-    if (aliveUndercovers.length > 0 && aliveWhites.length === 0) {
-      if (aliveUndercovers.length >= aliveCivils.length || aliveCivils.length <= 1) {
+    // 2. Les Infiltrés gagnent s'il ne reste qu'un seul Civil (ou zéro)
+    if (aliveCivils.length <= 1 && (aliveSpies.length > 0 || aliveDiplomats.length > 0)) {
+      if (aliveSpies.length > 0 && aliveDiplomats.length > 0) {
         return {
-          winner: ROLES.UNDERCOVER,
-          reason: "Les Undercovers sont désormais en supériorité !"
+          winner: 'infiltrators',
+          reason: "Victoire conjointe des Infiltrés (Espions & Diplomates) !"
+        };
+      } else if (aliveSpies.length > 0) {
+        return {
+          winner: ROLES.SPY,
+          reason: "Les Espions ont pris le contrôle et éliminé la menace !"
+        };
+      } else {
+        return {
+          winner: ROLES.DIPLOMAT,
+          reason: "Le Diplomate a réussi à survivre jusqu'à la fin !"
         };
       }
     }
 
-    if (aliveWhites.length > 0 && alive.length <= 2) {
-      return {
-        winner: ROLES.MR_WHITE,
-        reason: "M. Blanc a réussi à survivre jusqu'au duel final !"
-      };
+    // 3. Supériorité numérique des infiltrés
+    const totalInfiltrators = aliveSpies.length + aliveDiplomats.length;
+    if (totalInfiltrators >= aliveCivils.length && totalInfiltrators > 0) {
+      if (aliveSpies.length > 0 && aliveDiplomats.length > 0) {
+        return {
+          winner: 'infiltrators',
+          reason: "Les Infiltrés sont désormais en supériorité numérique !"
+        };
+      } else if (aliveSpies.length > 0) {
+        return {
+          winner: ROLES.SPY,
+          reason: "Les Espions sont désormais en supériorité numérique !"
+        };
+      } else {
+        return {
+          winner: ROLES.DIPLOMAT,
+          reason: "Le Diplomate a pris le dessus !"
+        };
+      }
     }
 
+    // 4. Cas où il ne reste qu'un seul joueur au total
     if (alive.length === 1) {
       const last = alive[0];
       return {
@@ -1151,20 +1312,24 @@ class UndercoverGame {
 
   recordGameStats(winningRole) {
     try {
-      const statsStr = localStorage.getItem('undercover_game_stats');
+      const statsStr = localStorage.getItem('espionnage_game_stats');
       const stats = statsStr ? JSON.parse(statsStr) : {
         totalGames: 0,
         civilWins: 0,
-        undercoverWins: 0,
-        whiteWins: 0
+        spyWins: 0,
+        diplomatWins: 0
       };
 
       stats.totalGames++;
       if (winningRole === ROLES.CIVIL) stats.civilWins++;
-      else if (winningRole === ROLES.UNDERCOVER) stats.undercoverWins++;
-      else if (winningRole === ROLES.MR_WHITE) stats.whiteWins++;
+      else if (winningRole === ROLES.SPY) stats.spyWins++;
+      else if (winningRole === ROLES.DIPLOMAT) stats.diplomatWins++;
+      else if (winningRole === 'infiltrators') {
+        stats.spyWins++;
+        stats.diplomatWins++;
+      }
 
-      localStorage.setItem('undercover_game_stats', JSON.stringify(stats));
+      localStorage.setItem('espionnage_game_stats', JSON.stringify(stats));
     } catch (e) {
       console.warn("Erreur sauvegarde stats", e);
     }
@@ -1172,15 +1337,15 @@ class UndercoverGame {
 
   static getGameStats() {
     try {
-      const statsStr = localStorage.getItem('undercover_game_stats');
+      const statsStr = localStorage.getItem('espionnage_game_stats');
       return statsStr ? JSON.parse(statsStr) : {
         totalGames: 0,
         civilWins: 0,
-        undercoverWins: 0,
-        whiteWins: 0
+        spyWins: 0,
+        diplomatWins: 0
       };
     } catch (e) {
-      return { totalGames: 0, civilWins: 0, undercoverWins: 0, whiteWins: 0 };
+      return { totalGames: 0, civilWins: 0, spyWins: 0, diplomatWins: 0 };
     }
   }
 }
@@ -1189,21 +1354,17 @@ class UndercoverGame {
 // 4. CONTRÔLEUR D'INTERFACE UTILISATEUR (APPLICATION)
 // ==========================================================================
 
-class UndercoverApp {
+class EspionnageApp {
   constructor() {
     this.wordRepo = new WordRepository();
-    this.game = new UndercoverGame(this.wordRepo);
+    this.game = new EspionnageGame(this.wordRepo);
 
     this.players = this.loadSavedPlayers();
-    this.roleConfig = UndercoverGame.getRecommendedRoles(Math.max(3, this.players.length));
+    this.sessionScores = this.loadSessionScores();
+    this.roleConfig = EspionnageGame.getRecommendedRoles(Math.max(3, this.players.length));
     this.currentAgeFilter = 'standard';
     this.selectedCategories = Object.keys(WORD_CATEGORIES);
     this.selectedSuspectId = null;
-
-    this.timerSeconds = 45;
-    this.timerInitial = 45;
-    this.timerInterval = null;
-    this.isTimerRunning = false;
 
     this.hasRevealedCurrentCard = false;
 
@@ -1221,7 +1382,7 @@ class UndercoverApp {
 
   loadSavedPlayers() {
     try {
-      const saved = localStorage.getItem('undercover_saved_players');
+      const saved = localStorage.getItem('espionnage_saved_players');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed)) return parsed;
@@ -1234,15 +1395,47 @@ class UndercoverApp {
 
   savePlayers() {
     try {
-      localStorage.setItem('undercover_saved_players', JSON.stringify(this.players));
+      localStorage.setItem('espionnage_saved_players', JSON.stringify(this.players));
     } catch (e) {
       console.warn("Impossible de sauvegarder les joueurs", e);
     }
   }
 
+  loadSessionScores() {
+    try {
+      const saved = localStorage.getItem('espionnage_session_scores');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed && typeof parsed === 'object') return parsed;
+      }
+    } catch (e) {
+      console.warn("Impossible de charger les scores de session", e);
+    }
+    return {};
+  }
+
+  saveSessionScores() {
+    try {
+      localStorage.setItem('espionnage_session_scores', JSON.stringify(this.sessionScores));
+    } catch (e) {
+      console.warn("Impossible de sauvegarder les scores de session", e);
+    }
+  }
+
+  resetSessionScores() {
+    this.sessionScores = {};
+    if (this.players && this.players.length > 0) {
+      this.players.forEach(name => {
+        this.sessionScores[name] = 0;
+      });
+    }
+    this.saveSessionScores();
+    this.renderSessionLeaderboard();
+  }
+
   loadOptions() {
     try {
-      const saved = localStorage.getItem('undercover_game_options');
+      const saved = localStorage.getItem('espionnage_game_options');
       if (saved) {
         const parsed = JSON.parse(saved);
         return Object.assign({ showRoles: false, anonymousVoting: false, showDetails: true }, parsed);
@@ -1255,7 +1448,7 @@ class UndercoverApp {
 
   saveOptions() {
     try {
-      localStorage.setItem('undercover_game_options', JSON.stringify(this.options));
+      localStorage.setItem('espionnage_game_options', JSON.stringify(this.options));
       if (this.game) this.game.setOptions(this.options);
       this.syncOptionsUi();
     } catch (e) {
@@ -1309,6 +1502,7 @@ class UndercoverApp {
     this.brandHomeBtn = document.getElementById('brand-home-btn');
     this.btnSoundToggle = document.getElementById('btn-sound-toggle');
     this.soundIcon = document.getElementById('sound-icon');
+    this.btnScoreboardModal = document.getElementById('btn-scoreboard-modal');
     this.btnSettingsModal = document.getElementById('btn-settings-modal');
     this.btnWordsModal = document.getElementById('btn-words-modal');
     this.btnRulesModal = document.getElementById('btn-rules-modal');
@@ -1336,14 +1530,14 @@ class UndercoverApp {
     this.btnAgeAdult = document.getElementById('btn-age-adult');
 
     this.valCivils = document.getElementById('val-civils');
-    this.valUndercovers = document.getElementById('val-undercovers');
-    this.valMrWhite = document.getElementById('val-mrwhite');
+    this.valSpies = document.getElementById('val-spies');
+    this.valDiplomats = document.getElementById('val-diplomats');
     this.btnDecCivils = document.getElementById('btn-dec-civils');
     this.btnIncCivils = document.getElementById('btn-inc-civils');
-    this.btnDecUndercovers = document.getElementById('btn-dec-undercovers');
-    this.btnIncUndercovers = document.getElementById('btn-inc-undercovers');
-    this.btnDecMrWhite = document.getElementById('btn-dec-mrwhite');
-    this.btnIncMrWhite = document.getElementById('btn-inc-mrwhite');
+    this.btnDecSpies = document.getElementById('btn-dec-spies');
+    this.btnIncSpies = document.getElementById('btn-inc-spies');
+    this.btnDecDiplomats = document.getElementById('btn-dec-diplomats');
+    this.btnIncDiplomats = document.getElementById('btn-inc-diplomats');
     this.roleValidationHint = document.getElementById('role-validation-hint');
     
     this.categoriesChipsContainer = document.getElementById('categories-chips-container');
@@ -1371,9 +1565,6 @@ class UndercoverApp {
     this.starterPlayerName = document.getElementById('starter-player-name');
     this.cluesPlayersList = document.getElementById('clues-players-list');
     this.aliveCountBadge = document.getElementById('alive-count-badge');
-    this.timerDisplay = document.getElementById('timer-display');
-    this.btnTimerToggle = document.getElementById('btn-timer-toggle');
-    this.btnTimerReset = document.getElementById('btn-timer-reset');
     this.btnGoToVote = document.getElementById('btn-go-to-vote');
 
     // Écran Voting (Vote Public & Anonyme)
@@ -1413,8 +1604,10 @@ class UndercoverApp {
     this.victoryTitle = document.getElementById('victory-title');
     this.victoryReason = document.getElementById('victory-reason');
     this.endCivilWord = document.getElementById('end-civil-word');
-    this.endUndercoverWord = document.getElementById('end-undercover-word');
+    this.endSpyWord = document.getElementById('end-spy-word');
     this.endPlayersList = document.getElementById('end-players-list');
+    this.endSessionLeaderboard = document.getElementById('end-session-leaderboard');
+    this.btnEndResetScores = document.getElementById('btn-end-reset-scores');
     this.btnPlayAgainSame = document.getElementById('btn-play-again-same');
     this.btnNewGameSetup = document.getElementById('btn-new-game-setup');
 
@@ -1425,11 +1618,11 @@ class UndercoverApp {
     this.modalOptShowDetails = document.getElementById('modal-opt-show-details');
 
     this.modalRules = document.getElementById('modal-rules');
-    this.modalMrWhiteGuess = document.getElementById('modal-mrwhite-guess');
-    this.mrwhiteGuessIntro = document.getElementById('mrwhite-guess-intro');
-    this.inputMrwhiteGuess = document.getElementById('input-mrwhite-guess');
-    this.btnSubmitMrwhiteGuess = document.getElementById('btn-submit-mrwhite-guess');
-    this.btnSkipMrwhiteGuess = document.getElementById('btn-skip-mrwhite-guess');
+    this.modalDiplomatGuess = document.getElementById('modal-diplomat-guess');
+    this.diplomatGuessIntro = document.getElementById('diplomat-guess-intro');
+    this.inputDiplomatGuess = document.getElementById('input-diplomat-guess');
+    this.btnSubmitDiplomatGuess = document.getElementById('btn-submit-diplomat-guess');
+    this.btnSkipDiplomatGuess = document.getElementById('btn-skip-diplomat-guess');
     
     this.modalWords = document.getElementById('modal-words');
     this.wordsTotalCount = document.getElementById('words-total-count');
@@ -1438,14 +1631,21 @@ class UndercoverApp {
     this.inputCustomWord2 = document.getElementById('input-custom-word2');
     this.customWordsItems = document.getElementById('custom-words-items');
 
+    this.modalScoreboard = document.getElementById('modal-scoreboard');
+    this.scoreboardLeaderName = document.getElementById('scoreboard-leader-name');
+    this.scoreboardLeaderPoints = document.getElementById('scoreboard-leader-points');
+    this.scoreboardLeaderIcon = document.getElementById('scoreboard-leader-icon');
+    this.modalScoreboardList = document.getElementById('modal-scoreboard-list');
+    this.btnModalResetScores = document.getElementById('btn-modal-reset-scores');
+
     this.modalStats = document.getElementById('modal-stats');
     this.statTotalGames = document.getElementById('stat-total-games');
     this.statCivilPct = document.getElementById('stat-civil-pct');
     this.statCivilBar = document.getElementById('stat-civil-bar');
-    this.statUndercoverPct = document.getElementById('stat-undercover-pct');
-    this.statUndercoverBar = document.getElementById('stat-undercover-bar');
-    this.statWhitePct = document.getElementById('stat-white-pct');
-    this.statWhiteBar = document.getElementById('stat-white-bar');
+    this.statSpyPct = document.getElementById('stat-spy-pct');
+    this.statSpyBar = document.getElementById('stat-spy-bar');
+    this.statDiplomatPct = document.getElementById('stat-diplomat-pct');
+    this.statDiplomatBar = document.getElementById('stat-diplomat-bar');
     this.btnResetStats = document.getElementById('btn-reset-stats');
 
     // Modale cycle épuisé & Mémoire des mots
@@ -1456,13 +1656,17 @@ class UndercoverApp {
 
     this.settingsPlayedWordsBadge = document.getElementById('settings-played-words-badge');
     this.settingsPlayedWordsDesc = document.getElementById('settings-played-words-desc');
+    this.settingsAgeStatsList = document.getElementById('settings-age-stats-list');
+    this.settingsCatStatsList = document.getElementById('settings-cat-stats-list');
+    this.btnToggleCatStats = document.getElementById('btn-toggle-cat-stats');
+    this.catStatsToggleLabel = document.getElementById('cat-stats-toggle-label');
     this.btnResetPlayedWords = document.getElementById('btn-reset-played-words');
     this.wordsPlayedCount = document.getElementById('words-played-count');
 
     this.toastContainer = document.getElementById('toast-container');
 
     // Thème de l'interface
-    this.currentTheme = localStorage.getItem('undercover_ui_theme') || 'dark';
+    this.currentTheme = localStorage.getItem('espionnage_ui_theme') || 'dark';
     this.themeCardBtns = document.querySelectorAll('[data-theme-val]');
   }
 
@@ -1471,10 +1675,12 @@ class UndercoverApp {
       this.brandHomeBtn.addEventListener('click', () => {
         sounds.playTap();
         if (this.game.phase !== PHASES.SETUP && this.game.phase !== PHASES.GAME_OVER) {
-          if (confirm("Une partie est en cours. Revenir à la sélection des joueurs ?")) {
+          if (confirm("Une partie est en cours. Revenir à la sélection des joueurs ? (Les scores seront remis à zéro)")) {
+            this.resetSessionScores();
             this.showScreen('setup');
           }
         } else {
+          this.resetSessionScores();
           this.showScreen('setup');
         }
       });
@@ -1485,6 +1691,14 @@ class UndercoverApp {
         const enabled = sounds.toggleSound();
         if (this.soundIcon) this.soundIcon.textContent = enabled ? '🔊' : '🔇';
         this.showToast(enabled ? 'Son activé 🔊' : 'Son désactivé 🔇');
+      });
+    }
+
+    if (this.btnScoreboardModal) {
+      this.btnScoreboardModal.addEventListener('click', () => {
+        sounds.playTap();
+        this.renderSessionLeaderboard();
+        this.openModal(this.modalScoreboard);
       });
     }
 
@@ -1518,6 +1732,34 @@ class UndercoverApp {
         sounds.playTap();
         this.renderStatsModal();
         this.openModal(this.modalStats);
+      });
+    }
+
+    const handleResetScores = () => {
+      sounds.playTap();
+      if (confirm("Voulez-vous réinitialiser tous les scores de la session à zéro ?")) {
+        this.resetSessionScores();
+        this.showToast("Scores de session remis à zéro 🔄");
+      }
+    };
+
+    if (this.btnModalResetScores) {
+      this.btnModalResetScores.addEventListener('click', handleResetScores);
+    }
+    if (this.btnEndResetScores) {
+      this.btnEndResetScores.addEventListener('click', handleResetScores);
+    }
+
+    // Toggle de la liste détaillée des thèmes dans la mémoire
+    if (this.btnToggleCatStats) {
+      this.btnToggleCatStats.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        sounds.playTap();
+        if (this.settingsCatStatsList) {
+          const isHidden = this.settingsCatStatsList.classList.toggle('hidden');
+          this.btnToggleCatStats.innerHTML = `<span id="cat-stats-toggle-label">${isHidden ? 'Voir le détail' : 'Masquer le détail'}</span> ${isHidden ? '▾' : '▴'}`;
+        }
       });
     }
 
@@ -1563,7 +1805,7 @@ class UndercoverApp {
       });
     });
 
-    [this.modalRules, this.modalWords, this.modalStats, this.modalSettings, this.modalWordsExhausted].forEach(modal => {
+    [this.modalRules, this.modalWords, this.modalStats, this.modalSettings, this.modalWordsExhausted, this.modalScoreboard].forEach(modal => {
       if (modal) {
         modal.addEventListener('click', (e) => {
           if (e.target === modal) {
@@ -1614,9 +1856,10 @@ class UndercoverApp {
         sounds.playTap();
         if (this.players.length > 0) {
           this.players = [];
+          this.resetSessionScores();
           this.savePlayers();
           this.renderPlayersList();
-          this.showToast('Liste des joueurs effacée 🗑️');
+          this.showToast('Joueurs et scores effacés 🗑️');
         }
       });
     }
@@ -1682,10 +1925,10 @@ class UndercoverApp {
 
     if (this.btnDecCivils) this.btnDecCivils.addEventListener('click', () => this.adjustRole('civils', -1));
     if (this.btnIncCivils) this.btnIncCivils.addEventListener('click', () => this.adjustRole('civils', 1));
-    if (this.btnDecUndercovers) this.btnDecUndercovers.addEventListener('click', () => this.adjustRole('undercovers', -1));
-    if (this.btnIncUndercovers) this.btnIncUndercovers.addEventListener('click', () => this.adjustRole('undercovers', 1));
-    if (this.btnDecMrWhite) this.btnDecMrWhite.addEventListener('click', () => this.adjustRole('mrWhite', -1));
-    if (this.btnIncMrWhite) this.btnIncMrWhite.addEventListener('click', () => this.adjustRole('mrWhite', 1));
+    if (this.btnDecSpies) this.btnDecSpies.addEventListener('click', () => this.adjustRole('spies', -1));
+    if (this.btnIncSpies) this.btnIncSpies.addEventListener('click', () => this.adjustRole('spies', 1));
+    if (this.btnDecDiplomats) this.btnDecDiplomats.addEventListener('click', () => this.adjustRole('diplomats', -1));
+    if (this.btnIncDiplomats) this.btnIncDiplomats.addEventListener('click', () => this.adjustRole('diplomats', 1));
 
     if (this.btnSelectAllCats) {
       this.btnSelectAllCats.addEventListener('click', () => {
@@ -1715,24 +1958,24 @@ class UndercoverApp {
 
         // Remplir le mot secret UNIQUEMENT au moment où le joueur clique sur Révéler
         if (this.revealRoleFlag) {
-          if (player.role === ROLES.MR_WHITE) {
-            this.revealRoleFlag.className = 'role-flag mrwhite';
-            this.revealRoleFlag.textContent = '🎭 VOUS ÊTES M. BLANC';
-            if (this.revealWordDisplay) this.revealWordDisplay.textContent = 'CARTE BLANCHE';
+          if (player.role === ROLES.DIPLOMAT) {
+            this.revealRoleFlag.className = 'role-flag diplomat';
+            this.revealRoleFlag.textContent = '🎭 VOUS ÊTES LE DIPLOMATE';
+            if (this.revealWordDisplay) this.revealWordDisplay.textContent = 'AUCUN MOT';
             if (this.revealDescDisplay) this.revealDescDisplay.textContent = "Vous n'avez aucun mot secret ! Écoutez attentivement les indices pour bluffer.";
           } else if (this.options.showRoles) {
             this.revealRoleFlag.className = `role-flag ${player.role}`;
             if (player.role === ROLES.CIVIL) {
               this.revealRoleFlag.textContent = '🛡️ VOUS ÊTES CIVIL';
               if (this.revealWordDisplay) this.revealWordDisplay.textContent = player.word;
-              if (this.revealDescDisplay) this.revealDescDisplay.textContent = "Donnez un indice subtil pour vous faire reconnaître des autres Civils sans aider M. Blanc !";
-            } else if (player.role === ROLES.UNDERCOVER) {
-              this.revealRoleFlag.textContent = '🕶️ VOUS ÊTES UNDERCOVER';
+              if (this.revealDescDisplay) this.revealDescDisplay.textContent = "Donnez un indice subtil pour vous faire reconnaître des autres Civils sans aider le Diplomate !";
+            } else if (player.role === ROLES.SPY) {
+              this.revealRoleFlag.textContent = '🕶️ VOUS ÊTES L\'ESPION';
               if (this.revealWordDisplay) this.revealWordDisplay.textContent = player.word;
               if (this.revealDescDisplay) this.revealDescDisplay.textContent = "Votre mot est légèrement différent des civils. Fondez-vous dans la masse !";
             }
           } else {
-            // RÈGLES PAR DÉFAUT : Rôles masqués pour Civils & Undercovers
+            // RÈGLES PAR DÉFAUT : Rôles masqués pour Civils & Espions
             this.revealRoleFlag.className = 'role-flag secret';
             this.revealRoleFlag.textContent = '🤫 MOT SECRET';
             if (this.revealWordDisplay) this.revealWordDisplay.textContent = player.word;
@@ -1768,15 +2011,24 @@ class UndercoverApp {
       }
     };
 
-    if (this.btnRevealCard) this.btnRevealCard.addEventListener('click', revealCard);
-    if (this.btnHideCard) this.btnHideCard.addEventListener('click', hideCard);
+    const toggleCard = (e) => {
+      if (e) {
+        e.preventDefault();
+      }
+      if (!this.secretCard) return;
+      if (this.secretCard.classList.contains('locked')) {
+        revealCard();
+      } else if (this.secretCard.classList.contains('revealed')) {
+        hideCard();
+      }
+    };
 
     if (this.secretCard) {
-      this.secretCard.addEventListener('click', () => {
-        if (this.secretCard.classList.contains('locked')) {
-          revealCard();
-        } else if (this.secretCard.classList.contains('revealed')) {
-          hideCard();
+      this.secretCard.addEventListener('click', toggleCard);
+      this.secretCard.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggleCard(e);
         }
       });
     }
@@ -1787,24 +2039,9 @@ class UndercoverApp {
       });
     }
 
-    if (this.btnTimerToggle) {
-      this.btnTimerToggle.addEventListener('click', () => {
-        sounds.playTap();
-        this.toggleTimer();
-      });
-    }
-
-    if (this.btnTimerReset) {
-      this.btnTimerReset.addEventListener('click', () => {
-        sounds.playTap();
-        this.resetTimer();
-      });
-    }
-
     if (this.btnGoToVote) {
       this.btnGoToVote.addEventListener('click', () => {
         sounds.playTap();
-        this.stopTimer();
         this.game.startVotingPhase();
         this.renderVotingScreen();
         this.showScreen('voting');
@@ -1817,25 +2054,25 @@ class UndercoverApp {
       });
     }
 
-    if (this.btnSubmitMrwhiteGuess) {
-      this.btnSubmitMrwhiteGuess.addEventListener('click', () => {
-        this.handleSubmitMrWhiteGuess();
+    if (this.btnSubmitDiplomatGuess) {
+      this.btnSubmitDiplomatGuess.addEventListener('click', () => {
+        this.handleSubmitDiplomatGuess();
       });
     }
 
-    if (this.inputMrwhiteGuess) {
-      this.inputMrwhiteGuess.addEventListener('keydown', (e) => {
+    if (this.inputDiplomatGuess) {
+      this.inputDiplomatGuess.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
-          this.handleSubmitMrWhiteGuess();
+          this.handleSubmitDiplomatGuess();
         }
       });
     }
 
-    if (this.btnSkipMrwhiteGuess) {
-      this.btnSkipMrwhiteGuess.addEventListener('click', () => {
+    if (this.btnSkipDiplomatGuess) {
+      this.btnSkipDiplomatGuess.addEventListener('click', () => {
         sounds.playTap();
-        this.closeModal(this.modalMrWhiteGuess);
-        const res = this.game.skipMrWhiteGuess();
+        this.closeModal(this.modalDiplomatGuess);
+        const res = this.game.skipDiplomatGuess();
         if (res) {
           this.renderGameOverScreen();
           this.showScreen('gameOver');
@@ -1857,8 +2094,10 @@ class UndercoverApp {
     if (this.btnNewGameSetup) {
       this.btnNewGameSetup.addEventListener('click', () => {
         sounds.playTap();
+        this.resetSessionScores();
         this.renderReviewScreen();
         this.showScreen('review');
+        this.showToast("Scores réinitialisés pour la nouvelle partie 🔄");
       });
     }
 
@@ -1883,7 +2122,7 @@ class UndercoverApp {
       this.btnResetStats.addEventListener('click', () => {
         sounds.playTap();
         if (confirm("Réinitialiser les statistiques ?")) {
-          localStorage.removeItem('undercover_game_stats');
+          localStorage.removeItem('espionnage_game_stats');
           this.renderStatsModal();
           this.showToast('Statistiques réinitialisées');
         }
@@ -1896,6 +2135,7 @@ class UndercoverApp {
     this.applyDetailsMode();
     this.renderPlayersList();
     this.updatePlayedWordsStatusUi();
+    this.renderSessionLeaderboard();
     if (this.soundIcon) {
       this.soundIcon.textContent = sounds.soundEnabled ? '🔊' : '🔇';
     }
@@ -1907,14 +2147,14 @@ class UndercoverApp {
     this.currentTheme = theme;
     document.documentElement.setAttribute('data-theme', theme);
     try {
-      localStorage.setItem('undercover_ui_theme', theme);
+      localStorage.setItem('espionnage_ui_theme', theme);
     } catch (e) {}
 
     // Mise à jour de la couleur de la barre de statut pour mobile/PWA
     const themeColors = {
-      dark: '#0b0f19',
+      dark: '#060810',
       light: '#f8f6f0',
-      midnight: '#060d19',
+      midnight: '#f2f8f4',
       oled: '#000000'
     };
     const metaThemeColor = document.getElementById('meta-theme-color') || document.querySelector('meta[name="theme-color"]');
@@ -1934,8 +2174,8 @@ class UndercoverApp {
       const themeLabels = {
         dark: 'Nébuleuse Sombre 🌌',
         light: 'Ivoire Raffiné ✨',
-        midnight: 'Minuit Saphir 🌊',
-        oled: 'Obsidienne OLED 🌑'
+        midnight: 'Menthe Pastel 🌿',
+        oled: 'Obsidienne OLED ✨'
       };
       this.showToast(`Thème « ${themeLabels[theme] || theme} » appliqué`);
     }
@@ -1999,6 +2239,10 @@ class UndercoverApp {
 
     sounds.playTap();
     this.players.push(name);
+    if (this.sessionScores[name] === undefined) {
+      this.sessionScores[name] = 0;
+      this.saveSessionScores();
+    }
     this.savePlayers();
     this.inputNewPlayerName.value = '';
     this.renderPlayersList();
@@ -2009,7 +2253,13 @@ class UndercoverApp {
 
   removePlayer(index) {
     sounds.playTap();
+    const removedName = this.players[index];
     this.players.splice(index, 1);
+    if (removedName && this.sessionScores[removedName] !== undefined) {
+      delete this.sessionScores[removedName];
+      this.saveSessionScores();
+      this.renderSessionLeaderboard();
+    }
     this.savePlayers();
     this.renderPlayersList();
   }
@@ -2102,7 +2352,7 @@ class UndercoverApp {
   }
 
   applyRecommendedRoles() {
-    this.roleConfig = UndercoverGame.getRecommendedRoles(this.players.length);
+    this.roleConfig = EspionnageGame.getRecommendedRoles(this.players.length);
     this.updateRoleUi();
   }
 
@@ -2119,26 +2369,36 @@ class UndercoverApp {
 
   updateRoleUi() {
     if (this.valCivils) this.valCivils.textContent = this.roleConfig.civils;
-    if (this.valUndercovers) this.valUndercovers.textContent = this.roleConfig.undercovers;
-    if (this.valMrWhite) this.valMrWhite.textContent = this.roleConfig.mrWhite;
+    if (this.valSpies) this.valSpies.textContent = this.roleConfig.spies;
+    if (this.valDiplomats) this.valDiplomats.textContent = this.roleConfig.diplomats;
 
-    const totalRoles = this.roleConfig.civils + this.roleConfig.undercovers + this.roleConfig.mrWhite;
+    const totalRoles = this.roleConfig.civils + this.roleConfig.spies + this.roleConfig.diplomats;
     const count = this.players.length;
 
     if (!this.roleValidationHint) return;
 
-    if (totalRoles === count) {
-      this.roleValidationHint.className = 'role-hint valid';
-      this.roleValidationHint.textContent = `✅ Parfait ! ${totalRoles} rôles pour vos ${count} participants.`;
-      if (this.btnStartGame) this.btnStartGame.disabled = false;
-    } else if (totalRoles < count) {
+    if (count < 3) {
       this.roleValidationHint.className = 'role-hint error';
-      this.roleValidationHint.textContent = `⚠️ Il manque ${count - totalRoles} rôle(s) à attribuer.`;
+      this.roleValidationHint.textContent = '⚠️ Il faut au moins 3 participants pour jouer.';
+      if (this.btnStartGame) this.btnStartGame.disabled = true;
+    } else if (totalRoles < count) {
+      const missing = count - totalRoles;
+      this.roleValidationHint.className = 'role-hint error';
+      this.roleValidationHint.textContent = `⚠️ Il manque ${missing} rôle${missing > 1 ? 's' : ''} à attribuer.`;
+      if (this.btnStartGame) this.btnStartGame.disabled = true;
+    } else if (totalRoles > count) {
+      const excess = totalRoles - count;
+      this.roleValidationHint.className = 'role-hint error';
+      this.roleValidationHint.textContent = `⚠️ Il y a ${excess} rôle${excess > 1 ? 's' : ''} en trop.`;
+      if (this.btnStartGame) this.btnStartGame.disabled = true;
+    } else if (this.roleConfig.spies + this.roleConfig.diplomats === 0) {
+      this.roleValidationHint.className = 'role-hint error';
+      this.roleValidationHint.textContent = '⚠️ Il faut au moins 1 Espion ou 1 Diplomate dans la partie.';
       if (this.btnStartGame) this.btnStartGame.disabled = true;
     } else {
-      this.roleValidationHint.className = 'role-hint error';
-      this.roleValidationHint.textContent = `⚠️ Il y a ${totalRoles - count} rôle(s) en trop.`;
-      if (this.btnStartGame) this.btnStartGame.disabled = true;
+      this.roleValidationHint.className = 'role-hint hidden';
+      this.roleValidationHint.textContent = '';
+      if (this.btnStartGame) this.btnStartGame.disabled = false;
     }
   }
 
@@ -2151,10 +2411,13 @@ class UndercoverApp {
         return;
       }
 
+      const allForCat = this.wordRepo.getAllPairs([cat.id], this.currentAgeFilter);
+      const availableForCat = allForCat.filter(p => !this.wordRepo.isPairPlayed(p.word1, p.word2));
+
       const chip = document.createElement('button');
       const isActive = this.selectedCategories.includes(cat.id);
-      chip.className = `cat-chip ${isActive ? 'active' : ''}`;
-      chip.textContent = cat.name;
+      chip.className = `cat-chip ${isActive ? 'active' : ''} ${availableForCat.length === 0 ? 'exhausted' : ''}`;
+      chip.innerHTML = `<span>${cat.name}</span> <small style="opacity: 0.85; font-size: 0.72rem; margin-left: 4px;">(${availableForCat.length}/${allForCat.length})</small>`;
 
       chip.addEventListener('click', () => {
         sounds.playTap();
@@ -2177,23 +2440,62 @@ class UndercoverApp {
   }
 
   updatePlayedWordsStatusUi() {
+    const detailed = this.wordRepo.getDetailedStats();
     const stats = this.wordRepo.getPoolStats(this.selectedCategories, this.currentAgeFilter);
-    const globalCount = this.wordRepo.getPlayedPairsCount();
-    const globalTotal = this.wordRepo.getAllPairs(null, 'adult').length;
 
+    // 1. Résumé global
     if (this.settingsPlayedWordsBadge) {
-      this.settingsPlayedWordsBadge.textContent = `${stats.playedCount} / ${stats.totalCount}`;
+      this.settingsPlayedWordsBadge.textContent = `${detailed.global.availableCount} restants / ${detailed.global.totalCount}`;
     }
     if (this.settingsPlayedWordsDesc) {
-      if (stats.isExhausted) {
-        this.settingsPlayedWordsDesc.textContent = `⚠️ Catalogue épuisé (0 mot restant)`;
+      if (detailed.global.isExhausted) {
+        this.settingsPlayedWordsDesc.textContent = `⚠️ Catalogue complet épuisé (0 mot restant sur ${detailed.global.totalCount})`;
       } else {
-        this.settingsPlayedWordsDesc.textContent = `${stats.availableCount} paire(s) encore disponible(s) sans répétition`;
+        this.settingsPlayedWordsDesc.textContent = `${detailed.global.playedCount} paire(s) jouée(s) • ${detailed.global.availableCount} restante(s) sans répétition`;
       }
     }
     if (this.wordsPlayedCount) {
-      this.wordsPlayedCount.textContent = `${globalCount} / ${globalTotal}`;
+      this.wordsPlayedCount.textContent = `${detailed.global.playedCount} / ${detailed.global.totalCount}`;
     }
+
+    // 2. Rendu des listes par tranche d'âge
+    if (this.settingsAgeStatsList) {
+      this.settingsAgeStatsList.innerHTML = '';
+      detailed.byAge.forEach(item => {
+        const row = document.createElement('div');
+        row.className = 'stat-breakdown-row';
+        const pct = item.totalCount > 0 ? Math.round((item.availableCount / item.totalCount) * 100) : 0;
+        row.innerHTML = `
+          <div class="stat-breakdown-info">
+            <span class="stat-breakdown-name">${item.icon} ${item.name}</span>
+            <div class="stat-breakdown-bar">
+              <div class="stat-breakdown-fill ${item.isExhausted ? 'exhausted' : ''}" style="width: ${pct}%;"></div>
+            </div>
+          </div>
+          <span class="stat-breakdown-badge ${item.isExhausted ? 'is-exhausted' : ''}">
+            ${item.isExhausted ? '⚠️ Épuisé' : `${item.availableCount} restants / ${item.totalCount}`}
+          </span>
+        `;
+        this.settingsAgeStatsList.appendChild(row);
+      });
+    }
+
+    // 3. Rendu du détail par thème / catégorie
+    if (this.settingsCatStatsList) {
+      this.settingsCatStatsList.innerHTML = '';
+      detailed.byCategory.forEach(cat => {
+        const chip = document.createElement('div');
+        chip.className = 'stat-category-chip';
+        chip.innerHTML = `
+          <span class="stat-category-name">${cat.icon || '🏷️'} ${cat.name.replace(/^[^\w\s]+/, '').trim()}</span>
+          <span class="stat-category-val ${cat.isExhausted ? 'exhausted' : ''}">
+            ${cat.isExhausted ? '0 restant' : `${cat.availableCount} / ${cat.totalCount}`}
+          </span>
+        `;
+        this.settingsCatStatsList.appendChild(chip);
+      });
+    }
+
     this.updateWordsCountBadge(stats);
   }
 
@@ -2268,7 +2570,7 @@ class UndercoverApp {
     if (this.btnNextPlayer) {
       this.btnNextPlayer.disabled = true;
       if (current === total) {
-        this.btnNextPlayer.innerHTML = `<span>Passer au Débat & Vote</span> ➡️`;
+        this.btnNextPlayer.innerHTML = `<span>Passer au Tour de parole</span> ➡️`;
       } else {
         this.btnNextPlayer.innerHTML = `<span>Joueur suivant</span> ➡️`;
       }
@@ -2321,67 +2623,17 @@ class UndercoverApp {
           </div>
           <strong>${p.name}</strong>
         </div>
-        ${isStarter ? '<span class="badge" style="background: rgba(99, 102, 241, 0.3); color: #a5b4fc;">🎙️ Commence</span>' : ''}
+        ${isStarter ? '<span class="badge" style="background: var(--color-accent-glow); color: var(--color-accent); border: 1px solid var(--color-accent-glow);">🎙️ Commence</span>' : ''}
       `;
       this.cluesPlayersList.appendChild(row);
     });
 
-    this.resetTimer();
-  }
-
-  toggleTimer() {
-    if (this.isTimerRunning) {
-      this.stopTimer();
-      if (this.btnTimerToggle) this.btnTimerToggle.textContent = '▶️';
-    } else {
-      this.startTimer();
-      if (this.btnTimerToggle) this.btnTimerToggle.textContent = '⏸️';
-    }
-  }
-
-  startTimer() {
-    if (this.isTimerRunning) return;
-    this.isTimerRunning = true;
-    this.timerInterval = setInterval(() => {
-      if (this.timerSeconds > 0) {
-        this.timerSeconds--;
-        this.updateTimerDisplay();
-        if (this.timerSeconds <= 5 && this.timerSeconds > 0) {
-          sounds.playTick();
-        }
+    if (this.btnGoToVote) {
+      if (this.options.anonymousVoting) {
+        this.btnGoToVote.innerHTML = `<span>Passer au Vote Secret</span> 🗳️`;
       } else {
-        this.stopTimer();
-        sounds.playTimerAlert();
-        if (this.btnTimerToggle) this.btnTimerToggle.textContent = '▶️';
-        this.showToast("Temps écoulé ! ⏰");
+        this.btnGoToVote.innerHTML = `<span>Passer au Débat & Vote</span> 🗳️`;
       }
-    }, 1000);
-  }
-
-  stopTimer() {
-    this.isTimerRunning = false;
-    if (this.timerInterval) {
-      clearInterval(this.timerInterval);
-      this.timerInterval = null;
-    }
-  }
-
-  resetTimer() {
-    this.stopTimer();
-    this.timerSeconds = this.timerInitial;
-    this.updateTimerDisplay();
-    if (this.btnTimerToggle) this.btnTimerToggle.textContent = '▶️';
-  }
-
-  updateTimerDisplay() {
-    if (!this.timerDisplay) return;
-    const mins = Math.floor(this.timerSeconds / 60).toString().padStart(2, '0');
-    const secs = (this.timerSeconds % 60).toString().padStart(2, '0');
-    this.timerDisplay.textContent = `${mins}:${secs}`;
-    if (this.timerSeconds <= 5) {
-      this.timerDisplay.style.color = 'var(--color-danger)';
-    } else {
-      this.timerDisplay.style.color = 'var(--text-primary)';
     }
   }
 
@@ -2659,14 +2911,14 @@ class UndercoverApp {
 
     const result = this.game.eliminatePlayer(playerId);
 
-    if (result.requiresMrWhiteGuess) {
-      if (this.mrwhiteGuessIntro) {
-        this.mrwhiteGuessIntro.innerHTML = `<strong>${result.eliminatedPlayer.name}</strong> a été éliminé et était <strong>M. Blanc</strong> !`;
+    if (result.requiresDiplomatGuess) {
+      if (this.diplomatGuessIntro) {
+        this.diplomatGuessIntro.innerHTML = `<strong>${result.eliminatedPlayer.name}</strong> a été éliminé et était <strong>le Diplomate</strong> !`;
       }
-      if (this.inputMrwhiteGuess) this.inputMrwhiteGuess.value = '';
-      this.openModal(this.modalMrWhiteGuess);
+      if (this.inputDiplomatGuess) this.inputDiplomatGuess.value = '';
+      this.openModal(this.modalDiplomatGuess);
       setTimeout(() => {
-        if (this.inputMrwhiteGuess) this.inputMrwhiteGuess.focus();
+        if (this.inputDiplomatGuess) this.inputDiplomatGuess.focus();
       }, 300);
       return;
     }
@@ -2675,26 +2927,26 @@ class UndercoverApp {
       this.renderGameOverScreen();
       this.showScreen('gameOver');
     } else {
-      const roleLabel = result.eliminatedPlayer.role === ROLES.CIVIL ? 'Civil 🛡️' : 'Undercover 🕶️';
+      const roleLabel = result.eliminatedPlayer.role === ROLES.CIVIL ? 'Civil 🛡️' : 'Espion 🕶️';
       this.showToast(`${result.eliminatedPlayer.name} (${roleLabel}) est éliminé. Manche ${this.game.roundNumber} !`);
       this.renderCluesScreen();
       this.showScreen('clues');
     }
   }
 
-  handleSubmitMrWhiteGuess() {
-    if (!this.inputMrwhiteGuess) return;
-    const guess = this.inputMrwhiteGuess.value.trim();
+  handleSubmitDiplomatGuess() {
+    if (!this.inputDiplomatGuess) return;
+    const guess = this.inputDiplomatGuess.value.trim();
     if (!guess) {
       this.showToast("Veuillez saisir un mot.");
       return;
     }
 
-    this.closeModal(this.modalMrWhiteGuess);
-    const result = this.game.handleMrWhiteGuess(guess);
+    this.closeModal(this.modalDiplomatGuess);
+    const result = this.game.handleDiplomatGuess(guess);
 
     if (result.isCorrect) {
-      sounds.playWhiteVictory();
+      sounds.playDiplomatVictory();
       this.renderGameOverScreen();
       this.showScreen('gameOver');
     } else {
@@ -2721,60 +2973,190 @@ class UndercoverApp {
         if (this.victoryIcon) this.victoryIcon.textContent = '🛡️';
         this.victoryTitle.textContent = 'Victoire des Civils !';
         this.victoryTitle.style.color = 'var(--color-civil)';
-      } else if (winner === ROLES.UNDERCOVER) {
+      } else if (winner === ROLES.SPY) {
         if (this.victoryIcon) this.victoryIcon.textContent = '🕶️';
-        this.victoryTitle.textContent = 'Victoire des Undercovers !';
-        this.victoryTitle.style.color = 'var(--color-undercover)';
-      } else if (winner === ROLES.MR_WHITE) {
+        this.victoryTitle.textContent = 'Victoire des Espions !';
+        this.victoryTitle.style.color = 'var(--color-spy)';
+      } else if (winner === ROLES.DIPLOMAT) {
         if (this.victoryIcon) this.victoryIcon.textContent = '🎭';
-        this.victoryTitle.textContent = 'Victoire de M. Blanc !';
-        this.victoryTitle.style.color = 'var(--color-mrwhite)';
+        this.victoryTitle.textContent = 'Victoire du Diplomate !';
+        this.victoryTitle.style.color = 'var(--color-diplomat)';
+      } else if (winner === 'infiltrators') {
+        if (this.victoryIcon) this.victoryIcon.textContent = '🕶️🎭';
+        this.victoryTitle.textContent = 'Victoire des Infiltrés !';
+        this.victoryTitle.style.color = 'var(--color-spy)';
       }
     }
 
     if (this.victoryReason) this.victoryReason.textContent = this.game.winReason;
     if (this.endCivilWord) this.endCivilWord.textContent = this.game.civilWord;
-    if (this.endUndercoverWord) this.endUndercoverWord.textContent = this.game.undercoverWord;
+    if (this.endSpyWord) this.endSpyWord.textContent = this.game.spyWord;
 
-    if (!this.endPlayersList) return;
-    this.endPlayersList.innerHTML = '';
+    // Mise à jour et cumul des scores de la session
+    const roundPoints = this.game.roundPoints || {};
     this.game.players.forEach(p => {
-      const row = document.createElement('div');
-      row.className = 'end-player-row';
+      const earned = roundPoints[p.id] || 0;
+      this.sessionScores[p.name] = (this.sessionScores[p.name] || 0) + earned;
+    });
+    this.saveSessionScores();
 
-      let roleBadge = '';
-      let wordLabel = p.word ? `« ${p.word} »` : 'Aucun mot';
+    if (this.endPlayersList) {
+      this.endPlayersList.innerHTML = '';
+      this.game.players.forEach(p => {
+        const row = document.createElement('div');
+        row.className = 'end-player-row';
 
-      if (p.role === ROLES.CIVIL) {
-        roleBadge = `<span class="role-badge-tag civil">Civil</span>`;
-      } else if (p.role === ROLES.UNDERCOVER) {
-        roleBadge = `<span class="role-badge-tag undercover">Undercover</span>`;
+        let roleBadge = '';
+        let wordLabel = p.word ? `« ${p.word} »` : 'Aucun mot';
+
+        if (p.role === ROLES.CIVIL) {
+          roleBadge = `<span class="role-badge-tag civil">Civil</span>`;
+        } else if (p.role === ROLES.SPY) {
+          roleBadge = `<span class="role-badge-tag spy">Espion</span>`;
+        } else {
+          roleBadge = `<span class="role-badge-tag diplomat">Diplomate</span>`;
+        }
+
+        const statusBadge = p.isAlive
+          ? `<span class="badge" style="background: rgba(16, 185, 129, 0.2); color: var(--color-success);">Vivant</span>`
+          : `<span class="badge" style="background: rgba(239, 68, 68, 0.2); color: var(--color-danger);">Éliminé</span>`;
+
+        const earned = roundPoints[p.id] || 0;
+        const total = this.sessionScores[p.name] || 0;
+        const ptsBadge = earned > 0
+          ? `<span class="points-gain-badge is-positive">+${earned} pts</span>`
+          : `<span class="points-gain-badge is-zero">+0 pt</span>`;
+
+        row.innerHTML = `
+          <div class="end-player-info">
+            <div class="player-avatar" style="background: ${p.avatarColor}; width: 34px; height: 34px;">
+              ${p.name.charAt(0).toUpperCase()}
+            </div>
+            <div>
+              <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                <strong>${p.name}</strong>
+                ${ptsBadge}
+              </div>
+              <div style="font-size: 0.8rem; color: var(--text-muted);">
+                ${wordLabel} • <span class="player-total-hint">Total session : <strong style="color: var(--text-primary);">${total} pt${total > 1 ? 's' : ''}</strong></span>
+              </div>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            ${roleBadge}
+            ${statusBadge}
+          </div>
+        `;
+
+        this.endPlayersList.appendChild(row);
+      });
+    }
+
+    this.renderSessionLeaderboard();
+  }
+
+  renderSessionLeaderboard() {
+    const playerNames = new Set(this.players);
+    Object.keys(this.sessionScores || {}).forEach(name => playerNames.add(name));
+    
+    const nameColorMap = {};
+    if (this.game && this.game.players) {
+      this.game.players.forEach(p => { nameColorMap[p.name] = p.avatarColor; });
+    }
+    const defaultColors = [
+      '#FF5E7E', '#4D96FF', '#6BCB77', '#FFD93D',
+      '#9D4EDD', '#FF9F45', '#00C9A7', '#E056FD',
+      '#00B4D8', '#FF6B6B', '#F368E0', '#10AC84'
+    ];
+    let colIdx = 0;
+
+    const list = Array.from(playerNames).map(name => {
+      const color = nameColorMap[name] || defaultColors[(colIdx++) % defaultColors.length];
+      return {
+        name,
+        points: this.sessionScores[name] || 0,
+        color
+      };
+    }).sort((a, b) => b.points - a.points);
+
+    const maxPoints = list.length > 0 ? Math.max(list[0].points, 1) : 1;
+
+    // Leader info pour le hero de la modale
+    if (this.scoreboardLeaderName && this.scoreboardLeaderPoints) {
+      if (list.length > 0 && list[0].points > 0) {
+        this.scoreboardLeaderName.textContent = list[0].name;
+        this.scoreboardLeaderPoints.textContent = `${list[0].points} point${list[0].points > 1 ? 's' : ''}`;
+        if (this.scoreboardLeaderIcon) this.scoreboardLeaderIcon.textContent = '👑';
+      } else if (list.length > 0) {
+        this.scoreboardLeaderName.textContent = list[0].name;
+        this.scoreboardLeaderPoints.textContent = `0 pt`;
+        if (this.scoreboardLeaderIcon) this.scoreboardLeaderIcon.textContent = '🎲';
       } else {
-        roleBadge = `<span class="role-badge-tag mrwhite">M. Blanc</span>`;
+        this.scoreboardLeaderName.textContent = 'Aucun joueur';
+        this.scoreboardLeaderPoints.textContent = '0 pt';
+        if (this.scoreboardLeaderIcon) this.scoreboardLeaderIcon.textContent = '🏆';
+      }
+    }
+
+    const generateLeaderboardHtml = () => {
+      if (list.length === 0) {
+        return `<div class="empty-leaderboard-hint">Aucun score enregistré pour cette session. Lancez une partie pour commencer ! 🚀</div>`;
       }
 
-      const statusBadge = p.isAlive
-        ? `<span class="badge" style="background: rgba(16, 185, 129, 0.2); color: var(--color-success);">Vivant</span>`
-        : `<span class="badge" style="background: rgba(239, 68, 68, 0.2); color: var(--color-danger);">Éliminé</span>`;
+      return list.map((item, index) => {
+        const rank = index + 1;
+        let rankBadge = '';
+        let rankClass = '';
+        if (rank === 1) {
+          rankBadge = '🥇';
+          rankClass = 'is-rank-1';
+        } else if (rank === 2) {
+          rankBadge = '🥈';
+          rankClass = 'is-rank-2';
+        } else if (rank === 3) {
+          rankBadge = '🥉';
+          rankClass = 'is-rank-3';
+        } else {
+          rankBadge = `#${rank}`;
+          rankClass = 'is-rank-other';
+        }
 
-      row.innerHTML = `
-        <div class="end-player-info">
-          <div class="player-avatar" style="background: ${p.avatarColor}; width: 32px; height: 32px;">
-            ${p.name.charAt(0).toUpperCase()}
-          </div>
-          <div>
-            <strong>${p.name}</strong>
-            <div style="font-size: 0.8rem; color: var(--text-muted);">${wordLabel}</div>
-          </div>
-        </div>
-        <div style="display: flex; align-items: center; gap: 8px;">
-          ${roleBadge}
-          ${statusBadge}
-        </div>
-      `;
+        const pct = Math.round((item.points / maxPoints) * 100);
+        const playerInGame = this.game && this.game.players ? this.game.players.find(p => p.name === item.name) : null;
+        const roundPts = (playerInGame && this.game.roundPoints) ? this.game.roundPoints[playerInGame.id] : null;
+        const roundBonusPill = (roundPts !== null && roundPts !== undefined && roundPts > 0)
+          ? `<span class="round-delta-tag">+${roundPts} ce tour</span>`
+          : '';
 
-      this.endPlayersList.appendChild(row);
-    });
+        return `
+          <div class="leaderboard-item ${rankClass}">
+            <div class="leaderboard-item-header">
+              <div class="leaderboard-player-col">
+                <span class="leaderboard-rank-badge ${rankClass}">${rankBadge}</span>
+                <div class="player-avatar" style="background: ${item.color}; width: 28px; height: 28px; font-size: 0.8rem;">
+                  ${item.name.charAt(0).toUpperCase()}
+                </div>
+                <strong class="leaderboard-player-name">${item.name}</strong>
+                ${roundBonusPill}
+              </div>
+              <div class="leaderboard-score-val">
+                <strong>${item.points}</strong> <small>pt${item.points > 1 ? 's' : ''}</small>
+              </div>
+            </div>
+            <div class="leaderboard-progress-track">
+              <div class="leaderboard-progress-fill ${rankClass}" style="width: ${pct}%;"></div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    };
+
+    if (this.modalScoreboardList) {
+      this.modalScoreboardList.innerHTML = generateLeaderboardHtml();
+    }
+    if (this.endSessionLeaderboard) {
+      this.endSessionLeaderboard.innerHTML = generateLeaderboardHtml();
+    }
   }
 
   renderCustomWordsList() {
@@ -2806,28 +3188,28 @@ class UndercoverApp {
   }
 
   renderStatsModal() {
-    const stats = UndercoverGame.getGameStats();
+    const stats = EspionnageGame.getGameStats();
     if (this.statTotalGames) this.statTotalGames.textContent = stats.totalGames;
 
     const total = stats.totalGames || 1;
     const civilPct = Math.round((stats.civilWins / total) * 100);
-    const undercoverPct = Math.round((stats.undercoverWins / total) * 100);
-    const whitePct = Math.round((stats.whiteWins / total) * 100);
+    const spyPct = Math.round((stats.spyWins / total) * 100);
+    const diplomatPct = Math.round((stats.diplomatWins / total) * 100);
 
     if (this.statCivilPct) this.statCivilPct.textContent = `${stats.civilWins} (${civilPct}%)`;
     if (this.statCivilBar) this.statCivilBar.style.width = `${civilPct}%`;
 
-    if (this.statUndercoverPct) this.statUndercoverPct.textContent = `${stats.undercoverWins} (${undercoverPct}%)`;
-    if (this.statUndercoverBar) this.statUndercoverBar.style.width = `${undercoverPct}%`;
+    if (this.statSpyPct) this.statSpyPct.textContent = `${stats.spyWins} (${spyPct}%)`;
+    if (this.statSpyBar) this.statSpyBar.style.width = `${spyPct}%`;
 
-    if (this.statWhitePct) this.statWhitePct.textContent = `${stats.whiteWins} (${whitePct}%)`;
-    if (this.statWhiteBar) this.statWhiteBar.style.width = `${whitePct}%`;
+    if (this.statDiplomatPct) this.statDiplomatPct.textContent = `${stats.diplomatWins} (${diplomatPct}%)`;
+    if (this.statDiplomatBar) this.statDiplomatBar.style.width = `${diplomatPct}%`;
   }
 }
 
 // Initialisation globale au chargement de la page
 window.addEventListener('DOMContentLoaded', () => {
-  window.undercoverApp = new UndercoverApp();
+  window.espionnageApp = new EspionnageApp();
 
   if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
     navigator.serviceWorker.register('./sw.js').then(reg => {

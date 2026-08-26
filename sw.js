@@ -1,4 +1,4 @@
-const CACHE_NAME = 'undercover-v3';
+const CACHE_NAME = 'espionnage-v13';
 const ASSETS_TO_PRECACHE = [
   './',
   './index.html',

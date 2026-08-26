@@ -1,11 +1,11 @@
 {
-  "name": "Undercover - Jeu d'Ambiance & Déduction",
-  "short_name": "Undercover",
+  "name": "Espionnage - Jeu d'Ambiance & Déduction",
+  "short_name": "Espionnage",
   "description": "Jeu d'ambiance et de déduction sociale entre amis avec des centaines de mots en français.",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#0b0f19",
-  "theme_color": "#0b0f19",
+  "background_color": "#060810",
+  "theme_color": "#060810",
   "orientation": "portrait-primary",
   "lang": "fr",
   "icons": [

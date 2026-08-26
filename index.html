@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Undercover - Le Jeu d'Ambiance & Déduction</title>
-  <meta name="description" content="Jeu d'ambiance Undercover gratuit en français. Jouez entre amis en mode Passe et Joue avec des centaines de mots secrets !">
-  <meta name="theme-color" content="#0b0f19" id="meta-theme-color">
+  <title>Espionnage - Le Jeu d'Ambiance & Déduction</title>
+  <meta name="description" content="Jeu d'ambiance et de déduction Espionnage gratuit en français. Jouez entre amis en mode Passe et Joue avec des centaines de mots secrets !">
+  <meta name="theme-color" content="#060810" id="meta-theme-color">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <link rel="manifest" href="manifest.json">
@@ -17,7 +17,7 @@
   <script>
     (function() {
       try {
-        var savedTheme = localStorage.getItem('undercover_ui_theme') || 'dark';
+        var savedTheme = localStorage.getItem('espionnage_ui_theme') || 'dark';
         document.documentElement.setAttribute('data-theme', savedTheme);
       } catch (e) {}
     })();
@@ -35,11 +35,14 @@
     <header class="app-header">
       <div class="brand" id="brand-home-btn" role="button" tabindex="0" title="Retour accueil">
         <span class="brand-icon">🕵️</span>
-        <span class="brand-name">UNDERCOVER</span>
+        <span class="brand-name">ESPIONNAGE</span>
       </div>
       <div class="header-actions">
         <button id="btn-sound-toggle" class="icon-btn" aria-label="Activer ou couper le son" title="Son">
           <span id="sound-icon">🔊</span>
+        </button>
+        <button id="btn-scoreboard-modal" class="icon-btn" aria-label="Tableau des scores" title="Classement & Scores">
+          <span>🏆</span>
         </button>
         <button id="btn-settings-modal" class="icon-btn" aria-label="Options & Règles" title="Options de la partie">
           <span>⚙️</span>
@@ -151,35 +154,35 @@
               </div>
             </div>
 
-            <!-- UNDERCOVER -->
-            <div class="role-control-row role-undercover">
+            <!-- ESPION -->
+            <div class="role-control-row role-spy">
               <div class="role-info">
-                <span class="role-badge-tag undercover">Undercover</span>
+                <span class="role-badge-tag spy">Espion</span>
                 <span class="role-desc">Reçoivent un mot très proche</span>
               </div>
               <div class="counter-control">
-                <button class="counter-btn" id="btn-dec-undercovers" aria-label="Moins d'undercovers">-</button>
-                <span class="counter-value" id="val-undercovers">1</span>
-                <button class="counter-btn" id="btn-inc-undercovers" aria-label="Plus d'undercovers">+</button>
+                <button class="counter-btn" id="btn-dec-spies" aria-label="Moins d'espions">-</button>
+                <span class="counter-value" id="val-spies">1</span>
+                <button class="counter-btn" id="btn-inc-spies" aria-label="Plus d'espions">+</button>
               </div>
             </div>
 
-            <!-- M. BLANC -->
-            <div class="role-control-row role-mrwhite">
+            <!-- DIPLOMATE -->
+            <div class="role-control-row role-diplomat">
               <div class="role-info">
-                <span class="role-badge-tag mrwhite">M. Blanc</span>
+                <span class="role-badge-tag diplomat">Diplomate</span>
                 <span class="role-desc">N'a aucun mot, doit bluffer</span>
               </div>
               <div class="counter-control">
-                <button class="counter-btn" id="btn-dec-mrwhite" aria-label="Moins de M. Blanc">-</button>
-                <span class="counter-value" id="val-mrwhite">0</span>
-                <button class="counter-btn" id="btn-inc-mrwhite" aria-label="Plus de M. Blanc">+</button>
+                <button class="counter-btn" id="btn-dec-diplomats" aria-label="Moins de diplomates">-</button>
+                <span class="counter-value" id="val-diplomats">0</span>
+                <button class="counter-btn" id="btn-inc-diplomats" aria-label="Plus de diplomates">+</button>
               </div>
             </div>
           </div>
 
-          <div id="role-validation-hint" class="role-hint">
-            <!-- Message de validation automatique -->
+          <div id="role-validation-hint" class="role-hint hidden">
+            <!-- Message de validation affiché uniquement en cas d'erreur -->
           </div>
         </div>
 
@@ -233,10 +236,10 @@
           </div>
           <div class="options-toggles-list">
             <!-- RÈGLE 1 : RÔLES VISIBLES -->
-            <label class="option-toggle-row" for="opt-show-roles">
+            <label class="option-toggle-row">
               <div class="option-text-col">
                 <span class="option-title">👁️ Rôles connus</span>
-                <span class="option-desc">Afficher si on est Civil ou Undercover dès la révélation</span>
+                <span class="option-desc">Afficher si on est Civil ou Espion dès la révélation</span>
               </div>
               <div class="toggle-wrapper">
                 <input type="checkbox" id="opt-show-roles" class="toggle-checkbox">
@@ -245,7 +248,7 @@
             </label>
 
             <!-- RÈGLE 2 : VOTE ANONYME -->
-            <label class="option-toggle-row" for="opt-anon-voting">
+            <label class="option-toggle-row">
               <div class="option-text-col">
                 <span class="option-title">🗳️ Vote anonyme</span>
                 <span class="option-desc">Vote secret joueur par joueur sur le téléphone avec gestion des ex æquo</span>
@@ -257,7 +260,7 @@
             </label>
 
             <!-- RÈGLE 3 : AFFICHER LES DÉTAILS -->
-            <label class="option-toggle-row" for="opt-show-details">
+            <label class="option-toggle-row">
               <div class="option-text-col">
                 <span class="option-title">💡 Explications & Détails</span>
                 <span class="option-desc">Afficher les descriptions et aides de jeu dans l'interface</span>
@@ -365,17 +368,6 @@
           </div>
           <div id="clues-players-list" class="clues-players-list">
             <!-- Rempli dynamiquement -->
-          </div>
-        </div>
-
-        <!-- CHRONOMÈTRE OPTIONNEL -->
-        <div class="card timer-card">
-          <div class="timer-display">
-            <span class="timer-digits" id="timer-display">00:45</span>
-            <div class="timer-controls">
-              <button id="btn-timer-toggle" class="btn btn-secondary btn-icon" title="Démarrer/Pause">▶️</button>
-              <button id="btn-timer-reset" class="btn btn-secondary btn-icon" title="Réinitialiser">🔄</button>
-            </div>
           </div>
         </div>
 
@@ -536,7 +528,7 @@
         <div class="victory-banner" id="victory-banner">
           <div class="victory-trophy" id="victory-icon">🏆</div>
           <h1 class="victory-title" id="victory-title">Victoire des Civils !</h1>
-          <p class="victory-reason" id="victory-reason">Tous les Undercovers et M. Blanc ont été démasqués.</p>
+          <p class="victory-reason" id="victory-reason">Tous les Espions et le Diplomate ont été démasqués.</p>
         </div>
 
         <!-- RÉSUMÉ DES MOTS SECRETS -->
@@ -547,28 +539,41 @@
               <span class="word-box-label">Mot des Civils</span>
               <strong class="word-box-val" id="end-civil-word">Croissant</strong>
             </div>
-            <div class="word-box undercover-box">
-              <span class="word-box-label">Mot des Undercovers</span>
-              <strong class="word-box-val" id="end-undercover-word">Pain au chocolat</strong>
+            <div class="word-box spy-box">
+              <span class="word-box-label">Mot des Espions</span>
+              <strong class="word-box-val" id="end-spy-word">Pain au chocolat</strong>
             </div>
           </div>
         </div>
 
         <!-- TABLEAU RÉCAPITULATIF DE TOUS LES JOUEURS -->
         <div class="card players-summary-card">
-          <h2 class="card-title">🎭 Rôles révélés</h2>
+          <h2 class="card-title">🎭 Rôles révélés & Points de manche</h2>
           <div id="end-players-list" class="end-players-list">
-            <!-- Liste détaillée des rôles -->
+            <!-- Liste détaillée des rôles et points -->
+          </div>
+        </div>
+
+        <!-- CLASSEMENT DE LA SESSION -->
+        <div class="card session-scoreboard-card">
+          <div class="card-header-row">
+            <h2 class="card-title">
+              <span>🏆 Classement de la session</span>
+            </h2>
+            <button id="btn-end-reset-scores" class="text-btn text-danger" title="Remettre les scores de session à zéro">🔄 Réinitialiser</button>
+          </div>
+          <div id="end-session-leaderboard" class="session-leaderboard-list">
+            <!-- Rempli dynamiquement -->
           </div>
         </div>
 
         <!-- ACTIONS DE FIN -->
         <div class="game-over-actions">
           <button id="btn-play-again-same" class="btn btn-primary btn-large btn-glow">
-            <span>Rejouer (Mêmes joueurs)</span> 🔄
+            <span>Manche suivante (Garder les scores)</span> 🔄
           </button>
           <button id="btn-new-game-setup" class="btn btn-secondary btn-large">
-            <span>Changer la configuration</span> ⚙️
+            <span>Nouvelle partie (Réinitialiser les scores)</span> ⚙️
           </button>
         </div>
       </section>
@@ -581,13 +586,13 @@
     <div id="modal-rules" class="modal-overlay hidden">
       <div class="modal-card">
         <div class="modal-header">
-          <h2 class="modal-title">📖 Règles d'Undercover</h2>
+          <h2 class="modal-title">📖 Règles d'Espionnage</h2>
           <button class="modal-close-btn" data-close="modal-rules">✕</button>
         </div>
         <div class="modal-body rules-body">
           <div class="rule-section">
             <h3>🎯 Le But du jeu</h3>
-            <p>Démasquer les imposteurs (Undercovers et M. Blanc) ou survivre si vous en faites partie !</p>
+            <p>Démasquer les imposteurs (Espions et Diplomate) ou survivre si vous en faites partie !</p>
           </div>
 
           <div class="rule-section">
@@ -595,11 +600,11 @@
             <div class="rule-role-item civil">
               <strong>🛡️ Les Civils :</strong> Ils reçoivent tous le même mot secret. Ils doivent se reconnaître entre eux et éliminer les intrus.
             </div>
-            <div class="rule-role-item undercover">
-              <strong>🕶️ L'Undercover :</strong> Il reçoit un mot très proche mais différent de celui des civils. Il ne sait pas qu'il est infiltré au début !
+            <div class="rule-role-item spy">
+              <strong>🕶️ L'Espion :</strong> Il reçoit un mot très proche mais différent de celui des civils. Il ne sait pas qu'il est l'espion infiltré au début !
             </div>
-            <div class="rule-role-item mrwhite">
-              <strong>🎭 M. Blanc :</strong> Il ne reçoit aucun mot. Son but est de deviner de quoi parlent les autres, de bluffer et d'échapper aux votes.
+            <div class="rule-role-item diplomat">
+              <strong>🎭 Le Diplomate :</strong> Il ne reçoit aucun mot. Son but est de deviner de quoi parlent les autres, de bluffer et d'échapper aux votes.
             </div>
           </div>
 
@@ -609,8 +614,31 @@
               <li><strong>Passe & Joue :</strong> Chacun regarde discrètement son mot.</li>
               <li><strong>Tour d'indices :</strong> Chaque joueur donne 1 mot ou 1 phrase d'indice décrivant son mot secret.</li>
               <li><strong>Vote :</strong> Les joueurs débattent et votent pour éliminer un joueur suspect.</li>
-              <li><strong>Dernière chance M. Blanc :</strong> Si M. Blanc est éliminé, il a une chance unique de deviner le mot civil pour voler la victoire !</li>
+              <li><strong>Dernière chance du Diplomate :</strong> Si le Diplomate est éliminé, il a une chance unique de deviner le mot civil pour voler la victoire !</li>
             </ol>
+          </div>
+
+          <div class="rule-section">
+            <h3>🏆 Système de Points</h3>
+            <p>À chaque manche, les joueurs de l'équipe victorieuse marquent des points pour le classement de la session :</p>
+            <div class="rule-points-grid">
+              <div class="rule-point-card civil">
+                <div class="rule-point-val">+2 pts</div>
+                <div class="rule-point-role">🛡️ Civils</div>
+                <small>Victoire si tous les imposteurs sont éliminés</small>
+              </div>
+              <div class="rule-point-card diplomat">
+                <div class="rule-point-val">+6 pts</div>
+                <div class="rule-point-role">🎭 Diplomate</div>
+                <small>Victoire par survie ou devinette du mot civil</small>
+              </div>
+              <div class="rule-point-card spy">
+                <div class="rule-point-val">+10 pts</div>
+                <div class="rule-point-role">🕶️ Espion</div>
+                <small>Victoire si les espions prennent le dessus</small>
+              </div>
+            </div>
+            <p class="rule-subnote"><em>Note : En cas de victoire conjointe des Infiltrés (Espions + Diplomates), les Espions marquent +10 pts et les Diplomates +6 pts. Les vaincus marquent 0 pt.</em></p>
           </div>
         </div>
         <div class="modal-footer">
@@ -620,31 +648,31 @@
     </div>
 
     <!-- ======================================================== -->
-    <!-- MODAL : DERNIÈRE CHANCE DE M. BLANC                      -->
+    <!-- MODAL : DERNIÈRE CHANCE DU DIPLOMATE                     -->
     <!-- ======================================================== -->
-    <div id="modal-mrwhite-guess" class="modal-overlay hidden">
-      <div class="modal-card special-mrwhite-modal">
+    <div id="modal-diplomat-guess" class="modal-overlay hidden">
+      <div class="modal-card special-diplomat-modal">
         <div class="modal-header">
-          <h2 class="modal-title">🎭 Dernière Chance de M. Blanc !</h2>
+          <h2 class="modal-title">🎭 Dernière Chance du Diplomate !</h2>
         </div>
         <div class="modal-body text-center">
-          <div class="mrwhite-avatar-badge">M. Blanc</div>
-          <p id="mrwhite-guess-intro" class="mrwhite-modal-text">
-            <strong>Alex</strong> a été éliminé mais était M. Blanc !
+          <div class="diplomat-avatar-badge">Diplomate</div>
+          <p id="diplomat-guess-intro" class="diplomat-modal-text">
+            <strong>Alex</strong> a été éliminé mais était le Diplomate !
           </p>
-          <p class="mrwhite-modal-subtext">
+          <p class="diplomat-modal-subtext">
             S'il devine le mot secret exact des Civils, il gagne immédiatement la partie !
           </p>
 
           <div class="guess-input-container">
-            <input type="text" id="input-mrwhite-guess" placeholder="Entrez le mot secret civil..." maxlength="30" autocomplete="off">
+            <input type="text" id="input-diplomat-guess" placeholder="Entrez le mot secret civil..." maxlength="30" autocomplete="off">
           </div>
         </div>
         <div class="modal-footer">
-          <button id="btn-submit-mrwhite-guess" class="btn btn-primary">
+          <button id="btn-submit-diplomat-guess" class="btn btn-primary">
             <span>Tenter ma chance 🎯</span>
           </button>
-          <button id="btn-skip-mrwhite-guess" class="btn btn-secondary">
+          <button id="btn-skip-diplomat-guess" class="btn btn-secondary">
             <span>Je ne sais pas (Passer)</span>
           </button>
         </div>
@@ -673,8 +701,8 @@
           <h3 class="subsection-title">Ajouter vos propres mots</h3>
           <form id="form-custom-words" class="custom-words-form" onsubmit="return false;">
             <div class="input-pair-row">
-              <input type="text" id="input-custom-word1" placeholder="Mot Civil (ex: Pain)" maxlength="25" required>
-              <input type="text" id="input-custom-word2" placeholder="Mot Undercover (ex: Brioche)" maxlength="25" required>
+              <input type="text" id="input-custom-word1" placeholder="Mot 1 (ex: Mer)" maxlength="25" required>
+              <input type="text" id="input-custom-word2" placeholder="Mot 2 (ex: Plage)" maxlength="25" required>
             </div>
             <button type="submit" id="btn-add-custom-word" class="btn btn-secondary">
               <span>Ajouter cette paire</span> ➕
@@ -690,6 +718,51 @@
         </div>
         <div class="modal-footer">
           <button class="btn btn-primary" data-close="modal-words">Fermer</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- MODAL : CLASSEMENT & TABLEAU DES SCORES DE LA SESSION    -->
+    <!-- ======================================================== -->
+    <div id="modal-scoreboard" class="modal-overlay hidden">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h2 class="modal-title">🏆 Tableau des Scores</h2>
+          <button class="modal-close-btn" data-close="modal-scoreboard">✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="scoreboard-hero">
+            <div class="scoreboard-hero-icon" id="scoreboard-leader-icon">👑</div>
+            <div class="scoreboard-hero-info">
+              <span class="scoreboard-hero-subtitle">En tête du classement</span>
+              <h3 id="scoreboard-leader-name" class="scoreboard-hero-title">En attente de partie</h3>
+              <div class="scoreboard-leader-badge-row">
+                <span id="scoreboard-leader-points" class="badge">0 pt</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="scoreboard-section-title">
+            <span>📊 Classement des joueurs</span>
+          </div>
+
+          <div id="modal-scoreboard-list" class="session-leaderboard-list">
+            <!-- Rempli dynamiquement -->
+          </div>
+
+          <div class="scoring-rules-reminder card">
+            <h4 class="scoring-reminder-title">Barème officiel Undercover</h4>
+            <div class="scoring-mini-pills">
+              <span class="scoring-pill civil">🛡️ Civil : <strong>+2 pts</strong></span>
+              <span class="scoring-pill diplomat">🎭 Diplomate : <strong>+6 pts</strong></span>
+              <span class="scoring-pill spy">🕶️ Espion : <strong>+10 pts</strong></span>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button id="btn-modal-reset-scores" class="btn btn-danger btn-small">🔄 Réinitialiser les scores</button>
+          <button class="btn btn-primary" data-close="modal-scoreboard">Fermer</button>
         </div>
       </div>
     </div>
@@ -722,21 +795,21 @@
 
             <div class="stat-bar-group">
               <div class="stat-bar-label">
-                <span>🕶️ Undercovers</span>
-                <strong id="stat-undercover-pct">0%</strong>
+                <span>🕶️ Espions</span>
+                <strong id="stat-spy-pct">0%</strong>
               </div>
               <div class="stat-progress-track">
-                <div id="stat-undercover-bar" class="stat-progress-fill undercover" style="width: 0%;"></div>
+                <div id="stat-spy-bar" class="stat-progress-fill spy" style="width: 0%;"></div>
               </div>
             </div>
 
             <div class="stat-bar-group">
               <div class="stat-bar-label">
-                <span>🎭 M. Blanc</span>
-                <strong id="stat-white-pct">0%</strong>
+                <span>🎭 Diplomates</span>
+                <strong id="stat-diplomat-pct">0%</strong>
               </div>
               <div class="stat-progress-track">
-                <div id="stat-white-bar" class="stat-progress-fill mrwhite" style="width: 0%;"></div>
+                <div id="stat-diplomat-bar" class="stat-progress-fill diplomat" style="width: 0%;"></div>
               </div>
             </div>
           </div>
@@ -773,8 +846,8 @@
                   <span class="swatch-circle accent" title="Accent"></span>
                 </div>
                 <div class="theme-card-text">
-                  <strong class="theme-card-name">Nébuleuse Sombre</strong>
-                  <span class="theme-card-desc">Bleu nuit & Indigo</span>
+                  <strong class="theme-card-name">Nébuleuse Sombre 🌌</strong>
+                  <span class="theme-card-desc">Nuit cosmique & Indigo</span>
                 </div>
                 <span class="theme-selected-badge">✓</span>
               </button>
@@ -788,21 +861,21 @@
                 </div>
                 <div class="theme-card-text">
                   <strong class="theme-card-name">Ivoire Raffiné ✨</strong>
-                  <span class="theme-card-desc">Blanc cassé & Lin chic</span>
+                  <span class="theme-card-desc">Ivoire & Lin chic</span>
                 </div>
                 <span class="theme-selected-badge">✓</span>
               </button>
 
-              <!-- THÈME 3 : MINUIT SAPHIR -->
-              <button type="button" class="theme-card-btn" data-theme-val="midnight" title="Thème Minuit Saphir">
+              <!-- THÈME 3 : MENTHE PASTEL -->
+              <button type="button" class="theme-card-btn" data-theme-val="midnight" title="Thème Menthe Pastel">
                 <div class="theme-swatch-row swatch-midnight">
                   <span class="swatch-circle bg" title="Fond"></span>
                   <span class="swatch-circle surface" title="Surface"></span>
                   <span class="swatch-circle accent" title="Accent"></span>
                 </div>
                 <div class="theme-card-text">
-                  <strong class="theme-card-name">Minuit Saphir</strong>
-                  <span class="theme-card-desc">Abysses & Cyan</span>
+                  <strong class="theme-card-name">Menthe Pastel 🌿</strong>
+                  <span class="theme-card-desc">Menthe & Vert doux</span>
                 </div>
                 <span class="theme-selected-badge">✓</span>
               </button>
@@ -815,8 +888,8 @@
                   <span class="swatch-circle accent" title="Accent"></span>
                 </div>
                 <div class="theme-card-text">
-                  <strong class="theme-card-name">Obsidienne OLED</strong>
-                  <span class="theme-card-desc">Noir pur & Violet</span>
+                  <strong class="theme-card-name">Obsidienne OLED ✨</strong>
+                  <span class="theme-card-desc">Noir pur & Doré</span>
                 </div>
                 <span class="theme-selected-badge">✓</span>
               </button>
@@ -830,10 +903,10 @@
             <p class="modal-settings-intro">Ces réglages s'appliquent immédiatement :</p>
             <div class="options-toggles-list">
               <!-- RÈGLE 1 : RÔLES VISIBLES -->
-              <label class="option-toggle-row" for="modal-opt-show-roles">
+              <label class="option-toggle-row">
                 <div class="option-text-col">
                   <span class="option-title">👁️ Rôles connus</span>
-                  <span class="option-desc">Afficher si on est Civil ou Undercover dès la révélation</span>
+                  <span class="option-desc">Afficher si on est Civil ou Espion dès la révélation</span>
                 </div>
                 <div class="toggle-wrapper">
                   <input type="checkbox" id="modal-opt-show-roles" class="toggle-checkbox">
@@ -842,7 +915,7 @@
               </label>
 
               <!-- RÈGLE 2 : VOTE ANONYME -->
-              <label class="option-toggle-row" for="modal-opt-anon-voting">
+              <label class="option-toggle-row">
                 <div class="option-text-col">
                   <span class="option-title">🗳️ Vote anonyme</span>
                   <span class="option-desc">Vote secret tour par tour sur le téléphone avec gestion des ex æquo</span>
@@ -854,7 +927,7 @@
               </label>
 
               <!-- RÈGLE 3 : AFFICHER LES DÉTAILS -->
-              <label class="option-toggle-row" for="modal-opt-show-details">
+              <label class="option-toggle-row">
                 <div class="option-text-col">
                   <span class="option-title">💡 Explications & Détails</span>
                   <span class="option-desc">Afficher les descriptions et aides de jeu dans l'interface</span>
@@ -869,19 +942,44 @@
 
           <!-- MÉMOIRE ANTI-RÉPÉTITION DES MOTS -->
           <div class="settings-group">
-            <h3 class="settings-group-title">🧠 Mémoire des mots joués</h3>
-            <p class="modal-settings-intro">Undercover retient les paires déjà sorties pour ne jamais proposer de doublons tant que la liste n'est pas épuisée.</p>
+            <div class="settings-group-header-row">
+              <h3 class="settings-group-title">🧠 Mémoire & Mots restants</h3>
+              <button type="button" id="btn-reset-played-words" class="btn btn-secondary btn-sm" title="Réinitialiser l'historique des mots">
+                🔄 Réinitialiser tout
+              </button>
+            </div>
+            <p class="modal-settings-intro">Espionnage retient les paires déjà jouées pour éviter les doublons. Voici l'état des mots restants pour chaque liste :</p>
+            
+            <!-- RÉSUMÉ GLOBAL -->
             <div class="played-words-status-box">
               <div class="played-words-info-col">
                 <div class="played-words-counter-row">
-                  <span class="played-words-lbl">Paires jouées :</span>
+                  <span class="played-words-lbl">Total catalogue :</span>
                   <strong id="settings-played-words-badge" class="played-words-badge">0 / 0</strong>
                 </div>
-                <span id="settings-played-words-desc" class="played-words-desc">Aucune répétition en cours</span>
+                <span id="settings-played-words-desc" class="played-words-desc">Calcul en cours...</span>
               </div>
-              <button type="button" id="btn-reset-played-words" class="btn btn-secondary btn-sm">
-                🔄 Réinitialiser la mémoire
-              </button>
+            </div>
+
+            <!-- DETAIL PAR TRANCHES D'AGE / LISTES -->
+            <div class="lists-breakdown-card" style="margin-top: 10px;">
+              <h4 class="subgroup-title">🎯 Mots restants par liste</h4>
+              <div id="settings-age-stats-list" class="stats-breakdown-list">
+                <!-- Rempli dynamiquement en JS -->
+              </div>
+            </div>
+
+            <!-- DETAIL PAR THEMES / CATEGORIES -->
+            <div class="lists-breakdown-card" style="margin-top: 10px;">
+              <div class="card-header-row" style="margin-bottom: 6px;">
+                <h4 class="subgroup-title">🏷️ Mots restants par thème</h4>
+                <button type="button" id="btn-toggle-cat-stats" class="text-btn" style="font-size: 0.8rem;">
+                  <span id="cat-stats-toggle-label">Voir le détail</span> ▾
+                </button>
+              </div>
+              <div id="settings-cat-stats-list" class="stats-category-grid hidden">
+                <!-- Rempli dynamiquement en JS -->
+              </div>
             </div>
           </div>
 

@@ -1,14 +1,14 @@
 {
-  "name": "undercover-game",
+  "name": "espionnage-game",
   "version": "1.0.0",
-  "description": "Jeu d'ambiance et de déduction sociale Undercover en version Web & Mobile PWA",
+  "description": "Jeu d'ambiance et de déduction sociale Espionnage en version Web & Mobile PWA",
   "type": "module",
   "scripts": {
     "dev": "npx serve . -l 3000",
     "start": "npx serve . -l 3000"
   },
   "keywords": [
-    "undercover",
+    "espionnage",
     "party-game",
     "game",
     "pwa",

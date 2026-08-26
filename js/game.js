@@ -1,11 +1,17 @@
 /**
- * Moteur de règles et état de jeu pour Undercover
+ * Moteur de règles et état de jeu pour Espionnage
  */
 
 export const ROLES = {
   CIVIL: 'civil',
-  UNDERCOVER: 'undercover',
-  MR_WHITE: 'mrwhite'
+  SPY: 'spy',
+  DIPLOMAT: 'diplomat'
+};
+
+export const POINTS_CONFIG = {
+  [ROLES.CIVIL]: 2,
+  [ROLES.DIPLOMAT]: 6,
+  [ROLES.SPY]: 10
 };
 
 export const PHASES = {
@@ -13,17 +19,17 @@ export const PHASES = {
   REVEAL: 'reveal',
   CLUES: 'clues',
   VOTING: 'voting',
-  MR_WHITE_GUESS: 'mr_white_guess',
+  DIPLOMAT_GUESS: 'diplomat_guess',
   GAME_OVER: 'game_over'
 };
 
-export class UndercoverGame {
+export class EspionnageGame {
   constructor(wordRepository) {
     this.wordRepo = wordRepository;
     this.players = []; // [{ id, name, role, word, isAlive, avatarColor }]
     this.wordPair = null; // { word1, word2, category }
     this.civilWord = '';
-    this.undercoverWord = '';
+    this.spyWord = '';
     this.phase = PHASES.SETUP;
     
     // Suivi de la distribution
@@ -34,11 +40,12 @@ export class UndercoverGame {
     this.startingPlayerIndex = 0;
     this.clueCurrentPlayerIndex = 0;
     this.eliminatedThisRound = null;
-    this.mrWhiteAwaitingGuess = null;
+    this.diplomatAwaitingGuess = null;
 
-    // Résultat final
-    this.winner = null; // 'civils' | 'undercovers' | 'mrwhite'
+    // Résultat final & Points de manche
+    this.winner = null; // 'civil' | 'spy' | 'diplomat' | 'infiltrators'
     this.winReason = '';
+    this.roundPoints = {}; // { [playerId]: number }
     this.playedWordPairs = [];
 
     // Options et vote anonyme
@@ -53,22 +60,22 @@ export class UndercoverGame {
    * Calcule la recommandation de rôles par défaut selon le nombre de joueurs
    */
   static getRecommendedRoles(playerCount) {
-    if (playerCount < 3) return { civils: 3, undercovers: 0, mrWhite: 0 };
-    if (playerCount === 3) return { civils: 2, undercovers: 1, mrWhite: 0 };
-    if (playerCount === 4) return { civils: 3, undercovers: 1, mrWhite: 0 };
-    if (playerCount === 5) return { civils: 3, undercovers: 1, mrWhite: 1 };
-    if (playerCount === 6) return { civils: 4, undercovers: 1, mrWhite: 1 };
-    if (playerCount === 7) return { civils: 5, undercovers: 1, mrWhite: 1 };
-    if (playerCount === 8) return { civils: 5, undercovers: 2, mrWhite: 1 };
-    if (playerCount === 9) return { civils: 6, undercovers: 2, mrWhite: 1 };
-    if (playerCount === 10) return { civils: 6, undercovers: 2, mrWhite: 2 };
-    if (playerCount <= 12) return { civils: playerCount - 4, undercovers: 3, mrWhite: 1 };
+    if (playerCount < 3) return { civils: 3, spies: 0, diplomats: 0 };
+    if (playerCount === 3) return { civils: 2, spies: 1, diplomats: 0 };
+    if (playerCount === 4) return { civils: 3, spies: 1, diplomats: 0 };
+    if (playerCount === 5) return { civils: 3, spies: 1, diplomats: 1 };
+    if (playerCount === 6) return { civils: 4, spies: 1, diplomats: 1 };
+    if (playerCount === 7) return { civils: 5, spies: 1, diplomats: 1 };
+    if (playerCount === 8) return { civils: 5, spies: 2, diplomats: 1 };
+    if (playerCount === 9) return { civils: 6, spies: 2, diplomats: 1 };
+    if (playerCount === 10) return { civils: 6, spies: 2, diplomats: 2 };
+    if (playerCount <= 12) return { civils: playerCount - 4, spies: 3, diplomats: 1 };
     
     // 13+ joueurs
-    const uc = Math.max(2, Math.floor(playerCount / 4));
-    const mw = Math.max(1, Math.floor(playerCount / 6));
-    const civ = playerCount - uc - mw;
-    return { civils: civ, undercovers: uc, mrWhite: mw };
+    const sp = Math.max(2, Math.floor(playerCount / 4));
+    const dip = Math.max(1, Math.floor(playerCount / 6));
+    const civ = playerCount - sp - dip;
+    return { civils: civ, spies: sp, diplomats: dip };
   }
 
   /**
@@ -82,7 +89,7 @@ export class UndercoverGame {
     this.options = Object.assign({ showRoles: false, anonymousVoting: false }, options);
     this.anonymousVotes = {};
 
-    const totalRoles = roleConfig.civils + roleConfig.undercovers + roleConfig.mrWhite;
+    const totalRoles = roleConfig.civils + roleConfig.spies + roleConfig.diplomats;
     if (totalRoles !== playerNames.length) {
       throw new Error(`La somme des rôles (${totalRoles}) ne correspond pas au nombre de joueurs (${playerNames.length}).`);
     }
@@ -96,13 +103,13 @@ export class UndercoverGame {
     }
     this.wordPair = pairResult;
     this.civilWord = this.wordPair.word1;
-    this.undercoverWord = this.wordPair.word2;
+    this.spyWord = this.wordPair.word2;
 
     // Créer la liste des rôles
     const rolesPool = [];
     for (let i = 0; i < roleConfig.civils; i++) rolesPool.push(ROLES.CIVIL);
-    for (let i = 0; i < roleConfig.undercovers; i++) rolesPool.push(ROLES.UNDERCOVER);
-    for (let i = 0; i < roleConfig.mrWhite; i++) rolesPool.push(ROLES.MR_WHITE);
+    for (let i = 0; i < roleConfig.spies; i++) rolesPool.push(ROLES.SPY);
+    for (let i = 0; i < roleConfig.diplomats; i++) rolesPool.push(ROLES.DIPLOMAT);
 
     // Mélanger les rôles (Fisher-Yates)
     for (let i = rolesPool.length - 1; i > 0; i--) {
@@ -122,8 +129,8 @@ export class UndercoverGame {
       const role = rolesPool[index];
       let word = '';
       if (role === ROLES.CIVIL) word = this.civilWord;
-      else if (role === ROLES.UNDERCOVER) word = this.undercoverWord;
-      else word = null; // M. Blanc
+      else if (role === ROLES.SPY) word = this.spyWord;
+      else word = null; // Diplomate
 
       return {
         id: `p_${index}_${Date.now()}`,
@@ -139,9 +146,10 @@ export class UndercoverGame {
     this.currentRevealIndex = 0;
     this.roundNumber = 1;
     this.eliminatedThisRound = null;
-    this.mrWhiteAwaitingGuess = null;
+    this.diplomatAwaitingGuess = null;
     this.winner = null;
     this.winReason = '';
+    this.roundPoints = {};
   }
 
   setOptions(options) {
@@ -257,7 +265,7 @@ export class UndercoverGame {
   /**
    * Élimine un joueur selon le vote
    * @param {string} playerId 
-   * @returns {Object} { eliminatedPlayer, winStatus, requiresMrWhiteGuess }
+   * @returns {Object} { eliminatedPlayer, winStatus, requiresDiplomatGuess }
    */
   eliminatePlayer(playerId) {
     const target = this.players.find(p => p.id === playerId);
@@ -268,14 +276,15 @@ export class UndercoverGame {
     target.isAlive = false;
     this.eliminatedThisRound = target;
 
-    // Si le joueur éliminé est M. Blanc, il a le droit à une devinette finale !
-    if (target.role === ROLES.MR_WHITE) {
-      this.phase = PHASES.MR_WHITE_GUESS;
-      this.mrWhiteAwaitingGuess = target;
+    // Si le joueur éliminé est le Diplomate, il a le droit à une devinette finale !
+    if (target.role === ROLES.DIPLOMAT) {
+      this.phase = PHASES.DIPLOMAT_GUESS;
+      this.diplomatAwaitingGuess = target;
       return {
         eliminatedPlayer: target,
-        requiresMrWhiteGuess: true,
-        winStatus: null
+        requiresDiplomatGuess: true,
+        winStatus: null,
+        roundPoints: {}
       };
     }
 
@@ -285,6 +294,7 @@ export class UndercoverGame {
       this.phase = PHASES.GAME_OVER;
       this.winner = winStatus.winner;
       this.winReason = winStatus.reason;
+      this.roundPoints = this.calculateRoundPoints(winStatus.winner);
       this.recordGameStats(winStatus.winner);
     } else {
       // Pas de victoire immédiate, préparer le tour suivant
@@ -293,17 +303,42 @@ export class UndercoverGame {
 
     return {
       eliminatedPlayer: target,
-      requiresMrWhiteGuess: false,
-      winStatus: winStatus
+      requiresDiplomatGuess: false,
+      winStatus: winStatus,
+      roundPoints: this.roundPoints
     };
   }
 
   /**
-   * Traitement de la tentative de devinette de M. Blanc
+   * Calcule les points remportés par chaque joueur lors de la manche
+   * @param {string} winner
+   * @returns {Object} { [playerId]: points }
+   */
+  calculateRoundPoints(winner) {
+    const pointsMap = {};
+    this.players.forEach(player => {
+      let earned = 0;
+      if (winner === ROLES.CIVIL && player.role === ROLES.CIVIL) {
+        earned = POINTS_CONFIG[ROLES.CIVIL];
+      } else if (winner === ROLES.SPY && player.role === ROLES.SPY) {
+        earned = POINTS_CONFIG[ROLES.SPY];
+      } else if (winner === ROLES.DIPLOMAT && player.role === ROLES.DIPLOMAT) {
+        earned = POINTS_CONFIG[ROLES.DIPLOMAT];
+      } else if (winner === 'infiltrators') {
+        if (player.role === ROLES.SPY) earned = POINTS_CONFIG[ROLES.SPY];
+        else if (player.role === ROLES.DIPLOMAT) earned = POINTS_CONFIG[ROLES.DIPLOMAT];
+      }
+      pointsMap[player.id] = earned;
+    });
+    return pointsMap;
+  }
+
+  /**
+   * Traitement de la tentative de devinette du Diplomate
    * @param {string} guessedWord 
    */
-  handleMrWhiteGuess(guessedWord) {
-    if (!this.mrWhiteAwaitingGuess) return null;
+  handleDiplomatGuess(guessedWord) {
+    if (!this.diplomatAwaitingGuess) return null;
 
     const cleanGuess = this.normalizeWord(guessedWord);
     const cleanCivil = this.normalizeWord(this.civilWord);
@@ -312,28 +347,32 @@ export class UndercoverGame {
 
     if (isCorrect) {
       this.phase = PHASES.GAME_OVER;
-      this.winner = ROLES.MR_WHITE;
-      this.winReason = `${this.mrWhiteAwaitingGuess.name} (M. Blanc) a trouvé le mot exact des Civils : « ${this.civilWord} » !`;
-      this.recordGameStats(ROLES.MR_WHITE);
+      this.winner = ROLES.DIPLOMAT;
+      this.winReason = `${this.diplomatAwaitingGuess.name} (le Diplomate) a trouvé le mot exact des Civils : « ${this.civilWord} » !`;
+      this.roundPoints = this.calculateRoundPoints(ROLES.DIPLOMAT);
+      this.recordGameStats(ROLES.DIPLOMAT);
       return {
         isCorrect: true,
-        winner: ROLES.MR_WHITE,
-        reason: this.winReason
+        winner: ROLES.DIPLOMAT,
+        reason: this.winReason,
+        roundPoints: this.roundPoints
       };
     }
 
     // Devinette ratée -> continuer la partie normalement
-    this.mrWhiteAwaitingGuess = null;
+    this.diplomatAwaitingGuess = null;
     const winStatus = this.checkWinCondition();
     if (winStatus) {
       this.phase = PHASES.GAME_OVER;
       this.winner = winStatus.winner;
       this.winReason = winStatus.reason;
+      this.roundPoints = this.calculateRoundPoints(winStatus.winner);
       this.recordGameStats(winStatus.winner);
       return {
         isCorrect: false,
         winner: winStatus.winner,
-        reason: winStatus.reason
+        reason: winStatus.reason,
+        roundPoints: this.roundPoints
       };
     }
 
@@ -344,22 +383,27 @@ export class UndercoverGame {
     return {
       isCorrect: false,
       winner: null,
-      reason: "Mauvaise réponse ! La partie continue."
+      reason: "Mauvaise réponse ! La partie continue.",
+      roundPoints: {}
     };
   }
 
   /**
-   * Ignore la devinette de M. Blanc (s'il ne souhaite pas deviner ou passe)
+   * Ignore la devinette du Diplomate (s'il ne souhaite pas deviner ou passe)
    */
-  skipMrWhiteGuess() {
-    this.mrWhiteAwaitingGuess = null;
+  skipDiplomatGuess() {
+    this.diplomatAwaitingGuess = null;
     const winStatus = this.checkWinCondition();
     if (winStatus) {
       this.phase = PHASES.GAME_OVER;
       this.winner = winStatus.winner;
       this.winReason = winStatus.reason;
+      this.roundPoints = this.calculateRoundPoints(winStatus.winner);
       this.recordGameStats(winStatus.winner);
-      return winStatus;
+      return {
+        ...winStatus,
+        roundPoints: this.roundPoints
+      };
     }
 
     this.roundNumber++;
@@ -369,38 +413,61 @@ export class UndercoverGame {
   }
 
   /**
-   * Vérifie les conditions de victoire selon les règles officielles d'Undercover
+   * Vérifie les conditions de victoire selon les règles officielles d'Espionnage
    */
   checkWinCondition() {
     const alive = this.getAlivePlayers();
     const aliveCivils = alive.filter(p => p.role === ROLES.CIVIL);
-    const aliveUndercovers = alive.filter(p => p.role === ROLES.UNDERCOVER);
-    const aliveWhites = alive.filter(p => p.role === ROLES.MR_WHITE);
+    const aliveSpies = alive.filter(p => p.role === ROLES.SPY);
+    const aliveDiplomats = alive.filter(p => p.role === ROLES.DIPLOMAT);
 
-    // 1. Les Civils gagnent s'il n'y a plus AUCUN Undercover ni AUCUN M. Blanc
-    if (aliveUndercovers.length === 0 && aliveWhites.length === 0) {
+    // 1. Les Civils gagnent s'il n'y a plus AUCUN Espion ni AUCUN Diplomate
+    if (aliveSpies.length === 0 && aliveDiplomats.length === 0) {
       return {
         winner: ROLES.CIVIL,
         reason: "Les Civils ont éliminé tous les imposteurs !"
       };
     }
 
-    // 2. Les Undercovers gagnent s'il ne reste qu'un seul Civil (ou s'ils atteignent la parité avec 0 M. Blanc)
-    if (aliveUndercovers.length > 0 && aliveWhites.length === 0) {
-      if (aliveUndercovers.length >= aliveCivils.length || aliveCivils.length <= 1) {
+    // 2. Les Infiltrés gagnent s'il ne reste qu'un seul Civil (ou zéro)
+    if (aliveCivils.length <= 1 && (aliveSpies.length > 0 || aliveDiplomats.length > 0)) {
+      if (aliveSpies.length > 0 && aliveDiplomats.length > 0) {
         return {
-          winner: ROLES.UNDERCOVER,
-          reason: "Les Undercovers sont désormais en supériorité !"
+          winner: 'infiltrators',
+          reason: "Victoire conjointe des Infiltrés (Espions & Diplomates) !"
+        };
+      } else if (aliveSpies.length > 0) {
+        return {
+          winner: ROLES.SPY,
+          reason: "Les Espions ont pris le contrôle et éliminé la menace !"
+        };
+      } else {
+        return {
+          winner: ROLES.DIPLOMAT,
+          reason: "Le Diplomate a réussi à survivre jusqu'à la fin !"
         };
       }
     }
 
-    // 3. Cas M. Blanc survit jusqu'aux 2 derniers joueurs
-    if (aliveWhites.length > 0 && alive.length <= 2) {
-      return {
-        winner: ROLES.MR_WHITE,
-        reason: "M. Blanc a réussi à survivre jusqu'au duel final !"
-      };
+    // 3. Supériorité numérique des infiltrés
+    const totalInfiltrators = aliveSpies.length + aliveDiplomats.length;
+    if (totalInfiltrators >= aliveCivils.length && totalInfiltrators > 0) {
+      if (aliveSpies.length > 0 && aliveDiplomats.length > 0) {
+        return {
+          winner: 'infiltrators',
+          reason: "Les Infiltrés sont désormais en supériorité numérique !"
+        };
+      } else if (aliveSpies.length > 0) {
+        return {
+          winner: ROLES.SPY,
+          reason: "Les Espions sont désormais en supériorité numérique !"
+        };
+      } else {
+        return {
+          winner: ROLES.DIPLOMAT,
+          reason: "Le Diplomate a pris le dessus !"
+        };
+      }
     }
 
     // 4. Cas où il ne reste qu'un seul joueur au total (cas limite)
@@ -431,20 +498,24 @@ export class UndercoverGame {
    */
   recordGameStats(winningRole) {
     try {
-      const statsStr = localStorage.getItem('undercover_game_stats');
+      const statsStr = localStorage.getItem('espionnage_game_stats');
       const stats = statsStr ? JSON.parse(statsStr) : {
         totalGames: 0,
         civilWins: 0,
-        undercoverWins: 0,
-        whiteWins: 0
+        spyWins: 0,
+        diplomatWins: 0
       };
 
       stats.totalGames++;
       if (winningRole === ROLES.CIVIL) stats.civilWins++;
-      else if (winningRole === ROLES.UNDERCOVER) stats.undercoverWins++;
-      else if (winningRole === ROLES.MR_WHITE) stats.whiteWins++;
+      else if (winningRole === ROLES.SPY) stats.spyWins++;
+      else if (winningRole === ROLES.DIPLOMAT) stats.diplomatWins++;
+      else if (winningRole === 'infiltrators') {
+        stats.spyWins++;
+        stats.diplomatWins++;
+      }
 
-      localStorage.setItem('undercover_game_stats', JSON.stringify(stats));
+      localStorage.setItem('espionnage_game_stats', JSON.stringify(stats));
     } catch (e) {
       console.warn("Erreur sauvegarde stats", e);
     }
@@ -452,15 +523,15 @@ export class UndercoverGame {
 
   static getGameStats() {
     try {
-      const statsStr = localStorage.getItem('undercover_game_stats');
+      const statsStr = localStorage.getItem('espionnage_game_stats');
       return statsStr ? JSON.parse(statsStr) : {
         totalGames: 0,
         civilWins: 0,
-        undercoverWins: 0,
-        whiteWins: 0
+        spyWins: 0,
+        diplomatWins: 0
       };
     } catch (e) {
-      return { totalGames: 0, civilWins: 0, undercoverWins: 0, whiteWins: 0 };
+      return { totalGames: 0, civilWins: 0, spyWins: 0, diplomatWins: 0 };
     }
   }
 }
